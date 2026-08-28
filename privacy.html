@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — ShiftMask</title>
+<meta name="description" content="What shiftmask.com collects, what the ShiftMask desktop app never sends anywhere, and how to reach us about your data.">
+<link rel="canonical" href="https://shiftmask.com/privacy.html">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07090F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --void:#07090F;
+  --ink:#0E1320;
+  --surface:#141A28;
+  --raised:#1C2333;
+  --fog:#E6EAF3;
+  --muted:#8D96AD;
+  --dim:#828CA6;
+  --rule:#222A3B;
+  --rule-bright:#333D52;
+  --coral:#FF7B64;
+  --coral-solid:#FF5F45;
+  --cobalt:#8FA3FF;
+  --verified:#3FCB98;
+  --f-display:"Chivo","Helvetica Neue",Arial,sans-serif;
+  --f-sans:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:clamp(20px,5vw,64px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--void);color:var(--fog);font-family:var(--f-sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--coral);text-underline-offset:4px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cobalt);outline-offset:4px;border-radius:3px}
+::selection{background:var(--coral-solid);color:var(--ink)}
+.shell{max-width:760px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+.wide{max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+.wordmark{font-family:var(--f-display);font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--fog);white-space:nowrap}
+.wordmark .m{display:inline-block;transform:translateY(.12em)}
+.lockup{display:flex;align-items:center;gap:.42em;text-decoration:none}
+
+nav .bar{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;
+  position:sticky;top:0;z-index:50;background:rgba(7,9,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+nav .wordmark{font-size:22px}
+nav a.back{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+nav a.back:hover{color:var(--fog)}
+
+main{padding:clamp(48px,8vw,88px) 0 clamp(64px,9vw,110px)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:0 0 14px}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);letter-spacing:-.02em;line-height:1.05;margin:0 0 10px}
+.updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
+h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
+h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+p{color:var(--muted);margin:0 0 16px}
+ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+li{margin:0 0 8px}
+strong{color:var(--fog);font-weight:600}
+.callout{
+  background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--verified);
+  padding:18px 22px;margin:0 0 16px;border-radius:2px;
+}
+.callout p{color:var(--fog);margin:0;font-size:15.5px}
+.note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
+
+footer{border-top:1px solid var(--rule);padding:32px 0}
+footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
+footer .wordmark{font-size:18px}
+footer .flinks{display:flex;gap:24px;flex-wrap:wrap}
+footer .flinks a{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+footer .flinks a:hover{color:var(--fog)}
+footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin:0}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect x="5" y="27" width="32" height="32" rx="8" fill="#E6EAF3"/>
+    <rect x="11" y="37.5" width="20" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="11" y="45" width="13" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="27" y="5" width="32" height="32" rx="8" fill="#FF7B64"/>
+    <rect x="33" y="15.5" width="20" height="3.5" rx="1.75" fill="#07090F"/>
+    <rect x="33" y="23" width="13" height="3.5" rx="1.75" fill="#07090F"/>
+  </symbol>
+</svg>
+
+<nav>
+  <div class="wide bar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <a class="back" href="/">&larr; Back to shiftmask.com</a>
+  </div>
+</nav>
+
+<main>
+  <div class="shell">
+    <p class="eyebrow">Legal</p>
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated 2026-08-28 &middot; Applies to shiftmask.com and the ShiftMask desktop application</p>
+
+    <div class="callout">
+      <p>The short version: <strong>the ShiftMask application itself sends nothing anywhere.</strong> It runs on your machine, reads the files you point it at, and writes its output back to your disk. There is no telemetry, no phone-home, no update check that leaks a file name. This page is about the much smaller footprint of the <em>website</em> and the <em>purchase</em> — not the product.</p>
+    </div>
+
+    <h2>1. Who this is</h2>
+    <p>ShiftMask is operated by Konrad Myśliński, based in Poland. <span class="note">[Jeżeli sprzedaż prowadzona jest przez podmiot firmowy, a nie osobę prywatną, podmień tę linijkę na pełną nazwę firmy i adres rejestrowy — ten dokument to szkic do uzupełnienia, nie gotowa porada prawna.]</span> For anything on this page, write to <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a>.</p>
+
+    <h2>2. What the website collects</h2>
+    <p>shiftmask.com uses <strong>GoatCounter</strong>, a privacy-first analytics tool, to count page views and see which links get clicked (for example, the download and pricing buttons). It does not use cookies, does not build a cross-site profile of you, and does not sell or share data with advertisers. It records things like: page visited, referring site, country-level location derived from IP address, and browser type — your full IP address is discarded, not stored.</p>
+    <p>GitHub, which hosts this site, also keeps its own standard server logs (IP address, requested file, timestamp) for a short period, under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's own privacy statement</a> — this is outside our control, same as for any site hosted on GitHub Pages.</p>
+
+    <h2>3. What happens when you buy a license</h2>
+    <p>Purchases are handled by <strong>Gumroad</strong>, acting as merchant of record. When you buy, Gumroad collects your email address and payment details directly — we never see or store your card number. Gumroad passes us your email address and purchase timestamp so we can issue and, if needed, help recover your license. Gumroad's own handling of your data is described in the <a href="https://gumroad.com/privacy" target="_blank" rel="noopener">Gumroad Privacy Policy</a>.</p>
+
+    <h2>4. What happens when you email us</h2>
+    <p>If you write to us for support or with a question, we keep that email thread to answer you and, if it points to a real bug, to fix it. We don't add you to a marketing list from a support email — if we ever start a mailing list, it will be opt-in, separate, and easy to leave.</p>
+
+    <h2>5. What we don't do</h2>
+    <ul>
+      <li>We don't sell, rent or trade your data to anyone.</li>
+      <li>We don't run advertising trackers, pixels, or cross-site ad networks on this site.</li>
+      <li>We don't and can't see the files you process with the ShiftMask application — it never leaves your machine.</li>
+    </ul>
+
+    <h2>6. Your rights</h2>
+    <p>If you're in the EU/EEA, UK, or a US state with its own privacy law (like California), you can ask us what we hold about you, ask us to correct or delete it, or object to how it's used. Since the only data we hold is your support-email thread and whatever Gumroad forwards us about a purchase, this is usually a quick request — email <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a> and we'll sort it out directly rather than making you fill out a form.</p>
+
+    <h2>7. Changes to this policy</h2>
+    <p>If this changes — a new analytics tool, a new payment processor — we'll update the date at the top of this page. Given how little this site actually collects, we don't expect that to happen often.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wide fbar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="flinks">
+      <a href="/#how">Method</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="mailto:konradmyslinski@gmail.com">Contact</a>
+    </div>
+    <p class="rights">&copy; 2026 ShiftMask</p>
+  </div>
+</footer>
+
+<!-- Privacy-first analytics: no cookies, no cross-site profile. -->
+<script data-goatcounter="https://shiftmask.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+</body>
+</html>

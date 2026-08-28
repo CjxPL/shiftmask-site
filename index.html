@@ -96,7 +96,12 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--cobalt);outline-off
 .lockup{display:flex;align-items:center;gap:.42em;text-decoration:none}
 
 /* ---------- nav ---------- */
-nav .bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 0}
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,9,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+nav .bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0}
 nav .wordmark{font-size:24px}
 nav .menu{display:flex;align-items:center;gap:30px}
 nav .menu a:not(.btn){
@@ -229,6 +234,13 @@ p{margin:0 0 18px}
   font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);
 }
 .offset-strip b{font-weight:600;color:var(--fog);letter-spacing:.06em}
+.offset-strip.beat{animation:beat 1.1s cubic-bezier(.2,.8,.2,1)}
+@keyframes beat{
+  0%{border-color:var(--rule-bright);box-shadow:0 0 0 0 rgba(255,95,69,.38)}
+  35%{border-color:var(--coral-solid);box-shadow:0 0 0 8px rgba(255,95,69,0)}
+  100%{border-color:var(--rule-bright);box-shadow:0 0 0 0 rgba(255,95,69,0)}
+}
+@media (prefers-reduced-motion:reduce){.offset-strip.beat{animation:none}}
 
 /* =========================================================
    CORAL BAND — the one loud moment
@@ -679,6 +691,29 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     });
   }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
   els.forEach(function(e){ io.observe(e); });
+
+  // Loop the "before/after" reveal in the hero data panel, so the
+  // masking transformation keeps demonstrating itself instead of
+  // firing once on load and going still.
+  var strip = document.querySelector('.offset-strip');
+  var revealEls = document.querySelectorAll('.rig .rd, .rig .flip');
+  var rig = document.querySelector('.rig');
+  if (!rm && strip && revealEls.length && rig) {
+    var restart = function(el){ el.style.animation = 'none'; void el.offsetWidth; el.style.animation = ''; };
+    var cycle = function(){
+      strip.classList.remove('beat'); void strip.offsetWidth; strip.classList.add('beat');
+      setTimeout(function(){ revealEls.forEach(restart); }, 260);
+    };
+    var timer = null;
+    var start = function(){ if (!timer) timer = setInterval(cycle, 5600); };
+    var stop = function(){ if (timer) { clearInterval(timer); timer = null; } };
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ en.isIntersecting ? start() : stop(); });
+    }, { threshold: 0.35 }).observe(rig);
+    document.addEventListener('visibilitychange', function(){
+      document.hidden ? stop() : (rig.getBoundingClientRect().top < innerHeight && start());
+    });
+  }
 })();
 </script>
 

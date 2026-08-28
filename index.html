@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShiftMask — Anonymize Excel &amp; SQL Data Before Using AI</title>
+<meta name="description" content="ShiftMask makes a safe local copy of your Excel, CSV and SQL data. Relations intact, dates shifted, values masked — so AI never sees a real record.">
+<link rel="canonical" href="https://shiftmask.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://shiftmask.com/">
+<meta property="og:title" content="ShiftMask — Anonymize Excel &amp; SQL Data Before Using AI">
+<meta property="og:description" content="Give AI your data. Keep your data. Relations intact, dates shifted, values masked — the real records never leave your machine.">
+<meta property="og:image" content="https://shiftmask.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#07090F">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+/* =========================================================
+   ShiftMask — dark-committed. Every colour is painted
+   explicitly so the page holds on any host background.
+   ========================================================= */
+:root{
+  --void:#07090F;
+  --ink:#0E1320;
+  --surface:#141A28;
+  --raised:#1C2333;
+  --fog:#E6EAF3;
+  --muted:#8D96AD;
+  --dim:#828CA6;
+  --rule:#222A3B;
+  --rule-bright:#333D52;
+
+  --coral:#FF7B64;
+  --coral-solid:#FF5F45;
+  --cobalt:#8FA3FF;
+  --verified:#3FCB98;
+
+  --f-display:"Chivo","Helvetica Neue",Arial,sans-serif;
+  --f-sans:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+
+  --gut:clamp(20px,5vw,64px);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--fog);
+  font-family:var(--f-sans);
+  font-size:17px;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* faint spreadsheet field over the whole page */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background-image:
+    repeating-linear-gradient(to right, rgba(143,163,255,.055) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(to bottom, rgba(143,163,255,.04) 0 1px, transparent 1px 44px);
+  mask-image:radial-gradient(ellipse 120% 90% at 50% 0%, #000 15%, transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 120% 90% at 50% 0%, #000 15%, transparent 78%);
+}
+main,nav,footer{position:relative;z-index:1}
+
+.shell{max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+a{color:var(--coral);text-underline-offset:4px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cobalt);outline-offset:4px;border-radius:3px}
+
+::selection{background:var(--coral-solid);color:var(--ink)}
+
+/* ---------- wordmark ---------- */
+.wordmark{
+  font-family:var(--f-display);font-weight:800;letter-spacing:-.035em;
+  line-height:1;color:var(--fog);white-space:nowrap;
+}
+.wordmark .m{display:inline-block;transform:translateY(.12em)}
+.lockup{display:flex;align-items:center;gap:.42em;text-decoration:none}
+
+/* ---------- nav ---------- */
+nav .bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 0}
+nav .wordmark{font-size:24px}
+nav .menu{display:flex;align-items:center;gap:30px}
+nav .menu a:not(.btn){
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+}
+nav .menu a:not(.btn):hover{color:var(--fog)}
+@media (max-width:760px){nav .menu a.nav-hide{display:none}}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
+  padding:17px 26px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.btn:hover{transform:translate(2px,-2px)}
+.btn-solid{background:var(--coral-solid);color:var(--ink)}
+.btn-solid:hover{background:#FF7357}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.btn-line:hover{border-color:var(--fog)}
+.btn-sm{padding:12px 18px;font-size:14px}
+.btn-dark{background:var(--ink);color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+
+/* ---------- shared type ---------- */
+.eyebrow{
+  font-family:var(--f-mono);font-size:12px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--coral);
+  display:flex;align-items:center;gap:12px;margin:0 0 26px;
+}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--coral-solid);flex:none}
+
+h1{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(44px,8.4vw,124px);
+  line-height:.98;letter-spacing:-.048em;
+  margin:0;text-wrap:balance;
+}
+h2{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(34px,5.4vw,72px);
+  line-height:.98;letter-spacing:-.04em;
+  margin:0 0 24px;text-wrap:balance;max-width:19ch;
+}
+h3{font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.02em;margin:0 0 10px}
+p{margin:0 0 18px}
+.lede{font-size:clamp(18px,1.9vw,22px);line-height:1.5;color:var(--muted);max-width:52ch}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{padding:clamp(40px,7vw,86px) 0 clamp(70px,9vw,130px);position:relative;overflow:hidden}
+.hero-grid{display:grid;margin-top:clamp(34px,4.5vw,58px);grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(30px,5vw,70px);align-items:center}
+@media (max-width:1000px){.hero-grid{grid-template-columns:1fr;gap:48px}}
+
+.hero h1 .stroke{
+  color:transparent;
+  -webkit-text-stroke:2px var(--coral-solid);
+  paint-order:stroke fill;
+}
+@media (max-width:700px){.hero h1 .stroke{-webkit-text-stroke-width:1.3px}}
+
+.hero .lede{margin-bottom:36px}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.cta-note{
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);margin:24px 0 0;display:flex;align-items:center;gap:10px;
+}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--verified);flex:none;box-shadow:0 0 0 0 rgba(63,203,152,.5);animation:pulse 2.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(63,203,152,0)}100%{box-shadow:0 0 0 0 rgba(63,203,152,0)}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+
+/* --- the transform object --- */
+.rig{position:relative;min-width:0}
+.rig::after{
+  content:"";position:absolute;right:-28%;top:-30%;width:112%;aspect-ratio:1;
+  background:radial-gradient(closest-side, rgba(255,95,69,.20), rgba(255,95,69,.05) 55%, transparent 72%);
+  pointer-events:none;z-index:0;
+}
+.slab{
+  position:relative;z-index:1;
+  background:linear-gradient(180deg,var(--surface),var(--ink));
+  border:1px solid var(--rule);
+  box-shadow:0 40px 90px -50px rgba(0,0,0,.95);
+}
+.slab + .slab{margin-top:14px}
+.slab-top{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:15px 20px;border-bottom:1px solid var(--rule);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+}
+.slab-top .who{display:flex;align-items:center;gap:9px}
+.dot{width:6px;height:6px;border-radius:50%;flex:none}
+.dot.a{background:var(--fog)}
+.dot.b{background:var(--coral-solid)}
+.slab-top .tagm{color:var(--coral);letter-spacing:.14em}
+
+.tbl{width:100%;border-collapse:collapse;font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+.tscroll{overflow-x:auto;min-width:0;max-width:100%}
+.tbl th{
+  text-align:left;font-weight:500;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);padding:13px 12px 9px;white-space:nowrap;border-bottom:1px solid var(--rule);
+}
+.tbl td{padding:10px 12px;border-bottom:1px solid rgba(34,42,59,.6);white-space:nowrap;color:var(--fog)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl th:first-child,.tbl td:first-child{padding-left:20px}
+.tbl th:last-child,.tbl td:last-child{padding-right:20px;text-align:right}
+.key{color:var(--muted)}
+
+.rd{
+  display:inline-block;background:var(--fog);color:transparent;
+  border-radius:1px;padding:0 3px;user-select:none;
+  transform:scaleX(0);transform-origin:left center;
+  animation:swipe .5s cubic-bezier(.2,.8,.2,1) forwards;
+}
+@keyframes swipe{to{transform:scaleX(1)}}
+.d{color:var(--coral);font-weight:500}
+.flip{display:inline-block;animation:flip .45s ease forwards;opacity:0}
+@keyframes flip{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .rd{transform:none;animation:none}
+  .flip{opacity:1;animation:none}
+}
+
+.offset-strip{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  padding:12px 20px;margin:14px 0;
+  border:1px dashed var(--rule-bright);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);
+}
+.offset-strip b{font-weight:600;color:var(--fog);letter-spacing:.06em}
+
+/* =========================================================
+   CORAL BAND — the one loud moment
+   ========================================================= */
+.band{background:var(--coral-solid);color:var(--ink);padding:clamp(64px,9vw,120px) 0;position:relative;overflow:hidden}
+.band::after{
+  content:"";position:absolute;right:-110px;bottom:-140px;width:460px;height:460px;
+  background:
+    linear-gradient(rgba(15,19,32,.13),rgba(15,19,32,.13)) 0 100%/46% 46% no-repeat,
+    linear-gradient(rgba(15,19,32,.13),rgba(15,19,32,.13)) 100% 0/46% 46% no-repeat;
+  pointer-events:none;
+}
+.band-grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center;position:relative;z-index:1}
+@media (max-width:860px){.band-grid{grid-template-columns:1fr;gap:24px}}
+.band .zero{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(110px,20vw,260px);line-height:.8;letter-spacing:-.06em;
+  margin:0;color:var(--ink);
+}
+.band h2{color:var(--ink);font-size:clamp(28px,4vw,52px);margin-bottom:14px}
+.band .say{color:rgba(15,19,32,.78);font-size:clamp(16px,1.7vw,19px);max-width:46ch;margin:0}
+.band .kicker{
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(15,19,32,.66);margin:0 0 16px;
+}
+
+/* =========================================================
+   SURVIVES — sticky heading, scrolling rows
+   ========================================================= */
+.survives{padding:clamp(78px,11vw,150px) 0}
+.split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(32px,6vw,90px);align-items:start}
+@media (max-width:960px){.split{grid-template-columns:1fr;gap:36px}}
+.split .hold{position:sticky;top:56px}
+@media (max-width:960px){.split .hold{position:static}}
+
+.rows{border-top:1px solid var(--rule)}
+.row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:baseline;
+  padding:30px 0 32px;border-bottom:1px solid var(--rule);
+}
+.row .t{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,3.2vw,38px);letter-spacing:-.03em;line-height:1.05;margin:0 0 10px}
+.row .d2{color:var(--muted);font-size:16.5px;margin:0;max-width:50ch}
+.verdict{
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  padding:6px 11px;border:1px solid currentColor;white-space:nowrap;
+}
+.verdict.keep{color:var(--verified)}
+.verdict.gone{color:var(--coral)}
+
+/* =========================================================
+   STEPS — each one shifted further right
+   ========================================================= */
+.steps{padding:clamp(70px,10vw,140px) 0;position:relative}
+.ladder{margin-top:60px;display:flex;flex-direction:column;gap:0}
+.rung{
+  border-top:1px solid var(--rule);
+  padding:34px 0 38px;
+  display:grid;grid-template-columns:92px minmax(0,1fr);gap:clamp(18px,3vw,44px);
+}
+.rung:last-child{border-bottom:1px solid var(--rule)}
+.rung .n{
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;color:var(--coral);padding-top:8px;
+}
+.rung .body{max-width:60ch}
+.rung h3{font-size:clamp(21px,2.6vw,30px);letter-spacing:-.025em}
+.rung p{color:var(--muted);margin:0;font-size:16.5px}
+/* the shift: each rung steps right */
+.rung:nth-child(2){padding-left:clamp(0px,4vw,64px)}
+.rung:nth-child(3){padding-left:clamp(0px,8vw,128px)}
+@media (max-width:760px){
+  .rung{grid-template-columns:1fr;gap:10px}
+  .rung:nth-child(2),.rung:nth-child(3){padding-left:0}
+}
+
+/* =========================================================
+   AUDIENCE
+   ========================================================= */
+.who-sec{padding:clamp(60px,9vw,120px) 0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:52px}
+.two > div{background:var(--void);padding:clamp(28px,4vw,48px)}
+.two .who-lab{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--coral);margin:0 0 18px}
+.two p{color:var(--muted);margin:0;font-size:16.5px}
+
+/* =========================================================
+   PRICING
+   ========================================================= */
+.pricing{padding:clamp(70px,10vw,140px) 0}
+.deal{
+  margin-top:54px;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,420px);gap:1px;
+  background:var(--rule);border:1px solid var(--rule);
+}
+@media (max-width:860px){.deal{grid-template-columns:1fr}}
+.deal .left{background:var(--surface);padding:clamp(30px,4.5vw,54px)}
+.deal .right{background:var(--ink);padding:clamp(30px,4.5vw,54px);display:flex;flex-direction:column;justify-content:center}
+.deal .tagline{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--coral);margin:0 0 24px;
+}
+.amount{font-family:var(--f-display);font-weight:900;font-size:clamp(72px,11vw,132px);line-height:.82;letter-spacing:-.05em;margin:0}
+.amount sup{font-size:.36em;vertical-align:super;letter-spacing:-.02em;margin-right:.06em}
+.terms{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:22px 0 0;line-height:1.9}
+.incl{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:14px}
+.incl li{position:relative;padding-left:30px;color:var(--muted);font-size:16.5px}
+.incl li::before{
+  content:"";position:absolute;left:0;top:.48em;width:12px;height:7px;
+  border-left:2px solid var(--verified);border-bottom:2px solid var(--verified);transform:rotate(-45deg);
+}
+.incl-note{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em;color:var(--dim);line-height:1.6;margin:0 0 34px;max-width:44ch}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+.faq{padding:clamp(60px,9vw,120px) 0}
+.qa{border-top:1px solid var(--rule)}
+.qa .item{
+  display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(20px,5vw,80px);
+  padding:32px 0;border-bottom:1px solid var(--rule);
+}
+@media (max-width:860px){.qa .item{grid-template-columns:1fr;gap:12px}}
+.qa h3{font-size:clamp(19px,2.2vw,25px);letter-spacing:-.025em;margin:0;line-height:1.2}
+.qa p{color:var(--muted);margin:0;font-size:16.5px}
+
+/* =========================================================
+   CLOSER + FOOTER
+   ========================================================= */
+.closer{padding:clamp(70px,11vw,150px) 0 clamp(50px,7vw,90px);text-align:left}
+.closer h2{font-size:clamp(38px,7.4vw,104px);margin-bottom:34px}
+footer{border-top:1px solid var(--rule);padding:36px 0 56px}
+footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
+footer .wordmark{font-size:19px}
+footer .flinks{display:flex;gap:24px;flex-wrap:wrap}
+footer .flinks a{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+footer .flinks a:hover{color:var(--fog)}
+footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin:0}
+
+/* ---------- scroll reveal ---------- */
+.rise{opacity:0;transform:translateY(22px)}
+.rise.in{opacity:1;transform:none;transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.rise.in{transition:none}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect x="5" y="27" width="32" height="32" rx="8" fill="#E6EAF3"/>
+    <rect x="11" y="37.5" width="20" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="11" y="45" width="13" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="27" y="5" width="32" height="32" rx="8" fill="#FF7B64"/>
+    <rect x="33" y="15.5" width="20" height="3.5" rx="1.75" fill="#07090F"/>
+    <rect x="33" y="23" width="13" height="3.5" rx="1.75" fill="#07090F"/>
+  </symbol>
+</svg>
+
+<nav>
+  <div class="shell bar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="30" height="30" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="menu">
+      <a href="#how" class="nav-hide">Method</a>
+      <a href="#survives" class="nav-hide">What survives</a>
+      <a href="#pricing" class="nav-hide">Pricing</a>
+      <!-- TODO: podmień na prawdziwy link do pobrania -->
+      <a class="btn btn-solid btn-sm" href="#pricing">Get ShiftMask</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="shell">
+      <p class="eyebrow">Local-first data masking</p>
+      <h1>Give AI your data.<br><span class="stroke">Keep your data.</span></h1>
+    </div>
+    <div class="shell hero-grid">
+      <div>
+        <p class="lede">ShiftMask builds a safe local copy of your Excel, CSV and SQL — table relations intact, every date shifted by one offset, every name masked. The real records never leave your machine.</p>
+        <div class="cta-row">
+          <!-- TODO: podmień na prawdziwy link do pobrania -->
+          <a class="btn btn-solid" href="#pricing">Download for Windows</a>
+          <a class="btn btn-line" href="#how">See the method</a>
+        </div>
+        <p class="cta-note"><span class="pulse"></span> Windows &middot; works with Wi-Fi off</p>
+      </div>
+
+      <div class="rig">
+        <div class="slab">
+          <div class="slab-top">
+            <span class="who"><span class="dot a"></span> invoices.xlsx &middot; on your disk</span>
+            <span>3 rows</span>
+          </div>
+          <div class="tscroll">
+            <table class="tbl">
+              <thead><tr><th>customer_id</th><th>name</th><th>invoice_date</th><th>amount</th></tr></thead>
+              <tbody>
+                <tr><td class="key">C-10482</td><td>Nowak Logistics</td><td>2026-08-14</td><td>18,420.00</td></tr>
+                <tr><td class="key">C-10483</td><td>Baltic Foods</td><td>2026-08-15</td><td>4,990.50</td></tr>
+                <tr><td class="key">C-10482</td><td>Nowak Logistics</td><td>2026-08-28</td><td>7,110.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="offset-strip">
+          <span>offset</span><b>&minus;289 days</b><span>&middot;</span><span>deterministic mask</span>
+        </div>
+
+        <div class="slab">
+          <div class="slab-top">
+            <span class="who"><span class="dot b"></span> what the model receives</span>
+            <span class="tagm">safe</span>
+          </div>
+          <div class="tscroll">
+            <table class="tbl">
+              <thead><tr><th>customer_id</th><th>name</th><th>invoice_date</th><th>amount</th></tr></thead>
+              <tbody>
+                <tr><td class="key">C-10482</td><td><span class="rd" style="animation-delay:.35s">Nowak Logistics</span></td><td class="d"><span class="flip" style="animation-delay:.55s">2025-10-29</span></td><td>18,420.00</td></tr>
+                <tr><td class="key">C-10483</td><td><span class="rd" style="animation-delay:.47s">Baltic Foods</span></td><td class="d"><span class="flip" style="animation-delay:.67s">2025-10-30</span></td><td>4,990.50</td></tr>
+                <tr><td class="key">C-10482</td><td><span class="rd" style="animation-delay:.59s">Nowak Logistics</span></td><td class="d"><span class="flip" style="animation-delay:.79s">2025-11-12</span></td><td>7,110.00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============ CORAL BAND ============ -->
+  <section class="band">
+    <div class="shell band-grid">
+      <p class="zero">0</p>
+      <div>
+        <p class="kicker">Bytes sent to any server</p>
+        <h2>Nothing to leak, because nothing leaves.</h2>
+        <p class="say">No account, no upload, no telemetry. ShiftMask reads your files, builds the masked copy in a local DuckDB database, and writes it back to your disk. Pull the network cable and it still works.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WHAT SURVIVES ============ -->
+  <section class="survives" id="survives">
+    <div class="shell split">
+      <div class="hold rise">
+        <p class="eyebrow">What survives</p>
+        <h2>Masked data is worthless if the analysis breaks.</h2>
+        <p class="lede">Most tools scramble values row by row. That destroys exactly the properties a model needs in order to write code that runs against your real database later.</p>
+      </div>
+      <div class="rows rise">
+        <div class="row">
+          <div>
+            <p class="t">Referential integrity</p>
+            <p class="d2">Keys are masked identically in every table, so joins, lookups and relationships still resolve.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Time intelligence</p>
+            <p class="d2">One shared offset moves the whole calendar. Intervals and period boundaries hold, so YTD, YoY and rolling averages return the same shape.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Cardinality and shape</p>
+            <p class="d2">Row counts, distinct counts and value distribution stay realistic, so the code is sized for your data, not a toy sample.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Personal data</p>
+            <p class="d2">Names, emails, phone numbers, addresses and free-text identifiers are replaced by generated values. Nothing traces back to a real person.</p>
+          </div>
+          <span class="verdict gone">Removed</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METHOD ============ -->
+  <section class="steps" id="how">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">The method</p>
+        <h2>Three moves. None in the cloud.</h2>
+      </div>
+      <div class="ladder">
+        <div class="rung rise">
+          <span class="n">01 / READ</span>
+          <div class="body">
+            <h3>Point it at your files</h3>
+            <p>Excel workbooks, CSV files or a SQL database. ShiftMask reads the schema and detects primary and foreign keys to map how your tables actually connect. You confirm or correct the map.</p>
+          </div>
+        </div>
+        <div class="rung rise">
+          <span class="n">02 / SHIFT</span>
+          <div class="body">
+            <h3>Move the calendar, mask the rest</h3>
+            <p>Every date moves by one project-wide offset. Names, emails and identifiers become generated stand-ins — the same input always yields the same output, so one customer stays one customer across every file.</p>
+          </div>
+        </div>
+        <div class="rung rise">
+          <span class="n">03 / BUILD</span>
+          <div class="body">
+            <h3>Hand the copy to a model</h3>
+            <p>Send the safe package to ChatGPT, Claude, Gemini or a coding agent. You get back a dashboard, report or app. Point that code at your real database offline and it runs unchanged.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AUDIENCE ============ -->
+  <section class="who-sec">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Built for</p>
+        <h2>Two people, one bad afternoon.</h2>
+      </div>
+      <div class="two rise">
+        <div>
+          <p class="who-lab">The analyst</p>
+          <p>You already use AI to write DAX, SQL and Python. You also know that pasting a client extract into a chat window is the kind of thing that ends a contract. ShiftMask gives you something you can paste.</p>
+        </div>
+        <div>
+          <p class="who-lab">The owner</p>
+          <p>You want a report or a small internal tool without hiring anyone for three months. You are also the person who signs the data processing agreement. ShiftMask keeps the real records where they belong.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="pricing" id="pricing">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Pricing</p>
+        <h2>Buy it once. It&rsquo;s yours.</h2>
+      </div>
+      <div class="deal rise">
+        <div class="left">
+          <p class="tagline">Core License</p>
+          <ul class="incl">
+            <li>Unlimited files, tables and projects &mdash; no time limit</li>
+            <li>Excel and CSV sources</li>
+            <li>Automatic relationship detection with manual override</li>
+            <li>Date shifting and deterministic masking</li>
+            <li>Export to anonymized Excel files</li>
+            <li>Runs entirely on your machine, offline</li>
+          </ul>
+          <p class="incl-note">SQL sources and DuckDB export are coming in a Pro upgrade &mdash; Core owners get a preferred upgrade price when it ships.</p>
+          <!-- TODO: podmień na prawdziwy link do płatności -->
+          <a class="btn btn-solid" href="#">Get Core License</a>
+        </div>
+        <div class="right">
+          <p class="amount"><sup>$</sup>39</p>
+          <p class="terms">One payment, per device<br>Free updates for 1 year<br>Founding price &mdash; first 150 licenses</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="faq" id="faq">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Before you trust it</p>
+        <h2>The questions that actually matter.</h2>
+      </div>
+      <div class="qa rise" style="margin-top:46px">
+        <div class="item">
+          <h3>Is it safe to put company data into ChatGPT?</h3>
+          <p>Not the real data. Anything you paste leaves your control, and most public AI tools give you no contractual guarantee about where it goes. ShiftMask exists so you never have to — you send a structurally identical copy in which no value maps back to a real person or account, and you get working code back all the same.</p>
+        </div>
+        <div class="item">
+          <h3>Does my data leave my computer?</h3>
+          <p>No. ShiftMask is a desktop application. It reads your files locally, builds the anonymized copy in a local DuckDB database, and writes the output to your disk. You decide what, if anything, gets sent anywhere.</p>
+        </div>
+        <div class="item">
+          <h3>Does masking break my Power BI time intelligence?</h3>
+          <p>That is the specific failure ShiftMask was built to avoid. Random date replacement destroys intervals, which breaks YTD, YoY and every rolling calculation. ShiftMask moves every date by one shared offset instead, so the distance between any two events is unchanged and time-based measures return the same shape.</p>
+        </div>
+        <div class="item">
+          <h3>How do I anonymize an Excel file for AI?</h3>
+          <p>Open the workbook in ShiftMask, confirm which columns hold personal data — it proposes a classification automatically — and export. You get a new workbook or a DuckDB file with the same sheets, columns and relationships, and with names, identifiers and dates replaced.</p>
+        </div>
+        <div class="item">
+          <h3>Does this make me GDPR compliant?</h3>
+          <p>No tool can make that promise for you, and be careful with any that does. What ShiftMask does is remove personal data from the copy you share, which is usually the hard part of using public AI tools lawfully. Your obligations under GDPR, and under HIPAA if you work with health data, still depend on your own processes.</p>
+        </div>
+        <div class="item">
+          <h3>How is this different from an enterprise masking platform?</h3>
+          <p>Those are built for test environments, priced for enterprise budgets, and usually run as a service. ShiftMask is a desktop app for one person with one project and a deadline, sold for one payment, and it never sends your data to a server.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSER ============ -->
+  <section class="closer">
+    <div class="shell rise">
+      <h2>Ship the report.<br><span style="color:var(--coral)">Keep the records.</span></h2>
+      <div class="cta-row">
+        <!-- TODO: podmień na prawdziwy link do pobrania -->
+        <a class="btn btn-solid" href="#pricing">Download for Windows</a>
+        <a class="btn btn-line" href="#faq">Read the questions</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="shell fbar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="flinks">
+      <a href="#how">Method</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <!-- TODO: podmień na prawdziwe adresy -->
+      <a href="#">Privacy</a>
+      <a href="#">Contact</a>
+    </div>
+    <p class="rights">&copy; 2026 ShiftMask</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.rise');
+  if (rm || !('IntersectionObserver' in window)) {
+    els.forEach(function(e){ e.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ShiftMask",
+      "url": "https://shiftmask.com/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Windows",
+      "description": "Desktop app that builds a safe local copy of Excel, CSV and SQL data — relations intact, dates shifted, values masked — so data can be used with AI tools without exposing real records.",
+      "offers": {
+        "@type": "Offer",
+        "price": "39",
+        "priceCurrency": "USD",
+        "name": "Core License",
+        "description": "One-time payment per device, perpetual license, includes one year of free updates. Founding price for the first 150 licenses."
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type":"Question","name":"Is it safe to put company data into ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"Not the real data. Anything you paste leaves your control, and most public AI tools give no contractual guarantee about where it goes. ShiftMask lets you send a structurally identical copy in which no value maps back to a real person or account, and you still get working code back."}},
+        {"@type":"Question","name":"Does my data leave my computer?","acceptedAnswer":{"@type":"Answer","text":"No. ShiftMask is a desktop application. It reads files locally, builds the anonymized copy in a local DuckDB database, and writes the output to your disk."}},
+        {"@type":"Question","name":"Does masking break my Power BI time intelligence?","acceptedAnswer":{"@type":"Answer","text":"No. Random date replacement destroys intervals, which breaks YTD, YoY and rolling calculations. ShiftMask moves every date by one shared offset, so the distance between any two events is unchanged and time-based measures return the same shape."}},
+        {"@type":"Question","name":"How do I anonymize an Excel file for AI?","acceptedAnswer":{"@type":"Answer","text":"Open the workbook in ShiftMask, confirm which columns hold personal data, and export. You get a workbook or DuckDB file with the same sheets, columns and relationships, and with names, identifiers and dates replaced."}},
+        {"@type":"Question","name":"Does ShiftMask make me GDPR compliant?","acceptedAnswer":{"@type":"Answer","text":"No tool can make that promise. ShiftMask removes personal data from the copy you share, which is usually the hard part of using public AI tools lawfully, but your obligations under GDPR and HIPAA still depend on your own processes."}},
+        {"@type":"Question","name":"How is ShiftMask different from an enterprise data masking platform?","acceptedAnswer":{"@type":"Answer","text":"Enterprise masking platforms are built for test environments, priced for enterprise budgets, and usually run as a service. ShiftMask is a desktop app for one person with one project, sold for one payment, and it never sends data to a server."}}
+      ]
+    }
+  ]
+}
+</script>
+
+</body>
+</html>

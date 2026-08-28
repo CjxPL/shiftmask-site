@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="ShiftMask">
+  <title>ShiftMask — wersja uproszczona do 32 px</title>
+  <rect x="2" y="24" width="38" height="38" rx="9" fill="#0F1320"/>
+  <rect x="24" y="2" width="38" height="38" rx="9" fill="#FF5F45"/>
+  <rect x="31" y="17" width="24" height="8" rx="4" fill="#0F1320"/>
+</svg>

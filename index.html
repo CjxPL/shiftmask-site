@@ -1,14 +1,6 @@
 <!doctype html>
 <html lang="en">
 <head>
-<!-- Google Analytics (GA4) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5KEZY0VNNV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-5KEZY0VNNV');
-</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ShiftMask — Anonymize Excel &amp; SQL Data Before Using AI</title>
@@ -388,6 +380,17 @@ footer .flinks{display:flex;gap:24px;flex-wrap:wrap}
 footer .flinks a{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);text-decoration:none}
 footer .flinks a:hover{color:var(--fog)}
 footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin:0}
+/* ---------- cookie consent banner (RODO/GDPR) ---------- */
+.consent-banner{position:fixed;left:0;right:0;bottom:0;z-index:200;background:rgba(14,19,32,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule-bright);padding:20px var(--gut)}
+.consent-banner[hidden]{display:none}
+.consent-inner{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between}
+.consent-text{flex:1 1 420px;margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.consent-text a{color:var(--coral)}
+.consent-actions{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0}
+.consent-btn{font-family:var(--f-sans);font-weight:600;font-size:13px;padding:12px 20px;border:1px solid transparent;border-radius:2px;cursor:pointer;background:var(--coral-solid);color:var(--ink)}
+.consent-btn:hover{background:#FF7357}
+.consent-btn.secondary{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.consent-btn.secondary:hover{border-color:var(--fog)}
 
 /* ---------- scroll reveal ---------- */
 .rise{opacity:0;transform:translateY(22px)}
@@ -682,6 +685,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="/privacy.html">Privacy</a>
+      <a href="#" id="consent-manage-link">Cookies</a>
       <a href="mailto:konradmyslinski@gmail.com?subject=ShiftMask">Contact</a>
     </div>
     <p class="rights">&copy; 2026 ShiftMask</p>
@@ -691,6 +695,73 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 <!-- Privacy-first analytics: no cookies, no cross-site profile. -->
 <!-- TODO: podmień na własny kod po założeniu darmowego konta na goatcounter.com -->
 <script data-goatcounter="https://shiftmask.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<!-- Cookie consent banner (RODO/GDPR) — gates Google Analytics (GA4) behind explicit opt-in. GoatCounter above sets no cookies and is unaffected. -->
+<div id="consent-banner" class="consent-banner" hidden>
+  <div class="consent-inner">
+    <p class="consent-text">We'd like to use <strong>Google Analytics</strong> (sets cookies) to see which pages and links lead to downloads or purchases. It only runs if you accept — <a href="/privacy.html">Privacy Policy</a></p>
+    <div class="consent-actions">
+      <button type="button" class="consent-btn secondary" id="consent-reject">Reject</button>
+      <button type="button" class="consent-btn" id="consent-accept">Accept</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var KEY = 'shiftmask_consent';
+  var GA_ID = 'G-5KEZY0VNNV';
+
+  function stored(){ try { return localStorage.getItem(KEY); } catch(e){ return null; } }
+  function store(v){ try { localStorage.setItem(KEY, v); } catch(e){} }
+
+  function loadGA(){
+    if (window.__smGaLoaded) return;
+    window.__smGaLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'granted'
+    });
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+  }
+
+  var consent = stored();
+  if (consent === 'granted') loadGA();
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var banner = document.getElementById('consent-banner');
+    var acceptBtn = document.getElementById('consent-accept');
+    var rejectBtn = document.getElementById('consent-reject');
+    var manageLink = document.getElementById('consent-manage-link');
+
+    if (!consent && banner) banner.hidden = false;
+
+    if (acceptBtn) acceptBtn.addEventListener('click', function(){
+      store('granted'); consent = 'granted'; loadGA();
+      if (banner) banner.hidden = true;
+    });
+    if (rejectBtn) rejectBtn.addEventListener('click', function(){
+      store('denied'); consent = 'denied';
+      if (banner) banner.hidden = true;
+    });
+    if (manageLink) manageLink.addEventListener('click', function(e){
+      e.preventDefault();
+      if (banner) banner.hidden = false;
+    });
+  });
+})();
+</script>
+
 
 <script>
 (function(){

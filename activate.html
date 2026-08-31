@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-5KEZY0VNNV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-5KEZY0VNNV');
+</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Activate — ShiftMask</title>
+<meta name="description" content="Activate your ShiftMask license: enter the email you purchased with and this device's ID to get your signed license token.">
+<link rel="canonical" href="https://shiftmask.com/activate.html">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#07090F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --void:#07090F;
+  --ink:#0E1320;
+  --surface:#141A28;
+  --raised:#1C2333;
+  --fog:#E6EAF3;
+  --muted:#8D96AD;
+  --dim:#828CA6;
+  --rule:#222A3B;
+  --rule-bright:#333D52;
+  --coral:#FF7B64;
+  --coral-solid:#FF5F45;
+  --cobalt:#8FA3FF;
+  --verified:#3FCB98;
+  --error:#FF8B7A;
+  --f-display:"Chivo","Helvetica Neue",Arial,sans-serif;
+  --f-sans:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:clamp(20px,5vw,64px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--void);color:var(--fog);font-family:var(--f-sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--coral);text-underline-offset:4px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px;border-radius:3px}
+::selection{background:var(--coral-solid);color:var(--ink)}
+.shell{max-width:640px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+.wide{max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+.wordmark{font-family:var(--f-display);font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--fog);white-space:nowrap}
+.wordmark .m{display:inline-block;transform:translateY(.12em)}
+.lockup{display:flex;align-items:center;gap:.42em;text-decoration:none}
+
+nav .bar{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;
+  position:sticky;top:0;z-index:50;background:rgba(7,9,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+nav .wordmark{font-size:22px}
+nav a.back{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+nav a.back:hover{color:var(--fog)}
+
+main{padding:clamp(48px,8vw,88px) 0 clamp(64px,9vw,110px)}
+.eyebrow{
+  font-family:var(--f-mono);font-size:12px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--coral);
+  display:flex;align-items:center;gap:12px;margin:0 0 20px;
+}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);letter-spacing:-.02em;line-height:1.05;margin:0 0 16px}
+.lede{color:var(--muted);font-size:17px;margin:0 0 40px;max-width:52ch}
+
+form{margin:0 0 28px}
+.field{margin:0 0 20px}
+.field label{
+  display:block;font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);margin:0 0 8px;
+}
+.field input{
+  width:100%;background:var(--surface);border:1px solid var(--rule-bright);border-radius:2px;
+  color:var(--fog);font-family:var(--f-sans);font-size:16px;padding:14px 16px;
+  transition:border-color .15s ease;
+}
+.field input::placeholder{color:var(--dim)}
+.field input:focus{border-color:var(--cobalt);outline:none}
+.field.mono input{font-family:var(--f-mono);letter-spacing:.06em;text-transform:uppercase}
+.field .hint{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:8px 0 0}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
+  padding:17px 26px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease, opacity .18s ease;
+  width:100%;
+}
+.btn:hover{transform:translate(2px,-2px)}
+.btn:disabled{opacity:.55;cursor:default;transform:none}
+.btn-solid{background:var(--coral-solid);color:var(--ink)}
+.btn-solid:hover:not(:disabled){background:#FF7357}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright);width:auto;padding:12px 18px;font-size:14px}
+.btn-line:hover{border-color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+
+.status{
+  font-family:var(--f-sans);font-size:15px;line-height:1.55;margin:18px 0 0;padding:14px 16px;
+  border-radius:2px;border:1px solid transparent;display:none;
+}
+.status.show{display:block}
+.status.error{background:rgba(255,139,122,.08);border-color:rgba(255,139,122,.35);color:var(--error)}
+.status.success{background:rgba(63,203,152,.08);border-color:rgba(63,203,152,.35);color:var(--verified)}
+
+.result{display:none;margin:28px 0 0;padding:22px;background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--verified);border-radius:2px}
+.result.show{display:block}
+.result .label{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin:0 0 10px}
+.token-box{
+  font-family:var(--f-mono);font-size:13px;line-height:1.5;color:var(--fog);
+  background:var(--void);border:1px solid var(--rule-bright);border-radius:2px;
+  padding:14px;word-break:break-all;max-height:140px;overflow-y:auto;margin:0 0 14px;
+  user-select:all;
+}
+.result-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.copied-note{font-family:var(--f-mono);font-size:12.5px;color:var(--verified);opacity:0;transition:opacity .2s ease}
+.copied-note.show{opacity:1}
+
+.callout{
+  background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--cobalt);
+  padding:18px 22px;margin:36px 0 0;border-radius:2px;
+}
+.callout p{color:var(--muted);margin:0;font-size:14.5px}
+.callout strong{color:var(--fog);font-weight:600}
+
+.aside{margin:36px 0 0;padding-top:28px;border-top:1px solid var(--rule)}
+.aside p{color:var(--muted);font-size:15px;margin:0 0 10px}
+.aside a{font-weight:600}
+
+footer{border-top:1px solid var(--rule);padding:32px 0}
+footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
+footer .wordmark{font-size:18px}
+footer .flinks{display:flex;gap:24px;flex-wrap:wrap}
+footer .flinks a{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+footer .flinks a:hover{color:var(--fog)}
+footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin:0}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect x="5" y="27" width="32" height="32" rx="8" fill="#E6EAF3"/>
+    <rect x="11" y="37.5" width="20" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="11" y="45" width="13" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="27" y="5" width="32" height="32" rx="8" fill="#FF7B64"/>
+    <rect x="33" y="15.5" width="20" height="3.5" rx="1.75" fill="#07090F"/>
+    <rect x="33" y="23" width="13" height="3.5" rx="1.75" fill="#07090F"/>
+  </symbol>
+</svg>
+
+<nav>
+  <div class="wide bar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <a class="back" href="/">&larr; Back to shiftmask.com</a>
+  </div>
+</nav>
+
+<main>
+  <div class="shell">
+    <p class="eyebrow">Activation</p>
+    <h1>Activate ShiftMask</h1>
+    <p class="lede">Enter the email you purchased with and the device ID shown on ShiftMask's activation screen. We'll hand back a signed license token — paste it into the app and you're done.</p>
+
+    <form id="activate-form" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+      </div>
+      <div class="field mono">
+        <label for="hardware_id">This device's ID</label>
+        <input type="text" id="hardware_id" name="hardware_id" placeholder="A1B2C3D4E5F6A1B2" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+        <p class="hint">Find this on ShiftMask's activation screen, under &ldquo;This device's ID&rdquo; — copy it exactly.</p>
+      </div>
+      <button type="submit" class="btn btn-solid" id="submit-btn">Activate</button>
+      <div class="status" id="status" role="alert"></div>
+    </form>
+
+    <div class="result" id="result">
+      <p class="label">License token</p>
+      <div class="token-box" id="token-box" tabindex="0"></div>
+      <div class="result-actions">
+        <button type="button" class="btn btn-line" id="copy-btn">Copy token</button>
+        <span class="copied-note" id="copied-note">Copied</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>What this page sends: your email and device ID, to a small verification service that checks your purchase and signs the token. Nothing else — no files, no usage data. The app itself never sends anything anywhere; this page is the one place that talks to the network.</p>
+    </div>
+
+    <div class="aside">
+      <p>Don't have a license yet? <a href="/#pricing">Get ShiftMask →</a></p>
+      <p>Bought ShiftMask and moving to a new machine? <a href="mailto:konradmyslinski@gmail.com?subject=Move%20my%20ShiftMask%20activation">Email us</a> to move your activation — one line with your purchase email is enough.</p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wide fbar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="flinks">
+      <a href="/#how">Method</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="mailto:konradmyslinski@gmail.com">Contact</a>
+    </div>
+    <p class="rights">&copy; 2026 ShiftMask</p>
+  </div>
+</footer>
+
+<!-- Privacy-first analytics: no cookies, no cross-site profile. -->
+<script data-goatcounter="https://shiftmask.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<script>
+(function () {
+  var API_URL = "https://shiftmask-activate.konradmyslinski.workers.dev/api/activate";
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var HW_RE = /^[0-9A-F]{16}$/;
+
+  var form = document.getElementById("activate-form");
+  var emailInput = document.getElementById("email");
+  var hwInput = document.getElementById("hardware_id");
+  var submitBtn = document.getElementById("submit-btn");
+  var statusEl = document.getElementById("status");
+  var resultEl = document.getElementById("result");
+  var tokenBox = document.getElementById("token-box");
+  var copyBtn = document.getElementById("copy-btn");
+  var copiedNote = document.getElementById("copied-note");
+
+  hwInput.addEventListener("input", function () {
+    var start = hwInput.selectionStart;
+    var upper = hwInput.value.toUpperCase().replace(/[^0-9A-F]/g, "");
+    hwInput.value = upper;
+    try { hwInput.setSelectionRange(start, start); } catch (e) {}
+  });
+
+  function showStatus(kind, message) {
+    statusEl.textContent = message;
+    statusEl.className = "status show " + kind;
+  }
+
+  function hideStatus() {
+    statusEl.className = "status";
+    statusEl.textContent = "";
+  }
+
+  function setLoading(loading) {
+    submitBtn.disabled = loading;
+    submitBtn.textContent = loading ? "Activating…" : "Activate";
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    hideStatus();
+    resultEl.classList.remove("show");
+
+    var email = emailInput.value.trim();
+    var hardwareId = hwInput.value.trim();
+
+    if (!EMAIL_RE.test(email)) {
+      showStatus("error", "Enter the email address you used to buy ShiftMask.");
+      emailInput.focus();
+      return;
+    }
+    if (!HW_RE.test(hardwareId)) {
+      showStatus("error", "That device ID doesn't look right — copy it exactly from ShiftMask's activation screen (16 characters).");
+      hwInput.focus();
+      return;
+    }
+
+    setLoading(true);
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, hardware_id: hardwareId })
+    })
+      .then(function (res) {
+        return res.json().then(function (data) {
+          return { ok: res.ok, status: res.status, data: data };
+        });
+      })
+      .then(function (result) {
+        setLoading(false);
+        if (!result.ok) {
+          var msg = (result.data && result.data.error) || "Something went wrong. Please try again.";
+          showStatus("error", msg);
+          return;
+        }
+        var customer = (result.data && result.data.customer) || email;
+        showStatus("success", "Activated — welcome, " + customer + ". Copy the token below into ShiftMask's activation screen.");
+        tokenBox.textContent = result.data.token;
+        resultEl.classList.add("show");
+      })
+      .catch(function () {
+        setLoading(false);
+        showStatus("error", "Couldn't reach the activation service — check your connection and try again, or email konradmyslinski@gmail.com.");
+      });
+  });
+
+  copyBtn.addEventListener("click", function () {
+    var text = tokenBox.textContent || "";
+    if (!text) return;
+    var done = function () {
+      copiedNote.classList.add("show");
+      setTimeout(function () { copiedNote.classList.remove("show"); }, 1600);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+    } else {
+      fallbackCopy(text, done);
+    }
+  });
+
+  function fallbackCopy(text, done) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -391,6 +391,9 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 .consent-btn:hover{background:#FF7357}
 .consent-btn.secondary{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
 .consent-btn.secondary:hover{border-color:var(--fog)}
+.consent-widget{position:fixed;left:20px;bottom:20px;z-index:200;display:inline-flex;align-items:center;padding:11px 16px;background:rgba(14,19,32,.92);border:1px solid var(--rule-bright);border-radius:2px;color:var(--dim);font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .18s ease, color .18s ease}
+.consent-widget:hover{color:var(--fog);border-color:var(--fog)}
+.consent-widget[hidden]{display:none}
 
 /* ---------- scroll reveal ---------- */
 .rise{opacity:0;transform:translateY(22px)}
@@ -685,7 +688,6 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <a href="#pricing">Pricing</a>
       <a href="#faq">FAQ</a>
       <a href="/privacy.html">Privacy</a>
-      <a href="#" id="consent-manage-link">Cookies</a>
       <a href="mailto:konradmyslinski@gmail.com?subject=ShiftMask">Contact</a>
     </div>
     <p class="rights">&copy; 2026 ShiftMask</p>
@@ -706,6 +708,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     </div>
   </div>
 </div>
+<button type="button" id="consent-widget" class="consent-widget" hidden aria-label="Cookie preferences">Cookies</button>
 
 <script>
 (function(){
@@ -740,24 +743,28 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
   document.addEventListener('DOMContentLoaded', function(){
     var banner = document.getElementById('consent-banner');
+    var widget = document.getElementById('consent-widget');
     var acceptBtn = document.getElementById('consent-accept');
     var rejectBtn = document.getElementById('consent-reject');
-    var manageLink = document.getElementById('consent-manage-link');
 
-    if (!consent && banner) banner.hidden = false;
+    function showBanner(){
+      if (banner) banner.hidden = false;
+      if (widget) widget.hidden = true;
+    }
+    function showWidget(){
+      if (banner) banner.hidden = true;
+      if (widget) widget.hidden = false;
+    }
+
+    if (consent) { showWidget(); } else { showBanner(); }
 
     if (acceptBtn) acceptBtn.addEventListener('click', function(){
-      store('granted'); consent = 'granted'; loadGA();
-      if (banner) banner.hidden = true;
+      store('granted'); consent = 'granted'; loadGA(); showWidget();
     });
     if (rejectBtn) rejectBtn.addEventListener('click', function(){
-      store('denied'); consent = 'denied';
-      if (banner) banner.hidden = true;
+      store('denied'); consent = 'denied'; showWidget();
     });
-    if (manageLink) manageLink.addEventListener('click', function(e){
-      e.preventDefault();
-      if (banner) banner.hidden = false;
-    });
+    if (widget) widget.addEventListener('click', function(){ showBanner(); });
   });
 })();
 </script>

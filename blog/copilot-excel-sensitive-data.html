@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Policy — ShiftMask</title>
-<meta name="description" content="What shiftmask.com collects, what the ShiftMask desktop app never sends anywhere, and how to reach us about your data.">
-<link rel="canonical" href="https://shiftmask.com/privacy.html">
-<meta name="robots" content="noindex">
+<title>How to Use Copilot in Excel Safely With Sensitive Data</title>
+<meta name="description" content="Copilot and Claude for Excel read your workbook directly — there's no chat window to intercept. Here's how to keep sensitive cells out of it anyway.">
+<link rel="canonical" href="https://shiftmask.com/blog/copilot-excel-sensitive-data.html">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -62,8 +61,10 @@ h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);l
 .updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
 h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
 h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+h2 a{color:inherit;text-decoration:none}
+h2 a:hover{color:var(--coral)}
 p{color:var(--muted);margin:0 0 16px}
-ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+ol,ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
 li{margin:0 0 8px}
 strong{color:var(--fog);font-weight:600}
 .callout{
@@ -72,6 +73,22 @@ strong{color:var(--fog);font-weight:600}
 }
 .callout p{color:var(--fog);margin:0;font-size:15.5px}
 .note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
+.entry-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.cta-block{margin-top:48px;padding-top:28px;border-top:1px solid var(--rule)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
+  padding:17px 26px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.btn:hover{transform:translate(2px,-2px)}
+.btn-solid{background:var(--coral-solid);color:var(--ink)}
+.btn-solid:hover{background:#FF7357}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.btn-line:hover{border-color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
 
 footer{border-top:1px solid var(--rule);padding:32px 0}
 footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
@@ -95,6 +112,29 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 .consent-widget:hover{color:var(--fog);border-color:var(--fog)}
 .consent-widget[hidden]{display:none}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Use Copilot in Excel Safely With Sensitive Data",
+  "description": "Copilot in Excel and Claude for Excel read your live workbook directly, so there's no chat window to mask the data before it reaches them. Here's the workflow that keeps sensitive cells out of it anyway.",
+  "author": {"@type": "Person", "name": "Konrad Myśliński"},
+  "publisher": {"@type": "Organization", "name": "ShiftMask"},
+  "datePublished": "2026-09-01",
+  "mainEntityOfPage": "https://shiftmask.com/blog/copilot-excel-sensitive-data.html"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Does Copilot or Claude for Excel use my data to train their models?", "acceptedAnswer": {"@type": "Answer", "text": "Training-data policies differ by plan and change over time. Check the current policy for your specific Microsoft 365 or Anthropic plan rather than assuming either way."}},
+    {"@type": "Question", "name": "Does masking the data change how well Copilot understands my formulas?", "acceptedAnswer": {"@type": "Answer", "text": "No, formula suggestions depend on structure rather than literal cell content, so a masked copy that preserves headers and relationships produces the same formulas as the real file."}},
+    {"@type": "Question", "name": "Can I use ShiftMask output with the chat-based Claude or ChatGPT instead of the Excel add-in?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, that is the more common use case and is covered in a separate guide on preparing data for chat-based AI analysis."}}
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -115,46 +155,56 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
       <span class="wordmark">shift<span class="m">mask</span></span>
     </a>
-    <a class="back" href="/">&larr; Back to shiftmask.com</a>
+    <a class="back" href="/blog/">&larr; All articles</a>
   </div>
 </nav>
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Legal</p>
-    <h1>Privacy Policy</h1>
-    <p class="updated">Last updated 2026-08-31 &middot; Applies to shiftmask.com and the ShiftMask desktop application</p>
+    <p class="eyebrow">Guide</p>
+    <h1>How to Use Copilot in Excel Safely With Sensitive Data</h1>
+    <p class="updated">Published 2026-09-01 &middot; 5 min read</p>
 
     <div class="callout">
-      <p>The short version: <strong>the ShiftMask application itself sends nothing anywhere.</strong> It runs on your machine, reads the files you point it at, and writes its output back to your disk. There is no telemetry, no phone-home, no update check that leaks a file name. This page is about the much smaller footprint of the <em>website</em> and the <em>purchase</em> — not the product.</p>
+      <p>Copilot in Excel and Claude for Excel read the live workbook directly through their own connection to Microsoft's or Anthropic's servers. There's no chat window to swap a masked file into. The workflow that keeps sensitive cells out of it happens one step earlier: mask the file first, run the add-in on the masked copy, then carry the formula &mdash; not the literal answer &mdash; back to the real workbook.</p>
     </div>
 
-    <h2>1. Who this is</h2>
-    <p>ShiftMask is operated by Konrad Myśliński, based in Poland. For anything on this page, write to <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a>.</p>
+    <p>You open a workbook with last quarter's churn numbers, real account names, real revenue figures, and ask Copilot to build a summary pivot. It answers in a couple of seconds, reading straight from the cells you already have open. Nothing gets uploaded to a chat window first. That's the part people miss when they try to apply the same anonymize-before-you-paste habit they've built for ChatGPT.</p>
 
-    <h2>2. What the website collects</h2>
-    <p>shiftmask.com uses <strong>GoatCounter</strong>, a privacy-first analytics tool, to count page views and see which links get clicked (for example, the download and pricing buttons). It does not use cookies, does not build a cross-site profile of you, and does not sell or share data with advertisers. It records things like: page visited, referring site, country-level location derived from IP address, and browser type — your full IP address is discarded, not stored.</p>
-    <p>shiftmask.com also offers <strong>Google Analytics (GA4)</strong> to understand traffic and which pages and links lead to downloads or purchases — but only if you say yes. On your first visit, a banner asks whether to turn it on; until you click Accept, the Google Analytics script is never loaded and nothing is sent to Google. If you accept, Google Analytics sets first-party cookies in your browser and sends data — pages viewed, referring site, approximate location, device and browser type, and on-page interactions like scrolls and outbound clicks — to Google. We have not enabled Google Signals or ad personalization features. Your choice is stored only in your own browser (not on our servers), and you can change it anytime via the "Cookies" link in the footer. Google's own handling of this data is described in the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> and the <a href="https://business.safety.google/adsservices/" target="_blank" rel="noopener">Google Ads Data Processing Terms</a> that apply to Analytics.</p>
-    <p>GitHub, which hosts this site, also keeps its own standard server logs (IP address, requested file, timestamp) for a short period, under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's own privacy statement</a> — this is outside our control, same as for any site hosted on GitHub Pages.</p>
+    <p>Copilot in Excel and Claude for Excel don't work like a chat window. There's no separate step where you paste text and could swap in a masked version instead. The add-in reads the live sheet through its own connection, and that connection is a fixed part of how the feature works.</p>
 
-    <h2>3. What happens when you buy a license</h2>
-    <p>Purchases are handled by <strong>Gumroad</strong>, acting as merchant of record. When you buy, Gumroad collects your email address and payment details directly — we never see or store your card number. Gumroad passes us your email address and purchase timestamp so we can issue and, if needed, help recover your license. Gumroad's own handling of your data is described in the <a href="https://gumroad.com/privacy" target="_blank" rel="noopener">Gumroad Privacy Policy</a>.</p>
+    <h2>Why you can't mask the data in flight</h2>
+    <p>The obvious fix people ask for is intercepting the traffic between Excel and the vendor's API and masking it on the way out. We looked at building that into ShiftMask and decided against it. It's not that it's impossible in a lab &mdash; it's that it would break every time Microsoft or Anthropic touched their API, and it puts you in the position of quietly proxying network traffic you don't control, on a connection whose terms you agreed to unmodified. That's not a trade we're willing to make, and we wouldn't trust a vendor who made it either.</p>
 
-    <h2>4. What happens when you email us</h2>
-    <p>If you write to us for support or with a question, we keep that email thread to answer you and, if it points to a real bug, to fix it. We don't add you to a marketing list from a support email — if we ever start a mailing list, it will be opt-in, separate, and easy to leave.</p>
+    <h2>The workflow that actually works</h2>
+    <ol>
+      <li>Make an anonymized copy of the workbook with ShiftMask &mdash; same tabs, same column headers, same relationships between sheets, none of the real values.</li>
+      <li>Open the masked copy and let Copilot or Claude for Excel do its normal work: pivot tables, formulas, cleanup, chart suggestions.</li>
+      <li>Take the formula or the calculated column it wrote &mdash; not the specific numbers it typed into a summary cell.</li>
+      <li>Paste that formula into the real workbook. Because column names, data types, and table relationships are identical between the masked copy and the original, it runs without edits.</li>
+    </ol>
+    <p>This works because a formula references structure, not content. <code>=SUMIFS(Sales[Amount],Sales[Region],"West")</code> doesn't care whether the amounts are real or masked &mdash; it cares that a column called <code>Amount</code> and a column called <code>Region</code> exist. Ask Copilot to compute something, and the masked copy and the real file give you the identical formula.</p>
 
-    <h2>5. What we don't do</h2>
-    <ul>
-      <li>We don't sell, rent or trade your data to anyone.</li>
-      <li>We don't run advertising trackers, pixels, or cross-site ad networks on this site.</li>
-      <li>We don't and can't see the files you process with the ShiftMask application — it never leaves your machine.</li>
-    </ul>
+    <h2>What breaks the pattern</h2>
+    <p>Ask Copilot to interpret rather than compute &mdash; "which customer is our biggest churn risk, and why" &mdash; and the answer names specific rows that only exist in the masked copy. You can't check "Customer_00231" against the real business without resolving it back to a real name first. That's a different problem from formula reuse, and it's covered in a separate guide on preparing data for chat-based analysis.</p>
 
-    <h2>6. Your rights</h2>
-    <p>If you're in the EU/EEA, UK, or a US state with its own privacy law (like California), you can ask us what we hold about you, ask us to correct or delete it, or object to how it's used. Since the only data we hold is your support-email thread and whatever Gumroad forwards us about a purchase, this is usually a quick request — email <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a> and we'll sort it out directly rather than making you fill out a form.</p>
+    <h2>When it's fine to skip masking entirely</h2>
+    <p>If a sheet has no customer names, no employee records, and nothing you'd hesitate to put in a Slack message to the whole company, masking it first is wasted effort. Internal budget scenarios, template files, and synthetic planning numbers don't need a step that exists specifically to protect data you don't have in the sheet.</p>
 
-    <h2>7. Changes to this policy</h2>
-    <p>If this changes — a new analytics tool, a new payment processor — we'll update the date at the top of this page. Given how little this site actually collects, we don't expect that to happen often.</p>
+    <h2>FAQ</h2>
+    <p><strong>Does Copilot or Claude for Excel use my data to train their models?</strong></p>
+    <p>Training-data policies differ by plan and change over time &mdash; a commercial Microsoft 365 tenant has different data commitments than a personal subscription, and Anthropic's terms differ between individual accounts and Claude for Excel used under a business agreement. Check the current policy for your specific plan rather than assuming either way; that's exactly the kind of detail worth confirming before a sensitive workbook is ever open in the add-in.</p>
+
+    <p><strong>Does masking the data change how well Copilot understands my formulas?</strong></p>
+    <p>No. Formula suggestions depend on structure &mdash; headers, data types, key relationships &mdash; not on the literal content of cells. If ShiftMask preserves the shape of the workbook, formula suggestions come out the same either way. The one exception: open-ended prompts like "write a summary paragraph for the exec team" will read differently against placeholder values than against real ones. Generate that kind of narrative summary against the real file directly, using the same formula or prompt &mdash; not against the masked copy.</p>
+
+    <p><strong>Can I use ShiftMask output with the chat-based Claude or ChatGPT instead of the Excel add-in?</strong></p>
+    <p>Yes &mdash; that's actually the more common use case, and it's covered in a separate guide on <a href="/blog/prepare-data-for-chatgpt-claude.html">preparing data for chat-based AI analysis</a>.</p>
+
+    <div class="cta-block">
+      <p>The add-in doesn't give you a step to intercept. The masked copy does the same job one layer earlier, in the file itself, before Copilot ever opens it.</p>
+      <a class="btn btn-solid" href="/#pricing" data-goatcounter-click="cta-blog-copilot-excel">Get ShiftMask Core License &mdash; $39, one time &rarr;</a>
+    </div>
   </div>
 </main>
 
@@ -167,10 +217,9 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     <div class="flinks">
       <a href="/#how">Method</a>
       <a href="/#pricing">Pricing</a>
-      <a href="/#faq">FAQ</a>
       <a href="/blog/">Blog</a>
       <a href="/privacy.html">Privacy</a>
-      <a href="mailto:konradmyslinski@gmail.com">Contact</a>
+      <a href="mailto:konradmyslinski@gmail.com?subject=ShiftMask">Contact</a>
     </div>
     <p class="rights">&copy; 2026 ShiftMask</p>
   </div>
@@ -249,7 +298,6 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
   });
 })();
 </script>
-
 
 </body>
 </html>

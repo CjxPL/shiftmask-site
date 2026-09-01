@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Use AI Safely With Sensitive Company Data</title>
+<meta name="description" content="Employees paste sensitive data into AI tools every day. Here's how to anonymize Excel, CSV and SQL data before it reaches ChatGPT — without breaking GDPR.">
+<link rel="canonical" href="https://shiftmask.com/blog/safely-use-ai-with-sensitive-data.html">
+<meta name="theme-color" content="#07090F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --void:#07090F;
+  --ink:#0E1320;
+  --surface:#141A28;
+  --raised:#1C2333;
+  --fog:#E6EAF3;
+  --muted:#8D96AD;
+  --dim:#828CA6;
+  --rule:#222A3B;
+  --rule-bright:#333D52;
+  --coral:#FF7B64;
+  --coral-solid:#FF5F45;
+  --cobalt:#8FA3FF;
+  --verified:#3FCB98;
+  --f-display:"Chivo","Helvetica Neue",Arial,sans-serif;
+  --f-sans:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:clamp(20px,5vw,64px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--void);color:var(--fog);font-family:var(--f-sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--coral);text-underline-offset:4px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cobalt);outline-offset:4px;border-radius:3px}
+::selection{background:var(--coral-solid);color:var(--ink)}
+.shell{max-width:760px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+.wide{max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+.wordmark{font-family:var(--f-display);font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--fog);white-space:nowrap}
+.wordmark .m{display:inline-block;transform:translateY(.12em)}
+.lockup{display:flex;align-items:center;gap:.42em;text-decoration:none}
+
+nav .bar{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;
+  position:sticky;top:0;z-index:50;background:rgba(7,9,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+nav .wordmark{font-size:22px}
+nav a.back{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+nav a.back:hover{color:var(--fog)}
+
+main{padding:clamp(48px,8vw,88px) 0 clamp(64px,9vw,110px)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:0 0 14px}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);letter-spacing:-.02em;line-height:1.05;margin:0 0 10px}
+.updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
+h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
+h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+h2 a{color:inherit;text-decoration:none}
+h2 a:hover{color:var(--coral)}
+p{color:var(--muted);margin:0 0 16px}
+ol,ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+li{margin:0 0 8px}
+strong{color:var(--fog);font-weight:600}
+.callout{
+  background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--verified);
+  padding:18px 22px;margin:0 0 16px;border-radius:2px;
+}
+.callout p{color:var(--fog);margin:0;font-size:15.5px}
+.note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
+.entry-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.cta-block{margin-top:48px;padding-top:28px;border-top:1px solid var(--rule)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
+  padding:17px 26px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.btn:hover{transform:translate(2px,-2px)}
+.btn-solid{background:var(--coral-solid);color:var(--ink)}
+.btn-solid:hover{background:#FF7357}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.btn-line:hover{border-color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+
+footer{border-top:1px solid var(--rule);padding:32px 0}
+footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
+footer .wordmark{font-size:18px}
+footer .flinks{display:flex;gap:24px;flex-wrap:wrap}
+footer .flinks a{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+footer .flinks a:hover{color:var(--fog)}
+footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin:0}
+/* ---------- cookie consent banner (RODO/GDPR) ---------- */
+.consent-banner{position:fixed;left:0;right:0;bottom:0;z-index:200;background:rgba(14,19,32,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule-bright);padding:20px var(--gut)}
+.consent-banner[hidden]{display:none}
+.consent-inner{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between}
+.consent-text{flex:1 1 420px;margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.consent-text a{color:var(--coral)}
+.consent-actions{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0}
+.consent-btn{font-family:var(--f-sans);font-weight:600;font-size:13px;padding:12px 20px;border:1px solid transparent;border-radius:2px;cursor:pointer;background:var(--coral-solid);color:var(--ink)}
+.consent-btn:hover{background:#FF7357}
+.consent-btn.secondary{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.consent-btn.secondary:hover{border-color:var(--fog)}
+.consent-widget{position:fixed;left:20px;bottom:20px;z-index:200;display:inline-flex;align-items:center;padding:11px 16px;background:rgba(14,19,32,.92);border:1px solid var(--rule-bright);border-radius:2px;color:var(--dim);font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .18s ease, color .18s ease}
+.consent-widget:hover{color:var(--fog);border-color:var(--fog)}
+.consent-widget[hidden]{display:none}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Use AI Safely With Sensitive Company Data",
+  "description": "Employees paste sensitive data into AI tools every day. Here's how to anonymize Excel, CSV and SQL data before it reaches ChatGPT — without breaking GDPR.",
+  "author": {"@type": "Person", "name": "Konrad Myśliński"},
+  "publisher": {"@type": "Organization", "name": "ShiftMask"},
+  "datePublished": "2026-09-01",
+  "mainEntityOfPage": "https://shiftmask.com/blog/safely-use-ai-with-sensitive-data.html"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Is it safe to paste company data into ChatGPT or Claude?", "acceptedAnswer": {"@type": "Answer", "text": "Not if the data includes anything personal, confidential, or regulated. The safe pattern is to anonymize the data locally first, then use the AI tool freely on the anonymized version."}},
+    {"@type": "Question", "name": "What's the difference between anonymization and pseudonymization for AI use?", "acceptedAnswer": {"@type": "Answer", "text": "Pseudonymization keeps a way to reverse the masking and is still regulated personal data under GDPR. True anonymization removes the ability to re-identify anyone, which is the standard AI-facing data should meet."}},
+    {"@type": "Question", "name": "Can I anonymize Excel or CSV files without breaking formulas and relationships?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if the tool detects which columns are keys shared across files and masks them identically everywhere, and shifts dates by a consistent offset rather than randomizing them."}},
+    {"@type": "Question", "name": "Does anonymizing data before using AI tools satisfy GDPR?", "acceptedAnswer": {"@type": "Answer", "text": "Properly anonymized data falls outside GDPR's scope per Recital 26, since it is no longer personal data. Pseudonymized data remains in scope."}},
+    {"@type": "Question", "name": "Is a cloud-based data anonymization tool safe for sensitive data?", "acceptedAnswer": {"@type": "Answer", "text": "It is safer than sending raw data straight to an AI tool, but a second vendor still sees the unmasked data first. For regulated data, the anonymization step itself should run locally."}}
+  ]
+}
+</script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect x="5" y="27" width="32" height="32" rx="8" fill="#E6EAF3"/>
+    <rect x="11" y="37.5" width="20" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="11" y="45" width="13" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="27" y="5" width="32" height="32" rx="8" fill="#FF7B64"/>
+    <rect x="33" y="15.5" width="20" height="3.5" rx="1.75" fill="#07090F"/>
+    <rect x="33" y="23" width="13" height="3.5" rx="1.75" fill="#07090F"/>
+  </symbol>
+</svg>
+
+<nav>
+  <div class="wide bar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <a class="back" href="/blog/">&larr; All articles</a>
+  </div>
+</nav>
+
+<main>
+  <div class="shell">
+    <p class="eyebrow">Guide</p>
+    <h1>How to Use AI Safely With Sensitive Company Data</h1>
+    <p class="updated">Published 2026-09-01 &middot; 7 min read</p>
+
+    <div class="callout">
+      <p>Anonymizing a single column ("just hash the email") is easy. Anonymizing a <em>dataset</em> &mdash; several related Excel or CSV files, or a SQL export, where a customer ID in one table has to match the same customer ID in another &mdash; is not, unless the tool preserves referential integrity and shifts dates consistently. Do that locally, before anything leaves your machine, and you can hand AI tools a structurally identical, fully realistic dataset with zero real records in it.</p>
+    </div>
+
+    <p>Someone on your team is going to paste a spreadsheet into ChatGPT this week. Not out of carelessness &mdash; because it's the fastest way to get a formula fixed, a trend explained, or a report drafted. According to Cyberhaven's 2026 AI Adoption &amp; Risk Report, nearly 40% of all AI interactions now involve sensitive data, and employees share it roughly once every three days. Most of that traffic runs through personal accounts your IT team can't see and your DPA doesn't cover.</p>
+
+    <p>That's not a hypothetical risk. It's Tuesday.</p>
+
+    <p>This article is about the actual mechanics of using AI safely with real company data &mdash; not "write an AI policy and hope people read it," but the specific technical step that makes the policy true: anonymizing the data before it ever reaches the model, in a way that doesn't wreck the thing that made the data useful in the first place.</p>
+
+    <h2>Why "just don't paste sensitive data" doesn't work</h2>
+    <p>Every company already has a policy that says, in effect, "don't put customer data into ChatGPT." Almost none of them have a way to enforce it that doesn't slow people down.</p>
+    <p>The numbers back this up. LayerX's <em>Enterprise AI and SaaS Data Security Report</em> found that 77% of employees who use generative AI tools copy-paste data directly into them, and 22% of those paste operations contain PII or PCI data &mdash; with 82% happening through personal, unmanaged accounts that sit entirely outside corporate visibility (<a href="https://www.theregister.com/2025/10/07/gen_ai_shadow_it_secrets" target="_blank" rel="noopener">LayerX, via The Register</a>). Cyberhaven's separate research puts sensitive-data exposure at closer to 40% of all AI interactions (<a href="https://www.cyberhaven.com/blog/4-2-of-workers-have-pasted-company-data-into-chatgpt" target="_blank" rel="noopener">Cyberhaven, 2026 AI Adoption &amp; Risk Report</a>).</p>
+    <p>Neither number describes malicious behavior. It describes normal work, done with the tools people actually have. A policy that only says "don't" competes with a deadline and loses.</p>
+    <p>There's also a regulatory dimension that's easy to underestimate. In 2024&ndash;2025, Italy's data protection authority (the Garante) fined OpenAI &euro;15 million for processing EU users' personal data without an adequate legal basis and for failing to report a security incident (<a href="https://complydog.com/blog/openai-gdpr-fine" target="_blank" rel="noopener">ComplyDog summary of the Garante decision</a>). That fine was about OpenAI's own conduct as a data controller &mdash; but it's a preview of the same question regulators will eventually ask your company: what legal basis did you have for sending EU customer data to a third-party model, and did you have a data processing agreement in place when someone did? For most GDPR-covered businesses, the honest answer today is "none, because we didn't know it was happening."</p>
+
+    <h2>The real fix: anonymize before you upload, not instead of uploading</h2>
+    <p>Blocking AI tools outright just pushes usage to personal devices and personal accounts, which is worse &mdash; it's the exact pattern behind that 82% "unmanaged account" figure above. The alternative that actually works is boring and effective: strip or replace the sensitive parts of the data before it reaches any AI tool, so there's nothing left to leak.</p>
+    <p>Done properly, that means four specific things, not just "hashing the names":</p>
+    <ol>
+      <li><strong>Referential integrity.</strong> If <code>Customer_00231</code> is a foreign key in three different tables, it needs to become the exact same masked value in all three &mdash; otherwise the moment AI generates a JOIN or a formula against your real database later, it breaks. Row-by-row, table-by-table masking without this step quietly destroys the relationships that made the dataset a <em>dataset</em> in the first place.</li>
+      <li><strong>Format-preserving masking.</strong> An email needs to stay <code>text@domain.com</code>-shaped, a Polish PESEL or NIP needs to keep a valid checksum, a postal code needs to keep its mask &mdash; otherwise the AI-generated code that expects that format breaks on real production data later, even though it worked fine on the masked sample.</li>
+      <li><strong>Date shifting, not date randomizing.</strong> Time intelligence &mdash; a 14-day fulfillment window, a month-over-month trend &mdash; has to survive anonymization. The fix is a fixed, project-wide random offset (e.g., every date moves &minus;14 days) rather than randomizing each date independently, which would destroy the very patterns you're asking the AI to help you find.</li>
+      <li><strong>Deterministic output.</strong> The same input should always mask to the same output, every time you re-run the process on a refreshed export &mdash; otherwise every re-anonymization silently breaks the mappings the AI already built code against.</li>
+    </ol>
+    <p>Miss any one of these and the anonymized file <em>looks</em> safe but behaves differently from the real data &mdash; which means the SQL, the dashboard logic, or the script an AI tool wrote for you doesn't actually work once you point it at production.</p>
+
+    <h2>Why "local-first" is the part people skip</h2>
+    <p>A tool that does all four steps above but runs in someone else's cloud has just moved the leak one hop downstream &mdash; you're now trusting a second vendor with the raw file instead of trusting the AI provider with it directly. For genuinely sensitive data &mdash; health records, national ID numbers, anything under GDPR, HIPAA, or a client NDA &mdash; the anonymization step itself has to happen on your machine, with nothing uploaded anywhere, including to the tool doing the anonymizing. That's the only version of "zero-data-leak" that means what it says, and it's the reason this has to be desktop software, not a web form.</p>
+
+    <h2>This is exactly what ShiftMask does</h2>
+    <p>ShiftMask is a local-first Windows app built around this specific problem: turning real Excel, CSV, and SQL data into a structurally identical, fully anonymized dataset &mdash; entirely on your machine, before any of it goes near an AI tool.</p>
+    <p>It handles the parts described above natively: it detects primary/foreign key relationships across files automatically and masks them to matching values, it uses format-preserving masking so emails, postal codes, and national ID numbers stay valid-looking and checksum-correct, it shifts every date in a project by the same fixed, random offset so ordering and durations survive intact, and it's deterministic &mdash; the same real value always produces the same masked value, project over project. Nothing is uploaded, logged, or phoned home; the tool is built to work fully offline, air-gapped machines included.</p>
+    <p>The output is designed to be handed to an AI coding assistant with confidence: the AI writes and tests SQL, dashboards, or scripts against the masked structure, and because the relationships, formats, and time intelligence are all preserved, that same code runs unmodified against your real production data afterward &mdash; you're not translating AI-generated code from a toy example to reality, because the "toy example" already has the real shape.</p>
+    <p>ShiftMask's Core License is a one-time $39 payment per device (founding price for the first 150 licenses; $59&ndash;69 afterward) &mdash; no subscription, no account, no recurring dependency on a vendor to keep your own data usable. It currently runs on Windows, with DuckDB export and SQL sources arriving in an upcoming Pro tier.</p>
+
+    <h2>FAQ</h2>
+    <p><strong>Is it safe to paste company data into ChatGPT or Claude?</strong></p>
+    <p>Not if the data includes anything personal, confidential, or regulated (customer records, employee data, health information, financial details). Once text is submitted to a third-party AI service, you no longer fully control where it's processed, retained, or used for model improvement, and you may have no data processing agreement covering that transfer. The safe pattern is to anonymize the data locally first, then use the AI tool freely on the anonymized version.</p>
+
+    <p><strong>What's the difference between anonymization and pseudonymization for AI use?</strong></p>
+    <p>Pseudonymization replaces identifying values with a token but keeps a way to reverse it (a lookup table), so it's still regulated personal data under GDPR. True anonymization removes the ability to re-identify anyone, even by the company that did the masking &mdash; that's the standard AI-facing data should meet, since the file may leave your control the moment it's uploaded to a cloud AI tool.</p>
+
+    <p><strong>Can I anonymize Excel or CSV files without breaking formulas and relationships?</strong></p>
+    <p>Yes, but only if the anonymization tool understands the data as a dataset, not as independent columns. That means detecting which columns are keys shared across files and masking them to identical values everywhere, and shifting dates by a consistent offset rather than randomizing them &mdash; otherwise joins, VLOOKUPs, and time-based calculations stop working on the masked copy.</p>
+
+    <p><strong>Does anonymizing data before using AI tools satisfy GDPR?</strong></p>
+    <p>Properly anonymized data (where re-identification is not reasonably possible) falls outside GDPR's scope entirely, per Recital 26 &mdash; because it's no longer "personal data." Pseudonymized data is still in scope. This is why format-preserving, non-reversible masking (rather than simple encryption or a reversible token) is the safer default when the goal is using a third-party AI tool.</p>
+
+    <p><strong>Is a cloud-based data anonymization tool safe for sensitive data?</strong></p>
+    <p>It's safer than sending raw data straight to an AI tool, but it still means a second vendor sees your unmasked data before anything is anonymized. For data covered by GDPR, HIPAA, an NDA, or an air-gapped environment, the anonymization step itself needs to run locally, with nothing uploaded &mdash; otherwise you've just added a hop, not removed the risk.</p>
+
+    <div class="cta-block">
+      <p>Your team is already using AI on real data. The fix isn't a stricter policy; it's removing the tradeoff, so using AI safely and using AI at all are the same choice. Anonymize locally, preserve the structure, and there's nothing left to leak.</p>
+      <a class="btn btn-solid" href="/#pricing" data-goatcounter-click="cta-blog-safely-use-ai">Get ShiftMask Core License &mdash; $39, one time &rarr;</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wide fbar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="flinks">
+      <a href="/#how">Method</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/blog/">Blog</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="mailto:konradmyslinski@gmail.com?subject=ShiftMask">Contact</a>
+    </div>
+    <p class="rights">&copy; 2026 ShiftMask</p>
+  </div>
+</footer>
+
+<!-- Privacy-first analytics: no cookies, no cross-site profile. -->
+<script data-goatcounter="https://shiftmask.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<!-- Cookie consent banner (RODO/GDPR) — gates Google Analytics (GA4) behind explicit opt-in. GoatCounter above sets no cookies and is unaffected. -->
+<div id="consent-banner" class="consent-banner" hidden>
+  <div class="consent-inner">
+    <p class="consent-text">We'd like to use <strong>Google Analytics</strong> (sets cookies) to see which pages and links lead to downloads or purchases. It only runs if you accept — <a href="/privacy.html">Privacy Policy</a></p>
+    <div class="consent-actions">
+      <button type="button" class="consent-btn secondary" id="consent-reject">Reject</button>
+      <button type="button" class="consent-btn" id="consent-accept">Accept</button>
+    </div>
+  </div>
+</div>
+<button type="button" id="consent-widget" class="consent-widget" hidden aria-label="Cookie preferences">Cookies</button>
+
+<script>
+(function(){
+  var KEY = 'shiftmask_consent';
+  var GA_ID = 'G-5KEZY0VNNV';
+
+  function stored(){ try { return localStorage.getItem(KEY); } catch(e){ return null; } }
+  function store(v){ try { localStorage.setItem(KEY, v); } catch(e){} }
+
+  function loadGA(){
+    if (window.__smGaLoaded) return;
+    window.__smGaLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'granted'
+    });
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+  }
+
+  var consent = stored();
+  if (consent === 'granted') loadGA();
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var banner = document.getElementById('consent-banner');
+    var widget = document.getElementById('consent-widget');
+    var acceptBtn = document.getElementById('consent-accept');
+    var rejectBtn = document.getElementById('consent-reject');
+
+    function showBanner(){
+      if (banner) banner.hidden = false;
+      if (widget) widget.hidden = true;
+    }
+    function showWidget(){
+      if (banner) banner.hidden = true;
+      if (widget) widget.hidden = false;
+    }
+
+    if (consent) { showWidget(); } else { showBanner(); }
+
+    if (acceptBtn) acceptBtn.addEventListener('click', function(){
+      store('granted'); consent = 'granted'; loadGA(); showWidget();
+    });
+    if (rejectBtn) rejectBtn.addEventListener('click', function(){
+      store('denied'); consent = 'denied'; showWidget();
+    });
+    if (widget) widget.addEventListener('click', function(){ showBanner(); });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Policy — ShiftMask</title>
-<meta name="description" content="What shiftmask.com collects, what the ShiftMask desktop app never sends anywhere, and how to reach us about your data.">
-<link rel="canonical" href="https://shiftmask.com/privacy.html">
-<meta name="robots" content="noindex">
+<title>How to Prepare Data for ChatGPT or Claude Without Losing Structure</title>
+<meta name="description" content="Masking a file before you paste it into ChatGPT or Claude is half the job. Here's what to do with an answer that names a record that no longer means anything.">
+<link rel="canonical" href="https://shiftmask.com/blog/prepare-data-for-chatgpt-claude.html">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -62,8 +61,10 @@ h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);l
 .updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
 h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
 h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+h2 a{color:inherit;text-decoration:none}
+h2 a:hover{color:var(--coral)}
 p{color:var(--muted);margin:0 0 16px}
-ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+ol,ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
 li{margin:0 0 8px}
 strong{color:var(--fog);font-weight:600}
 .callout{
@@ -72,6 +73,22 @@ strong{color:var(--fog);font-weight:600}
 }
 .callout p{color:var(--fog);margin:0;font-size:15.5px}
 .note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
+.entry-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.cta-block{margin-top:48px;padding-top:28px;border-top:1px solid var(--rule)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
+  padding:17px 26px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.btn:hover{transform:translate(2px,-2px)}
+.btn-solid{background:var(--coral-solid);color:var(--ink)}
+.btn-solid:hover{background:#FF7357}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.btn-line:hover{border-color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
 
 footer{border-top:1px solid var(--rule);padding:32px 0}
 footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
@@ -95,6 +112,29 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 .consent-widget:hover{color:var(--fog);border-color:var(--fog)}
 .consent-widget[hidden]{display:none}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Prepare Data for ChatGPT or Claude Without Losing Structure",
+  "description": "Masking the file before you paste it into ChatGPT or Claude is half the job. Here's what to do with an answer that names a customer ID nobody on your team recognizes.",
+  "author": {"@type": "Person", "name": "Konrad Myśliński"},
+  "publisher": {"@type": "Organization", "name": "ShiftMask"},
+  "datePublished": "2026-09-01",
+  "mainEntityOfPage": "https://shiftmask.com/blog/prepare-data-for-chatgpt-claude.html"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Does the chat tool's memory retain my file after the conversation?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the product and your settings. Check the specific privacy and data-retention controls for the tool you are using rather than assuming either way."}},
+    {"@type": "Question", "name": "Isn't keeping a mask-to-real key its own privacy risk?", "acceptedAnswer": {"@type": "Answer", "text": "No more than keeping the original file was. The key lives locally and never leaves the machine, the same way the real data always did."}},
+    {"@type": "Question", "name": "Can I use the same masked file across multiple chat tools?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, masking happens once locally, and the same anonymized copy can be used with Claude, ChatGPT, Gemini, or a Copilot chat interchangeably."}}
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -115,46 +155,58 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
       <span class="wordmark">shift<span class="m">mask</span></span>
     </a>
-    <a class="back" href="/">&larr; Back to shiftmask.com</a>
+    <a class="back" href="/blog/">&larr; All articles</a>
   </div>
 </nav>
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Legal</p>
-    <h1>Privacy Policy</h1>
-    <p class="updated">Last updated 2026-08-31 &middot; Applies to shiftmask.com and the ShiftMask desktop application</p>
+    <p class="eyebrow">Guide</p>
+    <h1>How to Prepare Data for ChatGPT or Claude Without Losing Structure</h1>
+    <p class="updated">Published 2026-09-01 &middot; 5 min read</p>
 
     <div class="callout">
-      <p>The short version: <strong>the ShiftMask application itself sends nothing anywhere.</strong> It runs on your machine, reads the files you point it at, and writes its output back to your disk. There is no telemetry, no phone-home, no update check that leaks a file name. This page is about the much smaller footprint of the <em>website</em> and the <em>purchase</em> — not the product.</p>
+      <p>Getting a safe file into the chat window is half the job. The other half is what you do with the answer that comes back &mdash; and that depends entirely on whether the model gave you a formula or a sentence naming a specific record.</p>
     </div>
 
-    <h2>1. Who this is</h2>
-    <p>ShiftMask is operated by Konrad Myśliński, based in Poland. For anything on this page, write to <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a>.</p>
+    <p>You've masked the file. Real names are gone, account numbers are scrambled, dates are shifted by a few weeks. You paste it into Claude or ChatGPT, ask for an analysis, and get a paragraph back naming "Customer_00231" as your highest churn risk. Now what &mdash; that ID means nothing to anyone on your team.</p>
 
-    <h2>2. What the website collects</h2>
-    <p>shiftmask.com uses <strong>GoatCounter</strong>, a privacy-first analytics tool, to count page views and see which links get clicked (for example, the download and pricing buttons). It does not use cookies, does not build a cross-site profile of you, and does not sell or share data with advertisers. It records things like: page visited, referring site, country-level location derived from IP address, and browser type — your full IP address is discarded, not stored.</p>
-    <p>shiftmask.com also offers <strong>Google Analytics (GA4)</strong> to understand traffic and which pages and links lead to downloads or purchases — but only if you say yes. On your first visit, a banner asks whether to turn it on; until you click Accept, the Google Analytics script is never loaded and nothing is sent to Google. If you accept, Google Analytics sets first-party cookies in your browser and sends data — pages viewed, referring site, approximate location, device and browser type, and on-page interactions like scrolls and outbound clicks — to Google. We have not enabled Google Signals or ad personalization features. Your choice is stored only in your own browser (not on our servers), and you can change it anytime via the "Cookies" link in the footer. Google's own handling of this data is described in the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> and the <a href="https://business.safety.google/adsservices/" target="_blank" rel="noopener">Google Ads Data Processing Terms</a> that apply to Analytics.</p>
-    <p>GitHub, which hosts this site, also keeps its own standard server logs (IP address, requested file, timestamp) for a short period, under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's own privacy statement</a> — this is outside our control, same as for any site hosted on GitHub Pages.</p>
+    <p>This is the step most anonymize-before-AI advice skips.</p>
 
-    <h2>3. What happens when you buy a license</h2>
-    <p>Purchases are handled by <strong>Gumroad</strong>, acting as merchant of record. When you buy, Gumroad collects your email address and payment details directly — we never see or store your card number. Gumroad passes us your email address and purchase timestamp so we can issue and, if needed, help recover your license. Gumroad's own handling of your data is described in the <a href="https://gumroad.com/privacy" target="_blank" rel="noopener">Gumroad Privacy Policy</a>.</p>
+    <h2>Two kinds of answer, two different next steps</h2>
+    <p>If the model gives you a formula, a script, or SQL, you apply it directly to the real file. No extra step, because the code references column names and logic, not the specific values it saw.</p>
+    <p>If the model gives you a narrative that names specific rows, IDs, or values, you have to resolve those back to reality before the answer means anything. "Customer_00231 generates 40% more revenue than your median account, largely from repeat orders in Q3" is a genuinely useful sentence. It's also useless until 00231 has a name attached to it again.</p>
 
-    <h2>4. What happens when you email us</h2>
-    <p>If you write to us for support or with a question, we keep that email thread to answer you and, if it points to a real bug, to fix it. We don't add you to a marketing list from a support email — if we ever start a mailing list, it will be opt-in, separate, and easy to leave.</p>
+    <h2>What reverse mapping actually is</h2>
+    <p>ShiftMask keeps a local dictionary of masked value to real value for every project. Reverse mapping means running the model's output back through that same dictionary so IDs, names, and other masked fields resolve to the real ones before anyone acts on them. It's a feature we're building next, not something in the current Core License &mdash; and it never leaves the machine, for the same reason the original file doesn't: the dictionary that connects a mask to a real record is exactly as sensitive as the record itself.</p>
+    <p>Until it ships, the practical version is a lookup list you keep yourself &mdash; a simple two-column sheet, mask value on one side, real value on the other, open only on your own machine &mdash; and doing the find-and-replace by hand on any output that names specific records.</p>
 
-    <h2>5. What we don't do</h2>
-    <ul>
-      <li>We don't sell, rent or trade your data to anyone.</li>
-      <li>We don't run advertising trackers, pixels, or cross-site ad networks on this site.</li>
-      <li>We don't and can't see the files you process with the ShiftMask application — it never leaves your machine.</li>
-    </ul>
+    <h2>Step by step</h2>
+    <ol>
+      <li>Mask the file with ShiftMask. Keep the project's masked-to-real key somewhere local, never in the same message thread as the chat.</li>
+      <li>Paste the masked file or the relevant sheet into Claude or ChatGPT and ask for the analysis.</li>
+      <li>If the answer is a formula, script, or SQL, apply it straight to the real file. Done.</li>
+      <li>If the answer references specific rows, IDs, or names, resolve those against your key before you act on it or share it with anyone else.</li>
+    </ol>
 
-    <h2>6. Your rights</h2>
-    <p>If you're in the EU/EEA, UK, or a US state with its own privacy law (like California), you can ask us what we hold about you, ask us to correct or delete it, or object to how it's used. Since the only data we hold is your support-email thread and whatever Gumroad forwards us about a purchase, this is usually a quick request — email <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a> and we'll sort it out directly rather than making you fill out a form.</p>
+    <h2>Where this goes wrong</h2>
+    <p>Partial masking is the most common failure. Masking the customer ID column but leaving the email column visible defeats the point &mdash; a masked ID sitting next to a real email re-identifies the row instantly. The same applies to combinations of fields that look harmless individually but aren't together: a frequently cited study by Latanya Sweeney found that roughly 87% of Americans could be uniquely identified from nothing more than a five-digit ZIP code, birth date, and sex, even with every name already removed. Masking has to cover the columns that combine to re-identify someone, not just the ones with an obvious name in the header.</p>
+    <p>The other common mistake is mid-conversation drift: pasting one real value "just to double check" into a thread that's otherwise using masked data. At that point the chat has seen the real record, and the anonymization step accomplished nothing for that particular value.</p>
 
-    <h2>7. Changes to this policy</h2>
-    <p>If this changes — a new analytics tool, a new payment processor — we'll update the date at the top of this page. Given how little this site actually collects, we don't expect that to happen often.</p>
+    <h2>FAQ</h2>
+    <p><strong>Does the chat tool's memory retain my file after the conversation?</strong></p>
+    <p>It depends on the product and your settings &mdash; chat history, memory features, and data-retention options vary by tool and change over time. Check the specific privacy and data controls for the tool you're using before assuming either way, and turn off any "use my conversations to improve the model" setting if that matters for your case.</p>
+
+    <p><strong>Isn't keeping a mask-to-real key its own privacy risk?</strong></p>
+    <p>No more than keeping the original file was. The key lives locally, the same way the real data always did, and never leaves the machine &mdash; it's exactly the thing an on-device reverse-mapping feature is meant to replace with something less manual, not a new category of exposure.</p>
+
+    <p><strong>Can I use the same masked file across multiple chat tools?</strong></p>
+    <p>Yes. Masking happens once, locally. You can hand the same anonymized copy to Claude, ChatGPT, Gemini, or a Copilot chat interchangeably, since none of them needs the real file to do useful work on the structure.</p>
+
+    <div class="cta-block">
+      <p>The masking step gets all the attention because it's the one that stops data leaving your machine. The unmasking step is the one that makes the answer worth having.</p>
+      <a class="btn btn-solid" href="/#pricing" data-goatcounter-click="cta-blog-prepare-chatgpt">Get ShiftMask Core License &mdash; $39, one time &rarr;</a>
+    </div>
   </div>
 </main>
 
@@ -167,10 +219,9 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     <div class="flinks">
       <a href="/#how">Method</a>
       <a href="/#pricing">Pricing</a>
-      <a href="/#faq">FAQ</a>
       <a href="/blog/">Blog</a>
       <a href="/privacy.html">Privacy</a>
-      <a href="mailto:konradmyslinski@gmail.com">Contact</a>
+      <a href="mailto:konradmyslinski@gmail.com?subject=ShiftMask">Contact</a>
     </div>
     <p class="rights">&copy; 2026 ShiftMask</p>
   </div>
@@ -249,7 +300,6 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
   });
 })();
 </script>
-
 
 </body>
 </html>

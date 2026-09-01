@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy Policy — ShiftMask</title>
-<meta name="description" content="What shiftmask.com collects, what the ShiftMask desktop app never sends anywhere, and how to reach us about your data.">
-<link rel="canonical" href="https://shiftmask.com/privacy.html">
-<meta name="robots" content="noindex">
+<title>Blog — ShiftMask</title>
+<meta name="description" content="Practical guides on anonymizing Excel, CSV and SQL data before using AI tools — Copilot, Claude, ChatGPT — safely, without breaking joins or formulas.">
+<link rel="canonical" href="https://shiftmask.com/blog/">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -62,8 +61,10 @@ h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);l
 .updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
 h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
 h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+h2 a{color:inherit;text-decoration:none}
+h2 a:hover{color:var(--coral)}
 p{color:var(--muted);margin:0 0 16px}
-ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+ol,ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
 li{margin:0 0 8px}
 strong{color:var(--fog);font-weight:600}
 .callout{
@@ -72,6 +73,22 @@ strong{color:var(--fog);font-weight:600}
 }
 .callout p{color:var(--fog);margin:0;font-size:15.5px}
 .note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
+.entry-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
+.cta-block{margin-top:48px;padding-top:28px;border-top:1px solid var(--rule)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
+  padding:17px 26px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.btn:hover{transform:translate(2px,-2px)}
+.btn-solid{background:var(--coral-solid);color:var(--ink)}
+.btn-solid:hover{background:#FF7357}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.btn-line:hover{border-color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
 
 footer{border-top:1px solid var(--rule);padding:32px 0}
 footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
@@ -95,6 +112,15 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 .consent-widget:hover{color:var(--fog);border-color:var(--fog)}
 .consent-widget[hidden]{display:none}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "ShiftMask Blog",
+  "url": "https://shiftmask.com/blog/",
+  "description": "Practical guides on anonymizing Excel, CSV and SQL data before using AI tools safely."
+}
+</script>
 </head>
 <body>
 
@@ -121,40 +147,22 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Legal</p>
-    <h1>Privacy Policy</h1>
-    <p class="updated">Last updated 2026-08-31 &middot; Applies to shiftmask.com and the ShiftMask desktop application</p>
+    <p class="eyebrow">Blog</p>
+    <h1>Guides for using AI safely with real data</h1>
+    <p class="updated">Practical, no-nonsense walkthroughs &mdash; not theory. Anonymize locally, keep the structure, hand AI tools something safe to work with.</p>
+    
+    <p class="entry-meta">Guide &middot; 7 min read</p>
+    <h2><a href="/blog/safely-use-ai-with-sensitive-data.html">How to Use AI Safely With Sensitive Company Data</a></h2>
+    <p>Anonymizing one column is easy. Anonymizing a dataset without breaking the joins, formats, and dates AI-generated code depends on is not — unless you do these four things. <a href="/blog/safely-use-ai-with-sensitive-data.html">Read the guide &rarr;</a></p>
 
-    <div class="callout">
-      <p>The short version: <strong>the ShiftMask application itself sends nothing anywhere.</strong> It runs on your machine, reads the files you point it at, and writes its output back to your disk. There is no telemetry, no phone-home, no update check that leaks a file name. This page is about the much smaller footprint of the <em>website</em> and the <em>purchase</em> — not the product.</p>
-    </div>
+    <p class="entry-meta">Guide &middot; 5 min read</p>
+    <h2><a href="/blog/copilot-excel-sensitive-data.html">How to Use Copilot in Excel Safely With Sensitive Data</a></h2>
+    <p>Copilot and Claude for Excel read your live workbook directly — there's no chat window to intercept. Here's the workflow that keeps sensitive cells out of it anyway. <a href="/blog/copilot-excel-sensitive-data.html">Read the guide &rarr;</a></p>
 
-    <h2>1. Who this is</h2>
-    <p>ShiftMask is operated by Konrad Myśliński, based in Poland. For anything on this page, write to <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a>.</p>
+    <p class="entry-meta">Guide &middot; 5 min read</p>
+    <h2><a href="/blog/prepare-data-for-chatgpt-claude.html">How to Prepare Data for ChatGPT or Claude Without Losing Structure</a></h2>
+    <p>Masking the file before you paste it is half the job. Here's what to do with an answer that names a customer ID nobody on your team recognizes. <a href="/blog/prepare-data-for-chatgpt-claude.html">Read the guide &rarr;</a></p>
 
-    <h2>2. What the website collects</h2>
-    <p>shiftmask.com uses <strong>GoatCounter</strong>, a privacy-first analytics tool, to count page views and see which links get clicked (for example, the download and pricing buttons). It does not use cookies, does not build a cross-site profile of you, and does not sell or share data with advertisers. It records things like: page visited, referring site, country-level location derived from IP address, and browser type — your full IP address is discarded, not stored.</p>
-    <p>shiftmask.com also offers <strong>Google Analytics (GA4)</strong> to understand traffic and which pages and links lead to downloads or purchases — but only if you say yes. On your first visit, a banner asks whether to turn it on; until you click Accept, the Google Analytics script is never loaded and nothing is sent to Google. If you accept, Google Analytics sets first-party cookies in your browser and sends data — pages viewed, referring site, approximate location, device and browser type, and on-page interactions like scrolls and outbound clicks — to Google. We have not enabled Google Signals or ad personalization features. Your choice is stored only in your own browser (not on our servers), and you can change it anytime via the "Cookies" link in the footer. Google's own handling of this data is described in the <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a> and the <a href="https://business.safety.google/adsservices/" target="_blank" rel="noopener">Google Ads Data Processing Terms</a> that apply to Analytics.</p>
-    <p>GitHub, which hosts this site, also keeps its own standard server logs (IP address, requested file, timestamp) for a short period, under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">GitHub's own privacy statement</a> — this is outside our control, same as for any site hosted on GitHub Pages.</p>
-
-    <h2>3. What happens when you buy a license</h2>
-    <p>Purchases are handled by <strong>Gumroad</strong>, acting as merchant of record. When you buy, Gumroad collects your email address and payment details directly — we never see or store your card number. Gumroad passes us your email address and purchase timestamp so we can issue and, if needed, help recover your license. Gumroad's own handling of your data is described in the <a href="https://gumroad.com/privacy" target="_blank" rel="noopener">Gumroad Privacy Policy</a>.</p>
-
-    <h2>4. What happens when you email us</h2>
-    <p>If you write to us for support or with a question, we keep that email thread to answer you and, if it points to a real bug, to fix it. We don't add you to a marketing list from a support email — if we ever start a mailing list, it will be opt-in, separate, and easy to leave.</p>
-
-    <h2>5. What we don't do</h2>
-    <ul>
-      <li>We don't sell, rent or trade your data to anyone.</li>
-      <li>We don't run advertising trackers, pixels, or cross-site ad networks on this site.</li>
-      <li>We don't and can't see the files you process with the ShiftMask application — it never leaves your machine.</li>
-    </ul>
-
-    <h2>6. Your rights</h2>
-    <p>If you're in the EU/EEA, UK, or a US state with its own privacy law (like California), you can ask us what we hold about you, ask us to correct or delete it, or object to how it's used. Since the only data we hold is your support-email thread and whatever Gumroad forwards us about a purchase, this is usually a quick request — email <a href="mailto:konradmyslinski@gmail.com">konradmyslinski@gmail.com</a> and we'll sort it out directly rather than making you fill out a form.</p>
-
-    <h2>7. Changes to this policy</h2>
-    <p>If this changes — a new analytics tool, a new payment processor — we'll update the date at the top of this page. Given how little this site actually collects, we don't expect that to happen often.</p>
   </div>
 </main>
 
@@ -167,10 +175,9 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     <div class="flinks">
       <a href="/#how">Method</a>
       <a href="/#pricing">Pricing</a>
-      <a href="/#faq">FAQ</a>
       <a href="/blog/">Blog</a>
       <a href="/privacy.html">Privacy</a>
-      <a href="mailto:konradmyslinski@gmail.com">Contact</a>
+      <a href="mailto:konradmyslinski@gmail.com?subject=ShiftMask">Contact</a>
     </div>
     <p class="rights">&copy; 2026 ShiftMask</p>
   </div>
@@ -249,7 +256,6 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
   });
 })();
 </script>
-
 
 </body>
 </html>

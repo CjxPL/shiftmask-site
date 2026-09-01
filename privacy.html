@@ -55,6 +55,47 @@ nav .bar{
 nav .wordmark{font-size:22px}
 nav a.back{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none}
 nav a.back:hover{color:var(--fog)}
+/* ---------- mobile menu ---------- */
+.menu-toggle{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;flex-shrink:0;
+  background:transparent;border:1px solid var(--rule-bright);border-radius:2px;
+  cursor:pointer;padding:0;
+}
+.menu-toggle:hover{border-color:var(--fog)}
+.menu-toggle-bars{position:relative;display:block;width:18px;height:2px;background:var(--fog);transition:background .15s ease}
+.menu-toggle-bars::before,.menu-toggle-bars::after{
+  content:"";position:absolute;left:0;width:18px;height:2px;background:var(--fog);
+  transition:transform .18s ease, opacity .18s ease;
+}
+.menu-toggle-bars::before{top:-6px}
+.menu-toggle-bars::after{top:6px}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars{background:transparent}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars::before{top:0;transform:rotate(45deg)}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars::after{top:0;transform:rotate(-45deg)}
+
+.mobile-menu{
+  display:block;overflow:hidden;max-height:0;
+  border-top:1px solid var(--rule);background:var(--ink);
+  transition:max-height .22s ease;
+}
+.mobile-menu.open{max-height:360px}
+.mobile-menu-inner{padding:6px var(--gut) 22px}
+.mobile-menu-eyebrow{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin:18px 0 4px;
+}
+.mobile-menu a{
+  display:block;font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:-.01em;
+  color:var(--fog);text-decoration:none;padding:14px 0;border-top:1px solid var(--rule);
+}
+.mobile-menu a:first-of-type{border-top:none}
+.mobile-menu a:hover,.mobile-menu a:active{color:var(--coral)}
+
+@media (prefers-reduced-motion:reduce){
+  .mobile-menu{transition:none}
+  .menu-toggle-bars,.menu-toggle-bars::before,.menu-toggle-bars::after{transition:none}
+}
 
 main{padding:clamp(48px,8vw,88px) 0 clamp(64px,9vw,110px)}
 .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:0 0 14px}
@@ -115,7 +156,18 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
       <span class="wordmark">shift<span class="m">mask</span></span>
     </a>
-    <a class="back" href="/">&larr; Back to shiftmask.com</a>
+    <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+      <span class="menu-toggle-bars" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="shell mobile-menu-inner">
+      <p class="mobile-menu-eyebrow">Menu</p>
+      <a href="/#how">Method</a>
+      <a href="/#survives">What survives</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/blog/">Blog</a>
+    </div>
   </div>
 </nav>
 
@@ -250,6 +302,42 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 })();
 </script>
 
+
+<script>
+(function(){
+  var toggle = document.getElementById('menu-toggle');
+  var panel = document.getElementById('mobile-menu');
+  if (!toggle || !panel) return;
+
+  function closeMenu(){
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
+    panel.classList.remove('open');
+  }
+  function openMenu(){
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close menu');
+    panel.classList.add('open');
+  }
+
+  toggle.addEventListener('click', function(){
+    var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  panel.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 760) closeMenu();
+  });
+})();
+</script>
 
 </body>
 </html>

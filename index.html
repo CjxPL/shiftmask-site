@@ -752,7 +752,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
         </div>
         <div class="item">
           <h3>Does my data leave my computer?</h3>
-          <p>No. ShiftMask is a desktop application. It reads your files locally, builds the anonymized copy in a local DuckDB database, and writes the output to your disk. You decide what, if anything, gets sent anywhere.</p>
+          <p>No. ShiftMask is a desktop application. It reads your files locally, builds the masked copy in a local DuckDB database, and writes the output to your disk. You decide what, if anything, gets sent anywhere.</p>
         </div>
         <div class="item">
           <h3>Does masking break my Power BI time intelligence?</h3>
@@ -1009,7 +1009,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       "@type": "FAQPage",
       "mainEntity": [
         {"@type":"Question","name":"Is it safe to put company data into ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"Not the real data. Anything you paste leaves your control, and most public AI tools give no contractual guarantee about where it goes. ShiftMask lets you send a structurally identical copy in which no value maps back to a real person or account, and you still get working code back."}},
-        {"@type":"Question","name":"Does my data leave my computer?","acceptedAnswer":{"@type":"Answer","text":"No. ShiftMask is a desktop application. It reads files locally, builds the anonymized copy in a local DuckDB database, and writes the output to your disk."}},
+        {"@type":"Question","name":"Does my data leave my computer?","acceptedAnswer":{"@type":"Answer","text":"No. ShiftMask is a desktop application. It reads files locally, builds the masked copy in a local DuckDB database, and writes the output to your disk."}},
         {"@type":"Question","name":"Does masking break my Power BI time intelligence?","acceptedAnswer":{"@type":"Answer","text":"No. Random date replacement destroys intervals, which breaks YTD, YoY and rolling calculations. ShiftMask moves every date by one shared offset, so the distance between any two events is unchanged and time-based measures return the same shape."}},
         {"@type":"Question","name":"How do I anonymize an Excel file for AI?","acceptedAnswer":{"@type":"Answer","text":"Open the workbook in ShiftMask, confirm which columns hold personal data, and export. You get a workbook or DuckDB file with the same sheets, columns and relationships, and with names, identifiers and dates replaced."}},
         {"@type":"Question","name":"Does ShiftMask make me GDPR compliant?","acceptedAnswer":{"@type":"Answer","text":"No tool can make that promise. ShiftMask removes personal data from the copy you share, which is usually the hard part of using public AI tools lawfully, but your obligations under GDPR and HIPAA still depend on your own processes."}},

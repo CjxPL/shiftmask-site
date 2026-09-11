@@ -221,7 +221,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <p>Copilot in Excel and Claude for Excel read the live workbook directly through their own connection to Microsoft's or Anthropic's servers. There's no chat window to swap a masked file into. The workflow that keeps sensitive cells out of it happens one step earlier: mask the file first, run the add-in on the masked copy, then carry the formula &mdash; not the literal answer &mdash; back to the real workbook.</p>
     </div>
 
-    <p>You open a workbook with last quarter's churn numbers, real account names, real revenue figures, and ask Copilot to build a summary pivot. It answers in a couple of seconds, reading straight from the cells you already have open. Nothing gets uploaded to a chat window first. That's the part people miss when they try to apply the same anonymize-before-you-paste habit they've built for ChatGPT.</p>
+    <p>You open a workbook with last quarter's churn numbers, real account names, real revenue figures, and ask Copilot to build a summary pivot. It answers in a couple of seconds, reading straight from the cells you already have open. Nothing gets uploaded to a chat window first. That's the part people miss when they try to apply the same instinct to strip the data before pasting they've built for ChatGPT.</p>
 
     <p>Copilot in Excel and Claude for Excel don't work like a chat window. There's no separate step where you paste text and could swap in a masked version instead. The add-in reads the live sheet through its own connection, and that connection is a fixed part of how the feature works.</p>
 
@@ -230,7 +230,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
     <h2>The workflow that actually works</h2>
     <ol>
-      <li>Make an anonymized copy of the workbook with ShiftMask &mdash; same tabs, same column headers, same relationships between sheets, none of the real values.</li>
+      <li>Make a masked copy of the workbook with ShiftMask &mdash; same tabs, same column headers, same relationships between sheets, none of the real values.</li>
       <li>Open the masked copy and let Copilot or Claude for Excel do its normal work: pivot tables, formulas, cleanup, chart suggestions.</li>
       <li>Take the formula or the calculated column it wrote &mdash; not the specific numbers it typed into a summary cell.</li>
       <li>Paste that formula into the real workbook. Because column names, data types, and table relationships are identical between the masked copy and the original, it runs without edits.</li>

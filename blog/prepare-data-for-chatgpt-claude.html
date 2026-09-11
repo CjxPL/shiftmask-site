@@ -172,7 +172,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
   "mainEntity": [
     {"@type": "Question", "name": "Does the chat tool's memory retain my file after the conversation?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the product and your settings. Check the specific privacy and data-retention controls for the tool you are using rather than assuming either way."}},
     {"@type": "Question", "name": "Isn't keeping a mask-to-real key its own privacy risk?", "acceptedAnswer": {"@type": "Answer", "text": "No more than keeping the original file was. The key lives locally and never leaves the machine, the same way the real data always did."}},
-    {"@type": "Question", "name": "Can I use the same masked file across multiple chat tools?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, masking happens once locally, and the same anonymized copy can be used with Claude, ChatGPT, Gemini, or a Copilot chat interchangeably."}}
+    {"@type": "Question", "name": "Can I use the same masked file across multiple chat tools?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, masking happens once locally, and the same masked copy can be used with Claude, ChatGPT, Gemini, or a Copilot chat interchangeably."}}
   ]
 }
 </script>
@@ -223,7 +223,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
     <p>You've masked the file. Real names are gone, account numbers are scrambled, dates are shifted by a few weeks. You paste it into Claude or ChatGPT, ask for an analysis, and get a paragraph back naming "Customer_00231" as your highest churn risk. Now what &mdash; that ID means nothing to anyone on your team.</p>
 
-    <p>This is the step most anonymize-before-AI advice skips.</p>
+    <p>This is the step most guidance on masking data for AI skips.</p>
 
     <h2>Two kinds of answer, two different next steps</h2>
     <p>If the model gives you a formula, a script, or SQL, you apply it directly to the real file. No extra step, because the code references column names and logic, not the specific values it saw.</p>
@@ -243,7 +243,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
     <h2>Where this goes wrong</h2>
     <p>Partial masking is the most common failure. Masking the customer ID column but leaving the email column visible defeats the point &mdash; a masked ID sitting next to a real email re-identifies the row instantly. The same applies to combinations of fields that look harmless individually but aren't together: a frequently cited study by Latanya Sweeney found that roughly 87% of Americans could be uniquely identified from nothing more than a five-digit ZIP code, birth date, and sex, even with every name already removed. Masking has to cover the columns that combine to re-identify someone, not just the ones with an obvious name in the header.</p>
-    <p>The other common mistake is mid-conversation drift: pasting one real value "just to double check" into a thread that's otherwise using masked data. At that point the chat has seen the real record, and the anonymization step accomplished nothing for that particular value.</p>
+    <p>The other common mistake is mid-conversation drift: pasting one real value "just to double check" into a thread that's otherwise using masked data. At that point the chat has seen the real record, and the masking step accomplished nothing for that particular value.</p>
 
     <h2>FAQ</h2>
     <p><strong>Does the chat tool's memory retain my file after the conversation?</strong></p>
@@ -253,7 +253,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     <p>No more than keeping the original file was. The key lives locally, the same way the real data always did, and never leaves the machine &mdash; it's exactly the thing an on-device reverse-mapping feature is meant to replace with something less manual, not a new category of exposure.</p>
 
     <p><strong>Can I use the same masked file across multiple chat tools?</strong></p>
-    <p>Yes. Masking happens once, locally. You can hand the same anonymized copy to Claude, ChatGPT, Gemini, or a Copilot chat interchangeably, since none of them needs the real file to do useful work on the structure.</p>
+    <p>Yes. Masking happens once, locally. You can hand the same masked copy to Claude, ChatGPT, Gemini, or a Copilot chat interchangeably, since none of them needs the real file to do useful work on the structure.</p>
 
     <div class="cta-block">
       <p>The masking step gets all the attention because it's the one that stops data leaving your machine. The unmasking step is the one that makes the answer worth having.</p>

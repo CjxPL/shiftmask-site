@@ -3,8 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Use AI Safely With Sensitive Company Data</title>
-<meta name="description" content="Employees paste sensitive data into AI tools every day. Here's how to anonymize Excel, CSV and SQL data before it reaches ChatGPT — without breaking GDPR.">
+<title>This guide is being rewritten — ShiftMask</title>
+<meta name="description" content="This guide has been taken down while it is rewritten.">
+<meta name="robots" content="noindex,follow">
 <link rel="canonical" href="https://shiftmask.com/blog/safely-use-ai-with-sensitive-data.html">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -157,25 +158,12 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "How to Use AI Safely With Sensitive Company Data",
-  "description": "Employees paste sensitive data into AI tools every day. Here's how to anonymize Excel, CSV and SQL data before it reaches ChatGPT — without breaking GDPR.",
+  "headline": "This guide is being rewritten",
+  "description": "This guide has been taken down while it is rewritten.",
   "author": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
   "publisher": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
   "datePublished": "2026-09-01",
   "mainEntityOfPage": "https://shiftmask.com/blog/safely-use-ai-with-sensitive-data.html"
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type": "Question", "name": "Is it safe to paste company data into ChatGPT or Claude?", "acceptedAnswer": {"@type": "Answer", "text": "Not if the data includes anything personal, confidential, or regulated. The safe pattern is to anonymize the data locally first, then use the AI tool freely on the anonymized version."}},
-    {"@type": "Question", "name": "What's the difference between anonymization and pseudonymization for AI use?", "acceptedAnswer": {"@type": "Answer", "text": "Pseudonymization keeps a way to reverse the masking and is still regulated personal data under GDPR. True anonymization removes the ability to re-identify anyone, which is the standard AI-facing data should meet."}},
-    {"@type": "Question", "name": "Can I anonymize Excel or CSV files without breaking formulas and relationships?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, if the tool detects which columns are keys shared across files and masks them identically everywhere, and shifts dates by a consistent offset rather than randomizing them."}},
-    {"@type": "Question", "name": "Does anonymizing data before using AI tools satisfy GDPR?", "acceptedAnswer": {"@type": "Answer", "text": "Properly anonymized data falls outside GDPR's scope per Recital 26, since it is no longer personal data. Pseudonymized data remains in scope."}},
-    {"@type": "Question", "name": "Is a cloud-based data anonymization tool safe for sensitive data?", "acceptedAnswer": {"@type": "Answer", "text": "It is safer than sending raw data straight to an AI tool, but a second vendor still sees the unmasked data first. For regulated data, the anonymization step itself should run locally."}}
-  ]
 }
 </script>
 </head>
@@ -216,65 +204,12 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 <main>
   <div class="shell">
     <p class="eyebrow">Guide</p>
-    <h1>How to Use AI Safely With Sensitive Company Data</h1>
-    <p class="updated">Published 2026-09-01 &middot; 7 min read</p>
-
-    <div class="callout">
-      <p>Anonymizing a single column ("just hash the email") is easy. Anonymizing a <em>dataset</em> &mdash; several related Excel or CSV files, or a SQL export, where a customer ID in one table has to match the same customer ID in another &mdash; is not, unless the tool preserves referential integrity and shifts dates consistently. Do that locally, before anything leaves your machine, and you can hand AI tools a structurally identical, fully realistic dataset with zero real records in it.</p>
-    </div>
-
-    <p>Someone on your team is going to paste a spreadsheet into ChatGPT this week. Not out of carelessness &mdash; because it's the fastest way to get a formula fixed, a trend explained, or a report drafted. According to Cyberhaven's 2026 AI Adoption &amp; Risk Report, nearly 40% of all AI interactions now involve sensitive data, and employees share it roughly once every three days. Most of that traffic runs through personal accounts your IT team can't see and your DPA doesn't cover.</p>
-
-    <p>That's not a hypothetical risk. It's Tuesday.</p>
-
-    <p>This article is about the actual mechanics of using AI safely with real company data &mdash; not "write an AI policy and hope people read it," but the specific technical step that makes the policy true: anonymizing the data before it ever reaches the model, in a way that doesn't wreck the thing that made the data useful in the first place.</p>
-
-    <h2>Why "just don't paste sensitive data" doesn't work</h2>
-    <p>Every company already has a policy that says, in effect, "don't put customer data into ChatGPT." Almost none of them have a way to enforce it that doesn't slow people down.</p>
-    <p>The numbers back this up. LayerX's <em>Enterprise AI and SaaS Data Security Report</em> found that 77% of employees who use generative AI tools copy-paste data directly into them, and 22% of those paste operations contain PII or PCI data &mdash; with 82% happening through personal, unmanaged accounts that sit entirely outside corporate visibility (<a href="https://www.theregister.com/2025/10/07/gen_ai_shadow_it_secrets" target="_blank" rel="noopener">LayerX, via The Register</a>). Cyberhaven's separate research puts sensitive-data exposure at closer to 40% of all AI interactions (<a href="https://www.cyberhaven.com/blog/4-2-of-workers-have-pasted-company-data-into-chatgpt" target="_blank" rel="noopener">Cyberhaven, 2026 AI Adoption &amp; Risk Report</a>).</p>
-    <p>Neither number describes malicious behavior. It describes normal work, done with the tools people actually have. A policy that only says "don't" competes with a deadline and loses.</p>
-    <p>There's also a regulatory dimension that's easy to underestimate. In 2024&ndash;2025, Italy's data protection authority (the Garante) fined OpenAI &euro;15 million for processing EU users' personal data without an adequate legal basis and for failing to report a security incident (<a href="https://complydog.com/blog/openai-gdpr-fine" target="_blank" rel="noopener">ComplyDog summary of the Garante decision</a>). That fine was about OpenAI's own conduct as a data controller &mdash; but it's a preview of the same question regulators will eventually ask your company: what legal basis did you have for sending EU customer data to a third-party model, and did you have a data processing agreement in place when someone did? For most GDPR-covered businesses, the honest answer today is "none, because we didn't know it was happening."</p>
-
-    <h2>The real fix: anonymize before you upload, not instead of uploading</h2>
-    <p>Blocking AI tools outright just pushes usage to personal devices and personal accounts, which is worse &mdash; it's the exact pattern behind that 82% "unmanaged account" figure above. The alternative that actually works is boring and effective: strip or replace the sensitive parts of the data before it reaches any AI tool, so there's nothing left to leak.</p>
-    <p>Done properly, that means four specific things, not just "hashing the names":</p>
-    <ol>
-      <li><strong>Referential integrity.</strong> If <code>Customer_00231</code> is a foreign key in three different tables, it needs to become the exact same masked value in all three &mdash; otherwise the moment AI generates a JOIN or a formula against your real database later, it breaks. Row-by-row, table-by-table masking without this step quietly destroys the relationships that made the dataset a <em>dataset</em> in the first place.</li>
-      <li><strong>Format-preserving masking.</strong> An email needs to stay <code>text@domain.com</code>-shaped, a Polish PESEL or NIP needs to keep a valid checksum, a postal code needs to keep its mask &mdash; otherwise the AI-generated code that expects that format breaks on real production data later, even though it worked fine on the masked sample.</li>
-      <li><strong>Date shifting, not date randomizing.</strong> Time intelligence &mdash; a 14-day fulfillment window, a month-over-month trend &mdash; has to survive anonymization. The fix is a fixed, project-wide random offset (e.g., every date moves &minus;14 days) rather than randomizing each date independently, which would destroy the very patterns you're asking the AI to help you find.</li>
-      <li><strong>Deterministic output.</strong> The same input should always mask to the same output, every time you re-run the process on a refreshed export &mdash; otherwise every re-anonymization silently breaks the mappings the AI already built code against.</li>
-    </ol>
-    <p>Miss any one of these and the anonymized file <em>looks</em> safe but behaves differently from the real data &mdash; which means the SQL, the dashboard logic, or the script an AI tool wrote for you doesn't actually work once you point it at production.</p>
-
-    <h2>Why "local-first" is the part people skip</h2>
-    <p>A tool that does all four steps above but runs in someone else's cloud has just moved the leak one hop downstream &mdash; you're now trusting a second vendor with the raw file instead of trusting the AI provider with it directly. For genuinely sensitive data &mdash; health records, national ID numbers, anything under GDPR, HIPAA, or a client NDA &mdash; the anonymization step itself has to happen on your machine, with nothing uploaded anywhere, including to the tool doing the anonymizing. That's the only version of "zero-data-leak" that means what it says, and it's the reason this has to be desktop software, not a web form.</p>
-
-    <h2>This is exactly what ShiftMask does</h2>
-    <p>ShiftMask is a local-first Windows app built around this specific problem: turning real Excel, CSV, and SQL data into a structurally identical, fully anonymized dataset &mdash; entirely on your machine, before any of it goes near an AI tool.</p>
-    <p>It handles the parts described above natively: it detects primary/foreign key relationships across files automatically and masks them to matching values, it uses format-preserving masking so emails, postal codes, and national ID numbers stay valid-looking and checksum-correct, it shifts every date in a project by the same fixed, random offset so ordering and durations survive intact, and it's deterministic &mdash; the same real value always produces the same masked value, project over project. Nothing is uploaded, logged, or phoned home; the tool is built to work fully offline, air-gapped machines included.</p>
-    <p>The output is designed to be handed to an AI coding assistant with confidence: the AI writes and tests SQL, dashboards, or scripts against the masked structure, and because the relationships, formats, and time intelligence are all preserved, that same code runs unmodified against your real production data afterward &mdash; you're not translating AI-generated code from a toy example to reality, because the "toy example" already has the real shape.</p>
-    <p>ShiftMask's Core License is a one-time $39 payment per device (founding price for the first 150 licenses; $59&ndash;69 afterward) &mdash; no subscription, no account, no recurring dependency on a vendor to keep your own data usable. It currently runs on Windows, with DuckDB export and SQL sources arriving in an upcoming Pro tier.</p>
-
-    <h2>FAQ</h2>
-    <p><strong>Is it safe to paste company data into ChatGPT or Claude?</strong></p>
-    <p>Not if the data includes anything personal, confidential, or regulated (customer records, employee data, health information, financial details). Once text is submitted to a third-party AI service, you no longer fully control where it's processed, retained, or used for model improvement, and you may have no data processing agreement covering that transfer. The safe pattern is to anonymize the data locally first, then use the AI tool freely on the anonymized version.</p>
-
-    <p><strong>What's the difference between anonymization and pseudonymization for AI use?</strong></p>
-    <p>Pseudonymization replaces identifying values with a token but keeps a way to reverse it (a lookup table), so it's still regulated personal data under GDPR. True anonymization removes the ability to re-identify anyone, even by the company that did the masking &mdash; that's the standard AI-facing data should meet, since the file may leave your control the moment it's uploaded to a cloud AI tool.</p>
-
-    <p><strong>Can I anonymize Excel or CSV files without breaking formulas and relationships?</strong></p>
-    <p>Yes, but only if the anonymization tool understands the data as a dataset, not as independent columns. That means detecting which columns are keys shared across files and masking them to identical values everywhere, and shifting dates by a consistent offset rather than randomizing them &mdash; otherwise joins, VLOOKUPs, and time-based calculations stop working on the masked copy.</p>
-
-    <p><strong>Does anonymizing data before using AI tools satisfy GDPR?</strong></p>
-    <p>Properly anonymized data (where re-identification is not reasonably possible) falls outside GDPR's scope entirely, per Recital 26 &mdash; because it's no longer "personal data." Pseudonymized data is still in scope. This is why format-preserving, non-reversible masking (rather than simple encryption or a reversible token) is the safer default when the goal is using a third-party AI tool.</p>
-
-    <p><strong>Is a cloud-based data anonymization tool safe for sensitive data?</strong></p>
-    <p>It's safer than sending raw data straight to an AI tool, but it still means a second vendor sees your unmasked data before anything is anonymized. For data covered by GDPR, HIPAA, an NDA, or an air-gapped environment, the anonymization step itself needs to run locally, with nothing uploaded &mdash; otherwise you've just added a hop, not removed the risk.</p>
-
-    <div class="cta-block">
-      <p>Your team is already using AI on real data. The fix isn't a stricter policy; it's removing the tradeoff, so using AI safely and using AI at all are the same choice. Anonymize locally, preserve the structure, and there's nothing left to leak.</p>
-      <a class="btn btn-solid" href="/#pricing" data-goatcounter-click="cta-blog-safely-use-ai">Get ShiftMask Core License &mdash; $39, one time &rarr;</a>
-    </div>
+    <h1>This guide is being rewritten</h1>
+    <p class="updated">Taken down 11 September 2026</p>
+    <p>An earlier version of this article leaned on the word &ldquo;anonymisation&rdquo; to describe what ShiftMask does, and said more about GDPR than we can stand behind.</p>
+    <p>ShiftMask masks and pseudonymises. The map from a stand-in back to the real value is kept, encrypted, in a vault on your machine &mdash; which under GDPR means the output is still personal data, handled with far less exposure. The old text implied otherwise, and that is not a detail: our customers are the ones judged against that regulation, not us.</p>
+    <p>We would rather leave this page empty than leave it wrong. The guide comes back when it says the right thing.</p>
+    <p><a class="btn btn-line" href="/blog/">Other guides</a> <a class="btn btn-line" href="/#faq">ShiftMask FAQ</a></p>
   </div>
 </main>
 

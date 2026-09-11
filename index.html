@@ -738,6 +738,40 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     </div>
   </section>
 
+  <!-- ============ DOWNLOAD ============ -->
+  <section class="faq" id="download">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Download</p>
+        <h2>Windows 10 and 11.<br>No account, no admin rights.</h2>
+        <p class="lede" style="margin-top:20px">ShiftMask installs for your user only, so you do not need administrator permissions. If your work laptop blocks installers outright, take the portable build instead &mdash; unzip it and run it.</p>
+        <div class="cta-row" style="margin-top:30px">
+          <a class="btn btn-solid" href="https://github.com/CjxPL/shiftmask-releases/releases/latest/download/ShiftMask-win-Setup.exe" data-goatcounter-click="download-setup">Download the installer</a>
+          <a class="btn btn-line" href="https://github.com/CjxPL/shiftmask-releases/releases/latest/download/ShiftMask-win-Portable.zip" data-goatcounter-click="download-portable">Portable version</a>
+        </div>
+        <p class="cta-note"><span class="pulse"></span> Needs Microsoft Edge WebView2 Runtime &middot; most machines have it, a fresh Windows install often does not</p>
+      </div>
+
+      <div class="qa rise" style="margin-top:52px">
+        <div class="item">
+          <h3>Windows may still warn you. Here is exactly why.</h3>
+          <p>The installer <strong>is</strong> signed, by <em>4optima Sp. z o.o.</em> Windows can still show a warning, and the reason is not the signature &mdash; it is reputation. SmartScreen counts how many people have installed a given file; a release published days ago has not been installed by many yet. That counter goes up on its own. We would rather tell you this here than let it surprise you.</p>
+        </div>
+        <div class="item">
+          <h3>First, your browser may block the download</h3>
+          <p>Edge or Chrome may report that the file could not be scanned. Open the downloads list, click the three dots next to <em>ShiftMask-win-Setup.exe</em>, and choose <strong>Keep</strong>.</p>
+        </div>
+        <div class="item">
+          <h3>Then Windows asks before running it</h3>
+          <p>A blue panel may appear: <em>Windows protected your PC</em>. Click <strong>More info</strong> &mdash; the publisher line should read <em>4optima Sp. z o.o.</em> If it does, the file is ours and intact; choose <strong>Run anyway</strong>. If it says anything else, stop and write to us.</p>
+        </div>
+        <div class="item">
+          <h3>Do not take our word for it &mdash; check the file yourself</h3>
+          <p>Right-click the installer, choose <strong>Properties</strong> and open the <strong>Digital Signatures</strong> tab: it should name <em>4optima Sp. z o.o.</em> From PowerShell, <em>Get-AuthenticodeSignature .\ShiftMask-win-Setup.exe</em> should return <em>Valid</em>. That tells you more about a file than any warning dialog does &mdash; and it is the same check your IT department will run.</p>
+        </div>
+      </div>
+    </div>
+  </section>
   <!-- ============ FAQ ============ -->
   <section class="faq" id="faq">
     <div class="shell">

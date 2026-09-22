@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to Prepare Data for ChatGPT or Claude Without Losing Structure</title>
-<meta name="description" content="Masking a file before you paste it into ChatGPT or Claude is half the job. Here's what to do with an answer that names a record that no longer means anything.">
-<link rel="canonical" href="https://shiftmask.com/blog/prepare-data-for-chatgpt-claude.html">
+<title>Installing ShiftMask offline — air-gapped deployment</title>
+<meta name="description" content="Step-by-step installation of ShiftMask on a Windows machine with no internet access, including the one Microsoft component you have to carry in yourself.">
+<link rel="canonical" href="https://shiftmask.com/air-gapped/">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -102,10 +102,8 @@ h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);l
 .updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
 h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
 h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
-h2 a{color:inherit;text-decoration:none}
-h2 a:hover{color:var(--coral)}
 p{color:var(--muted);margin:0 0 16px}
-ol,ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
 li{margin:0 0 8px}
 strong{color:var(--fog);font-weight:600}
 .callout{
@@ -114,22 +112,6 @@ strong{color:var(--fog);font-weight:600}
 }
 .callout p{color:var(--fog);margin:0;font-size:15.5px}
 .note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
-.entry-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
-.cta-block{margin-top:48px;padding-top:28px;border-top:1px solid var(--rule)}
-
-/* ---------- buttons ---------- */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
-  padding:17px 26px;border:1px solid transparent;border-radius:2px;
-  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
-}
-.btn:hover{transform:translate(2px,-2px)}
-.btn-solid{background:var(--coral-solid);color:var(--ink)}
-.btn-solid:hover{background:#FF7357}
-.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
-.btn-line:hover{border-color:var(--fog)}
-@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
 
 footer{border-top:1px solid var(--rule);padding:32px 0}
 footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
@@ -152,30 +134,24 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 .consent-widget{position:fixed;left:20px;bottom:20px;z-index:200;display:inline-flex;align-items:center;padding:11px 16px;background:rgba(14,19,32,.92);border:1px solid var(--rule-bright);border-radius:2px;color:var(--dim);font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .18s ease, color .18s ease}
 .consent-widget:hover{color:var(--fog);border-color:var(--fog)}
 .consent-widget[hidden]{display:none}
+
+/* ---------- subpage additions ---------- */
+h3{font-family:var(--f-display);font-weight:700;font-size:clamp(17px,1.9vw,19px);letter-spacing:-.005em;color:var(--fog);margin:28px 0 10px}
+pre{background:var(--ink);border:1px solid var(--rule);border-left:2px solid var(--cobalt);border-radius:2px;padding:16px 18px;overflow-x:auto;margin:0 0 16px}
+pre code{font-family:var(--f-mono);font-size:13px;line-height:1.7;color:var(--fog);white-space:pre}
+p code,li code{font-family:var(--f-mono);font-size:.88em;color:var(--fog);background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:1px 5px}
+.warn{background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--coral-solid);padding:18px 22px;margin:0 0 16px;border-radius:2px}
+.warn p{color:var(--fog);margin:0;font-size:15.5px}
+.warn p + p{margin-top:10px}
+.step{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cobalt);margin:0 0 6px}
+.lane{border-top:1px solid var(--rule);padding-top:20px;margin:40px 0 0}
+.lane:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lane h2{border-top:none;padding-top:0;margin-top:0}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border-radius:2px;margin:0 0 14px}
+.tag.now{background:rgba(63,203,152,.12);color:var(--verified);border:1px solid rgba(63,203,152,.35)}
+.tag.next{background:rgba(143,163,255,.12);color:var(--cobalt);border:1px solid rgba(143,163,255,.35)}
+.tag.later{background:var(--surface);color:var(--dim);border:1px solid var(--rule-bright)}
 </style>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "How to Prepare Data for ChatGPT or Claude Without Losing Structure",
-  "description": "Masking the file before you paste it into ChatGPT or Claude is half the job. Here's what to do with an answer that names a customer ID nobody on your team recognizes.",
-  "author": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
-  "publisher": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
-  "datePublished": "2026-09-01",
-  "mainEntityOfPage": "https://shiftmask.com/blog/prepare-data-for-chatgpt-claude.html"
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type": "Question", "name": "Does the chat tool's memory retain my file after the conversation?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on the product and your settings. Check the specific privacy and data-retention controls for the tool you are using rather than assuming either way."}},
-    {"@type": "Question", "name": "Isn't keeping a mask-to-real key its own privacy risk?", "acceptedAnswer": {"@type": "Answer", "text": "No more than keeping the original file was. The key lives locally and never leaves the machine, the same way the real data always did."}},
-    {"@type": "Question", "name": "Can I use the same masked file across multiple chat tools?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, masking happens once locally, and the same masked copy can be used with Claude, ChatGPT, Gemini, or a Copilot chat interchangeably."}}
-  ]
-}
-</script>
 </head>
 <body>
 
@@ -213,52 +189,82 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Guide</p>
-    <h1>How to Prepare Data for ChatGPT or Claude Without Losing Structure</h1>
-    <p class="updated">Published 2026-09-01 &middot; 5 min read</p>
+    <p class="eyebrow">Deployment</p>
+    <h1>Installing on a machine with no internet</h1>
+    <p class="updated">For air-gapped workstations, isolated networks and locked-down environments</p>
 
     <div class="callout">
-      <p>Getting a safe file into the chat window is half the job. The other half is what you do with the answer that comes back &mdash; and that depends entirely on whether the model gave you a formula or a sentence naming a specific record.</p>
+      <p>ShiftMask is built for exactly this situation. The masking runs locally, the licence is verified offline, and your real data never leaves the machine. <strong>One Microsoft component needs preparing in advance</strong> — that is the only reason this page exists.</p>
     </div>
 
-    <p>You've masked the file. Real names are gone, account numbers are scrambled, dates are shifted by a few weeks. You paste it into Claude or ChatGPT, ask for an analysis, and get a paragraph back naming "Customer_00231" as your highest churn risk. Now what &mdash; that ID means nothing to anyone on your team.</p>
+    <h2>What the machine needs</h2>
+    <ul>
+      <li><strong>Windows 10 (64-bit) or Windows 11.</strong></li>
+      <li><strong>Microsoft Edge WebView2 Runtime</strong> — the Microsoft component ShiftMask uses to draw its window. This is the only prerequisite.</li>
+      <li><strong>No Python, no .NET, no administrator rights for ShiftMask itself.</strong> It installs for the current user only and writes nothing to <code>Program Files</code>.</li>
+    </ul>
+    <p>On a machine that has internet, ShiftMask handles this for you: if the runtime is missing it explains the situation, asks for your permission and installs it, then carries on. On a machine that does not, the runtime has to be carried in — which is what the rest of this page is about.</p>
+    <p>We do not put a private copy of the runtime inside our installer. It is around 200&nbsp;MB, twenty times the size of everything else we ship, and Microsoft patches it for you on machines that are online. Bundling our own copy would make us, not Microsoft, responsible for shipping you security fixes for it. We would rather not be in that position, and neither would your security team.</p>
 
-    <p>This is the step most guidance on masking data for AI skips.</p>
+    <h2>Check whether the runtime is already there</h2>
+    <p>Do not assume it is. On a freshly imaged Windows 11 Enterprise machine it is usually <strong>not</strong> installed, despite what Microsoft's documentation implies. We checked.</p>
+    <p>Run this in PowerShell on the target machine:</p>
+<pre><code>$id = "{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}"
+"HKLM:\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\Clients\$id",
+"HKLM:\SOFTWARE\Microsoft\EdgeUpdate\Clients\$id",
+"HKCU:\SOFTWARE\Microsoft\EdgeUpdate\Clients\$id" |
+  ForEach-Object { (Get-ItemProperty $_ -Name pv -ErrorAction SilentlyContinue).pv }</code></pre>
+    <p>A version number (for example <code>153.0.4234.32</code>) means the runtime is installed and you can skip to step 3. No output means it is missing. A value of <code>0.0.0.0</code> also means missing — that key is left behind when the runtime is uninstalled.</p>
 
-    <h2>Two kinds of answer, two different next steps</h2>
-    <p>If the model gives you a formula, a script, or SQL, you apply it directly to the real file. No extra step, because the code references column names and logic, not the specific values it saw.</p>
-    <p>If the model gives you a narrative that names specific rows, IDs, or values, you have to resolve those back to reality before the answer means anything. "Customer_00231 generates 40% more revenue than your median account, largely from repeat orders in Q3" is a genuinely useful sentence. It's also useless until 00231 has a name attached to it again.</p>
+    <h2>What to bring to the machine</h2>
+    <p>Two files, both downloaded on a machine that does have internet:</p>
+    <ul>
+      <li><strong><code>ShiftMask-win-Setup.exe</code></strong> — from your ShiftMask download link.</li>
+      <li><strong>The WebView2 Evergreen Standalone Installer (x64)</strong> — about 203&nbsp;MB, from Microsoft's WebView2 download page. Pick <strong>&ldquo;Evergreen Standalone Installer&rdquo;</strong>, not &ldquo;Evergreen Bootstrapper&rdquo;: the bootstrapper is a small downloader and needs internet at the moment you run it.</li>
+    </ul>
+    <p>Both files are signed. ShiftMask's installer is signed by <strong>4optima Sp. z o.o.</strong> — verify it before you carry it anywhere:</p>
+<pre><code>Get-AuthenticodeSignature .\ShiftMask-win-Setup.exe | Format-List Status, SignerCertificate</code></pre>
 
-    <h2>What reverse mapping actually is</h2>
-    <p>ShiftMask keeps a local dictionary of masked value to real value for every project. Reverse mapping means running the model's output back through that same dictionary so IDs, names, and other masked fields resolve to the real ones before anyone acts on them. It's a feature we're building next, not something in the current Core License &mdash; and it never leaves the machine, for the same reason the original file doesn't: the dictionary that connects a mask to a real record is exactly as sensitive as the record itself.</p>
-    <p>Until it ships, the practical version is a lookup list you keep yourself &mdash; a simple two-column sheet, mask value on one side, real value on the other, open only on your own machine &mdash; and doing the find-and-replace by hand on any output that names specific records.</p>
-
-    <h2>Step by step</h2>
-    <ol>
-      <li>Mask the file with ShiftMask. Keep the project's masked-to-real key somewhere local, never in the same message thread as the chat.</li>
-      <li>Paste the masked file or the relevant sheet into Claude or ChatGPT and ask for the analysis.</li>
-      <li>If the answer is a formula, script, or SQL, apply it straight to the real file. Done.</li>
-      <li>If the answer references specific rows, IDs, or names, resolve those against your key before you act on it or share it with anyone else.</li>
-    </ol>
-
-    <h2>Where this goes wrong</h2>
-    <p>Partial masking is the most common failure. Masking the customer ID column but leaving the email column visible defeats the point &mdash; a masked ID sitting next to a real email re-identifies the row instantly. The same applies to combinations of fields that look harmless individually but aren't together: a frequently cited study by Latanya Sweeney found that roughly 87% of Americans could be uniquely identified from nothing more than a five-digit ZIP code, birth date, and sex, even with every name already removed. Masking has to cover the columns that combine to re-identify someone, not just the ones with an obvious name in the header.</p>
-    <p>The other common mistake is mid-conversation drift: pasting one real value "just to double check" into a thread that's otherwise using masked data. At that point the chat has seen the real record, and the masking step accomplished nothing for that particular value.</p>
-
-    <h2>FAQ</h2>
-    <p><strong>Does the chat tool's memory retain my file after the conversation?</strong></p>
-    <p>It depends on the product and your settings &mdash; chat history, memory features, and data-retention options vary by tool and change over time. Check the specific privacy and data controls for the tool you're using before assuming either way, and turn off any "use my conversations to improve the model" setting if that matters for your case.</p>
-
-    <p><strong>Isn't keeping a mask-to-real key its own privacy risk?</strong></p>
-    <p>No more than keeping the original file was. The key lives locally, the same way the real data always did, and never leaves the machine &mdash; it's exactly the thing an on-device reverse-mapping feature is meant to replace with something less manual, not a new category of exposure.</p>
-
-    <p><strong>Can I use the same masked file across multiple chat tools?</strong></p>
-    <p>Yes. Masking happens once, locally. You can hand the same masked copy to Claude, ChatGPT, Gemini, or a Copilot chat interchangeably, since none of them needs the real file to do useful work on the structure.</p>
-
-    <div class="cta-block">
-      <p>The masking step gets all the attention because it's the one that stops data leaving your machine. The unmasking step is the one that makes the answer worth having.</p>
-      <a class="btn btn-solid" href="/#pricing" data-goatcounter-click="cta-blog-prepare-chatgpt">Get ShiftMask Core License &mdash; $39, one time &rarr;</a>
+    <h2>Step 1 — Copy both files onto the machine's local disk</h2>
+    <p class="step">Not optional</p>
+    <div class="warn">
+      <p><strong>Skipping this step fails silently.</strong> The WebView2 installer, started directly from a USB stick, a mapped drive or a network share, exits after about one second, reports nothing and installs nothing. There is no error message and no exit code to tell you what happened.</p>
+      <p>You will believe the installer is broken. It is not — it just will not run from that kind of location. Copy both files to a normal local folder first, for example <code>C:\Install\</code>, and run them from there.</p>
     </div>
+
+    <h2>Step 2 — Install the WebView2 Runtime</h2>
+    <p>Double-click the standalone installer and let it finish. It takes roughly a minute and a half and shows Microsoft's own progress window.</p>
+    <p>For unattended or scripted deployment:</p>
+<pre><code>Start-Process "C:\Install\MicrosoftEdgeWebView2RuntimeInstallerX64.exe" `
+  -ArgumentList "/silent","/install" -Wait</code></pre>
+    <p>Installing the runtime machine-wide may require local administrator rights in your environment; ShiftMask itself does not.</p>
+    <p>Then re-run the check from the top of this page. <strong>Confirm you get a version number before moving on.</strong> The installer can report success and still not have installed anything — the registry is what decides, not the exit code.</p>
+
+    <h2>Step 3 — Install ShiftMask</h2>
+    <p>Run <code>ShiftMask-win-Setup.exe</code>. It takes about 20 seconds, needs no administrator approval, and installs for the current user only:</p>
+    <ul>
+      <li>Application: <code>%LOCALAPPDATA%\ShiftMask</code> — around 285&nbsp;MB.</li>
+      <li>Your data, including the vault: <code>%LOCALAPPDATA%\4optima\ShiftMask</code>, kept separately so that uninstalling ShiftMask never removes it.</li>
+      <li>Nothing in <code>Program Files</code>, nothing in the registry beyond the usual per-user uninstall entry.</li>
+    </ul>
+    <p>ShiftMask starts and shows the activation screen. The footer reads <code>OFFLINE &middot; 0 BYTES SENT</code>.</p>
+
+    <h2>Step 4 — Activate</h2>
+    <p>Activation is fully offline. The screen shows this device's ID; send it to us with your purchase and you get back a licence token that begins with <code>SM1-</code>. Paste it in and press Activate. No network call is made at any point — the token carries a signature that ShiftMask verifies locally.</p>
+
+    <h2>Two things worth doing on day one</h2>
+    <p><strong>Back up the vault.</strong> It holds the map between your real values and their stand-ins, and it lives in <code>%LOCALAPPDATA%\4optima\ShiftMask</code> — which most corporate backup policies do not cover. Without it, results from earlier runs can never be matched back to real records.</p>
+    <p><strong>Store the vault password where the company keeps other critical secrets.</strong> There is no recovery. That is a property of the encryption, not a missing feature: if the password is lost, the project's stand-ins can never be connected to real records again, including everything already exported.</p>
+
+    <h2>If something goes wrong</h2>
+    <h3>&ldquo;ShiftMask cannot start&rdquo;</h3>
+    <p>The WebView2 Runtime is missing. Go back to step 2 and confirm the registry check returns a version.</p>
+    <h3>The WebView2 installer finished in about a second and nothing happened</h3>
+    <p>You ran it from a USB stick or a network share. Copy it to a local disk and run it again. This is the most common failure on this page.</p>
+    <h3>The registry check returns <code>0.0.0.0</code></h3>
+    <p>Treat it as not installed. The key survives uninstallation of the runtime.</p>
+    <h3>Still stuck</h3>
+    <p>Open Help inside ShiftMask and use &ldquo;Report a problem&rdquo;. It builds a plain-text diagnostic report locally that you can read in full before sending anything, and it contains no values from your data. Send it to <a href="mailto:shiftmask@4optima.pl">shiftmask@4optima.pl</a>, or see the <a href="/support/">support page</a> if this machine has no mail client.</p>
   </div>
 </main>
 
@@ -271,11 +277,12 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     <div class="flinks">
       <a href="/#how">Method</a>
       <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
       <a href="/blog/">Blog</a>
       <a href="/support/">Support</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/imprint.html">Legal</a>
-      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20blog-prepare&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20blog-prepare%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
+      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20air-gapped&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20air-gapped%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
     </div>
     <p class="rights">ShiftMask is a product of <a href="/imprint.html" style="color:inherit">4optima Sp. z o.o.</a> &middot; &copy; 2026</p>
   </div>
@@ -354,6 +361,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
   });
 })();
 </script>
+
 
 <script>
 (function(){

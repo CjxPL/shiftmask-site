@@ -11,10 +11,9 @@
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Activate — ShiftMask</title>
-<meta name="description" content="Activate your ShiftMask license: enter the email you purchased with and this device's ID to get your signed license token.">
-<link rel="canonical" href="https://shiftmask.com/activate.html">
-<meta name="robots" content="noindex">
+<title>Try ShiftMask free for 7 days</title>
+<meta name="description" content="Seven days of the full ShiftMask, on your own files. No purchase, no email address, no account — just the device ID from the app.">
+<link rel="canonical" href="https://shiftmask.com/try/">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -223,26 +222,22 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Activation</p>
-    <h1>Activate ShiftMask</h1>
-    <p class="lede">Enter the email you purchased with and the device ID shown on ShiftMask's activation screen. We'll hand back a signed license token — paste it into the app and you're done.</p>
+    <p class="eyebrow">Free trial</p>
+    <h1>Try it on your own files</h1>
+    <p class="lede">Seven days of the full product &mdash; every feature, no row limits, no watermark. No purchase, no email address, no account. Install ShiftMask, copy the device ID it shows you, and paste it below.</p>
 
-    <form id="activate-form" novalidate>
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required>
-      </div>
+    <form id="demo-form" novalidate>
       <div class="field mono">
         <label for="hardware_id">This device's ID</label>
         <input type="text" id="hardware_id" name="hardware_id" placeholder="A1B2C3D4E5F6A1B2" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
-        <p class="hint">Find this on ShiftMask's activation screen, under &ldquo;This device's ID&rdquo; — copy it exactly.</p>
+        <p class="hint">Find this on ShiftMask's activation screen, under &ldquo;This device's ID&rdquo; &mdash; copy it exactly.</p>
       </div>
-      <button type="submit" class="btn btn-solid" id="submit-btn">Activate</button>
+      <button type="submit" class="btn btn-solid" id="submit-btn" data-goatcounter-click="cta-demo-start">Start my 7 days</button>
       <div class="status" id="status" role="alert"></div>
     </form>
 
     <div class="result" id="result">
-      <p class="label">License token</p>
+      <p class="label">Trial token</p>
       <div class="token-box" id="token-box" tabindex="0"></div>
       <div class="result-actions">
         <button type="button" class="btn btn-line" id="copy-btn">Copy token</button>
@@ -251,12 +246,13 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     </div>
 
     <div class="callout">
-      <p>What this page sends: your email and device ID, to a small verification service that checks your purchase and signs the token. Nothing else — no files, no usage data. The app itself never sends anything anywhere; this page is the one place that talks to the network.</p>
+      <p>What this page sends: the device ID you typed, and nothing else. No email address is asked for and none is stored. The app itself never sends anything anywhere &mdash; this page is the one place that talks to the network.</p>
     </div>
 
     <div class="aside">
-      <p>Don't have a license yet? <a href="/#pricing">Get ShiftMask →</a></p>
-      <p>Bought ShiftMask and moving to a new machine? <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20transfer%5D%20site&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20transfer%0Asource%3A%20site%0Aapp_version%3A%20%0Acustomer%3A%20%0Aemail%3A%20%0Aplan%3A%20%0Aold_hardware_id%3A%20%0Anew_hardware_id%3A%20%0A---%20END%20---%0A">Email us</a> to move your activation — one line with your purchase email is enough.</p>
+      <p><strong>One trial per machine.</strong> Asking again returns the same token with the same end date, so there is no point coming back for another seven days. We would rather say that plainly than pretend not to notice.</p>
+      <p>When the seven days are up, the app stops and your files are untouched &mdash; nothing is deleted and nothing is held hostage. <a href="/#pricing">Buy a licence</a> and the same install carries on where it left off.</p>
+      <p>Haven't installed it yet? <a href="/#pricing">Get ShiftMask &rarr;</a> &middot; Terms: <a href="/eula/">licence agreement</a></p>
     </div>
   </div>
 </main>
@@ -276,7 +272,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <a href="/privacy.html">Privacy</a>
       <a href="/eula/">Terms</a>
       <a href="/imprint.html">Legal</a>
-      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20activate&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20activate%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
+      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20try&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20try%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
     </div>
     <p class="rights">ShiftMask is a product of <a href="/imprint.html" style="color:inherit">4optima Sp. z o.o.</a> &middot; &copy; 2026</p>
   </div>
@@ -287,12 +283,10 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
 <script>
 (function () {
-  var API_URL = "https://shiftmask-activate.konradmyslinski.workers.dev/api/activate";
-  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var API_URL = "https://shiftmask-activate.konradmyslinski.workers.dev/api/demo";
   var HW_RE = /^[0-9A-F]{16}$/;
 
-  var form = document.getElementById("activate-form");
-  var emailInput = document.getElementById("email");
+  var form = document.getElementById("demo-form");
   var hwInput = document.getElementById("hardware_id");
   var submitBtn = document.getElementById("submit-btn");
   var statusEl = document.getElementById("status");
@@ -320,7 +314,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
   function setLoading(loading) {
     submitBtn.disabled = loading;
-    submitBtn.textContent = loading ? "Activating…" : "Activate";
+    submitBtn.textContent = loading ? "Starting…" : "Start my 7 days";
   }
 
   form.addEventListener("submit", function (e) {
@@ -328,14 +322,8 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     hideStatus();
     resultEl.classList.remove("show");
 
-    var email = emailInput.value.trim();
     var hardwareId = hwInput.value.trim();
 
-    if (!EMAIL_RE.test(email)) {
-      showStatus("error", "Enter the email address you used to buy ShiftMask.");
-      emailInput.focus();
-      return;
-    }
     if (!HW_RE.test(hardwareId)) {
       showStatus("error", "That device ID doesn't look right — copy it exactly from ShiftMask's activation screen (16 characters).");
       hwInput.focus();
@@ -347,7 +335,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, hardware_id: hardwareId })
+      body: JSON.stringify({ hardware_id: hardwareId })
     })
       .then(function (res) {
         return res.json().then(function (data) {
@@ -361,14 +349,21 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
           showStatus("error", msg);
           return;
         }
-        var customer = (result.data && result.data.customer) || email;
-        showStatus("success", "Activated — welcome, " + customer + ". Copy the token below into ShiftMask's activation screen.");
+        // `reissued` mowi, ze ta maszyna juz raz wzięła demo. Mówimy to
+        // wprost, zamiast udawać, że właśnie zaczęły się nowe siedem dni.
+        var ends = (result.data && result.data.expires) || "";
+        showStatus(
+          "success",
+          result.data && result.data.reissued
+            ? "This machine already has a trial" + (ends ? ", running until " + ends : "") + ". Here is the same token again — paste it into ShiftMask's activation screen."
+            : "You're in" + (ends ? " until " + ends : "") + ". Copy the token below into ShiftMask's activation screen."
+        );
         tokenBox.textContent = result.data.token;
         resultEl.classList.add("show");
       })
       .catch(function () {
         setLoading(false);
-        showStatus("error", "Couldn't reach the activation service — check your connection and try again, or email shiftmask@4optima.pl.");
+        showStatus("error", "Couldn't reach the trial service — check your connection and try again, or email shiftmask@4optima.pl.");
       });
   });
 

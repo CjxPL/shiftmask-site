@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ShiftMask roadmap — what is shipped and what comes next</title>
-<meta name="description" content="What ShiftMask does today, what we are building next, and what we have decided not to build.">
-<link rel="canonical" href="https://shiftmask.com/roadmap/">
+<title>ShiftMask licence agreement</title>
+<meta name="description" content="The ShiftMask End User Licence Agreement — what you may do with the software, what we do not warrant, and what happens if you lose your vault password.">
+<link rel="canonical" href="https://shiftmask.com/eula/">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -189,59 +189,76 @@ p code,li code{font-family:var(--f-mono);font-size:.88em;color:var(--fog);backgr
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Roadmap</p>
-    <h1>What ShiftMask does, and what comes next</h1>
-    <p class="updated">No dates. A date we miss is worth less to you than an order we keep.</p>
+    <p class="eyebrow">Legal</p>
+    <h1>End User Licence Agreement</h1>
+    <p class="updated">Version 1.0 &middot; 28 September 2026 &middot; Applies to the ShiftMask desktop application</p>
 
     <div class="callout">
-      <p>This page is ordered by what we intend to build next, not by what sounds most impressive. Anything in <strong>Working today</strong> is in the product you can buy right now; everything below that is intent, and intent moves when customers tell us it should. If something you need is missing, <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20idea%5D%20roadmap">tell us</a> — that is how this order changes.</p>
+      <p>This agreement covers your <strong>use of the software</strong>. It does not cover your purchase: ShiftMask is sold through Lemon Squeezy acting as merchant of record, and the terms of that sale &mdash; payment, refunds and your right of withdrawal &mdash; are theirs. Our refund policy is answered in the <a href="/#faq">FAQ</a>.</p>
     </div>
 
-    <div class="lane">
-      <span class="tag now">Working today</span>
-      <h2>In the current release</h2>
-      <h3>Excel and CSV, with the relationships intact</h3>
-      <p>ShiftMask reads your workbooks, detects primary and foreign keys to work out how the tables connect, and lets you correct that map before anything is written.</p>
-      <h3>Consistent stand-ins across every file and every run</h3>
-      <p>One customer stays one customer — in every table, and in the project you come back to next month. That is what makes joins survive.</p>
-      <h3>One shared date offset</h3>
-      <p>Every date moves by the same amount, so intervals hold and time-based measures return the same shape. This is the specific failure that random date replacement causes and that we set out to avoid.</p>
-      <h3>Putting the real values back</h3>
-      <p>When an AI tool hands you a result built on masked data, ShiftMask substitutes the real values back into it. Deliberately, it does not reverse the date shift or the amount scaling: in a file that came back from a model there is no way to tell a scaled amount from a number the model calculated itself, and guessing would corrupt your analysis.</p>
-      <h3>Offline, with no account</h3>
-      <p>No telemetry, no phone-home, no licence server. Activation is offline, and the footer tells you how many bytes have been sent: none. See <a href="/air-gapped/">installing on a machine with no internet</a>.</p>
+    <p>This Agreement is between you and <strong>4optima Sp. z o.o.</strong>, ul. Wydmowa 4, 05-092 Łomianki, Poland (KRS 0000544621, NIP 1182105589), which develops and publishes ShiftMask (&ldquo;we&rdquo;, &ldquo;us&rdquo;).</p>
+    <p>By installing or using ShiftMask, you accept this Agreement. If you do not accept it, do not install it. The application shows you this text on first run and asks you to accept it there; a Polish translation is included in the application for convenience, and this English version is the one that governs.</p>
+
+    <h2>1. What you may do</h2>
+    <p>We grant you a <strong>perpetual, non-exclusive, non-transferable licence</strong> to install and use one copy of ShiftMask on <strong>one computer</strong>, for any purpose, personal or commercial, including work you do for your clients.</p>
+    <p>There is no limit on how much you use it: no cap on files, rows, projects or output, and no expiry. A licence with an expiry date is a trial licence and says so on the activation screen.</p>
+    <p>You may install it on a replacement computer. The licence follows you, not the hardware &mdash; see section 4.</p>
+
+    <h2>2. What you may not do</h2>
+    <ul>
+      <li>Use one licence on more than one computer at the same time.</li>
+      <li>Share, resell, sublicense, rent or publish your licence token.</li>
+      <li>Remove or alter the licence mechanism, or use ShiftMask without a valid licence.</li>
+      <li>Reverse engineer, decompile or disassemble the software, <strong>except</strong> where and to the extent that applicable law gives you that right regardless of this Agreement &mdash; in particular for interoperability purposes. If you intend to rely on that right, we ask that you contact us first: it is usually faster for both of us if we simply tell you what you need to know.</li>
+    </ul>
+
+    <h2>3. Your data</h2>
+    <p>ShiftMask runs entirely on your computer. It does not send your data anywhere, does not require an account, and contains no telemetry. We never receive, see or store the files you process, and we could not produce them if we were asked to.</p>
+    <p>What the website and the purchase collect is described separately in our <a href="/privacy.html">Privacy Policy</a>.</p>
+
+    <h2>4. Licences, and moving to a new computer</h2>
+    <p>Your licence token is tied to the device identifier shown on the activation screen. Verification happens entirely on your machine &mdash; there is no licence server and no check-in.</p>
+    <p>When you replace your computer, write to us and we will issue a new token. There is no charge and no limit on how many times. We ask that you stop using the licence on the old machine.</p>
+    <p>Because activation is offline, <strong>a token cannot be revoked once issued.</strong> That is the cost of working on machines with no internet, and we accept it deliberately.</p>
+
+    <h2>5. Updates</h2>
+    <p>Your purchase includes every update we release in the <strong>twelve months</strong> after the date of purchase. After that the version you have continues to work &mdash; indefinitely, offline, without reactivation. Renewing for a further year of updates is optional.</p>
+    <p>We may change, add or remove features in an update. We will not change an update in a way that disables software you have already paid for.</p>
+
+    <h2>6. The vault, and the password you must not lose</h2>
+    <p>ShiftMask keeps the map between your real values and their stand-ins in an encrypted vault on your computer, protected by a password that you choose and that only you know.</p>
+    <div class="warn">
+      <p><strong>If you lose that password, the vault cannot be opened &mdash; by you, by us, or by anyone.</strong> There is no recovery procedure, no master key and no support route that changes this. It is a property of the encryption, not a gap in the product: a recovery route for us would be a recovery route for anyone who obtained the file.</p>
+      <p>Everything that depended on that vault is lost with it, including masked exports you produced earlier. Back the vault up, and keep the password where your organisation keeps its other critical secrets.</p>
     </div>
 
-    <div class="lane">
-      <span class="tag next">Next</span>
-      <h2>What we are working on</h2>
-      <h3>SQL databases as a source</h3>
-      <p>Point ShiftMask at a database rather than a folder of exports, and let it read the schema — including the relationships you would otherwise have to confirm by hand.</p>
-      <h3>Export to DuckDB</h3>
-      <p>Hand a model a single queryable file instead of a pile of spreadsheets.</p>
-      <h3>Clipboard masking</h3>
-      <p>The gap this closes is the honest one: the risky paste is rarely a whole file. It is three rows copied out of a report into a chat window, at half past five. A masking step that only works on files does not help at that moment.</p>
-      <h3>Reusable per-client dictionaries</h3>
-      <p>Keep the same stand-ins across separate projects for the same client, so work done months apart still lines up.</p>
-    </div>
+    <h2>7. No warranty</h2>
+    <p>ShiftMask is provided <strong>as is</strong>. We do not warrant that it is free of defects, that it will run on every configuration, or that its output will be fit for any particular purpose of yours.</p>
+    <p>In particular: ShiftMask <strong>masks and pseudonymises</strong> your data. It does not anonymise it. The map back to the real values is retained, which under the GDPR means the masked copy remains personal data. Deciding what you may lawfully do with that copy &mdash; including whether you may give it to a particular AI service &mdash; is your decision and your responsibility, and depends on your own obligations, not on ours. <strong>Verify the output before you share it.</strong></p>
 
-    <div class="lane">
-      <span class="tag later">Later</span>
-      <h2>Under consideration</h2>
-      <h3>Audit logging for regulated teams</h3>
-      <p>A record of what was masked, when and by whom — the artefact a compliance review asks for. The design question we have not settled is how to produce it without the log itself becoming a second copy of the thing we are protecting.</p>
-      <h3>A local gateway between your tools and an AI service</h3>
-      <p>Masking applied as data passes through, rather than as a step you remember to run. The appeal is obvious; so is the risk of a component that sits in the middle of everything, which is why it is here and not above.</p>
-      <h3>macOS</h3>
-      <p>Asked for regularly. It is a second build, a second signing chain and a second set of things that break, so it happens when the Windows product is finished rather than alongside it.</p>
-    </div>
+    <h2>8. Liability</h2>
+    <p>Our total liability to you under this Agreement is limited to the amount you paid for your licence.</p>
+    <p><strong>This limit does not apply</strong> to liability we cannot lawfully limit &mdash; in particular damage caused intentionally or by gross negligence, and injury to life, body or health. Nothing in this Agreement excludes or limits the rights you have as a consumer under the mandatory law of the country where you live.</p>
 
-    <div class="lane">
-      <h2>What we are not going to do</h2>
-      <p><strong>A cloud version.</strong> The entire promise is that your data stays on your machine. A hosted ShiftMask would be a different product wearing this one's name.</p>
-      <p><strong>A licence server.</strong> Checking licences online would break precisely the customers who most need this tool — the ones on isolated networks — to inconvenience the few who would work around it anyway.</p>
-      <p><strong>Tell you that ShiftMask anonymises your data.</strong> It masks and pseudonymises: the map back to the real values is kept, encrypted, on your machine, which is what makes the output reversible and therefore useful. Under GDPR that is pseudonymisation, and the copy you share is still personal data. We would rather say so than sell you a word.</p>
-    </div>
+    <h2>9. Other people's software</h2>
+    <p>ShiftMask includes open source components licensed by their own authors. Their licence terms and copyright notices are in the file <code>THIRD-PARTY-NOTICES.txt</code>, distributed with the application, and they govern those components rather than this Agreement.</p>
+    <p>ShiftMask uses the Microsoft Edge WebView2 Runtime, which is Microsoft's software and subject to Microsoft's own terms. It is not part of what we license to you.</p>
+
+    <h2>10. Ending this Agreement</h2>
+    <p>This licence ends automatically if you materially breach section 2 and do not put it right within 30 days of us asking you to. You may end it at any time by uninstalling ShiftMask.</p>
+    <p>Sections 3, 6, 7, 8 and 9 survive the end of this Agreement.</p>
+
+    <h2>11. Law and disputes</h2>
+    <p>This Agreement is governed by Polish law. If you are a consumer, this does not deprive you of the protection of the mandatory rules of the country where you habitually reside, and you may bring proceedings in your own courts.</p>
+    <p>If you are not a consumer, disputes go to the courts having jurisdiction over our registered office.</p>
+
+    <h2>12. Changes</h2>
+    <p>This version applies to the copy you install. If we change this Agreement, the new version applies to versions of the software released afterwards &mdash; not retroactively to the licence you already hold.</p>
+
+    <h2>Contact</h2>
+    <p><strong>4optima Sp. z o.o.</strong>, ul. Wydmowa 4, 05-092 Łomianki, Poland<br>
+    <a href="mailto:shiftmask@4optima.pl">shiftmask@4optima.pl</a> &middot; <a href="/imprint.html">Full registration details</a></p>
   </div>
 </main>
 
@@ -258,9 +275,8 @@ p code,li code{font-family:var(--f-mono);font-size:.88em;color:var(--fog);backgr
       <a href="/blog/">Blog</a>
       <a href="/support/">Support</a>
       <a href="/privacy.html">Privacy</a>
-      <a href="/eula/">Terms</a>
       <a href="/imprint.html">Legal</a>
-      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20roadmap&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20roadmap%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
+      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20eula&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20eula%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
     </div>
     <p class="rights">ShiftMask is a product of <a href="/imprint.html" style="color:inherit">4optima Sp. z o.o.</a> &middot; &copy; 2026</p>
   </div>

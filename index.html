@@ -390,21 +390,50 @@ p{margin:0 0 18px}
    PRICING
    ========================================================= */
 .pricing{padding:clamp(70px,10vw,140px) 0}
-.deal{
-  margin-top:54px;
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,420px);gap:1px;
-  background:var(--rule);border:1px solid var(--rule);
+.tiers{
+  margin-top:50px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch;
 }
-@media (max-width:860px){.deal{grid-template-columns:1fr}}
-.deal .left{background:var(--surface);padding:clamp(30px,4.5vw,54px)}
-.deal .right{background:var(--ink);padding:clamp(30px,4.5vw,54px);display:flex;flex-direction:column;justify-content:center}
-.deal .tagline{
+@media (max-width:980px){.tiers{grid-template-columns:1fr;max-width:560px}}
+.tier{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--surface);border:1px solid var(--rule-bright);border-radius:16px;
+  padding:clamp(24px,3vw,34px);
+}
+.tier-live{
+  border-color:var(--coral-solid);
+  box-shadow:0 0 0 1px var(--coral-solid),0 24px 60px rgba(255,95,69,.10);
+}
+.tier-soon{border-style:dashed}
+.tier-soon .tier-name,.tier-soon .tier-price{color:var(--muted)}
+.tier-flag{
   font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--coral);margin:0 0 24px;
+  margin:0 0 18px;color:var(--dim);
 }
-.amount{font-family:var(--f-display);font-weight:900;font-size:clamp(72px,11vw,132px);line-height:.82;letter-spacing:-.05em;margin:0}
-.amount sup{font-size:.36em;vertical-align:super;letter-spacing:-.02em;margin-right:.06em}
-.terms{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin:22px 0 0;line-height:1.9}
+.tier-live .tier-flag{color:var(--ink);background:var(--coral-solid);display:inline-block;padding:5px 10px;border-radius:999px;align-self:flex-start}
+.tier-name{
+  font-family:var(--f-display);font-weight:800;font-size:clamp(24px,2.4vw,30px);letter-spacing:-.025em;
+  margin:0;color:var(--fog);line-height:1.1;
+}
+.tier-sub{font-family:var(--f-mono);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-left:8px;vertical-align:middle}
+.tier-for{color:var(--muted);font-size:15px;line-height:1.5;margin:10px 0 0;min-height:3em}
+.tier-price{
+  font-family:var(--f-display);font-weight:900;font-size:clamp(54px,5.6vw,72px);line-height:.9;letter-spacing:-.05em;
+  margin:22px 0 0;color:var(--fog);
+}
+.tier-price sup{font-size:.4em;vertical-align:super;letter-spacing:-.02em;margin-right:.06em}
+.tier-terms{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:14px 0 0;line-height:1.85;min-height:calc(1.85em*3)}
+.tier-founding{color:var(--coral)}
+.tier .btn{margin-top:22px;width:100%;text-align:center;justify-content:center}
+.tier-try{font-family:var(--f-mono);font-size:12px;letter-spacing:.02em;color:var(--dim);margin:12px 0 0;line-height:1.6;min-height:1.6em}
+.tier-try a{color:var(--cobalt)}
+.tier .incl{margin:26px 0 0;padding-top:24px;border-top:1px solid var(--rule);gap:12px}
+.tier .incl li{font-size:15px}
+.tier .incl li.incl-all{padding-left:0;color:var(--fog);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
+.tier .incl li.incl-all::before{display:none}
+.tier-notes{margin-top:34px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:980px){.tier-notes{grid-template-columns:1fr;max-width:560px}}
+.tier-notes .incl-note{margin:0;max-width:none}
 .incl{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:14px}
 .incl li{position:relative;padding-left:30px;color:var(--muted);font-size:16.5px}
 .incl li::before{
@@ -758,10 +787,20 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <div class="rise">
         <p class="eyebrow">Pricing</p>
         <h2>Buy it once. It&rsquo;s yours.</h2>
+        <p class="lede" style="margin-top:20px">One licence for what ships today. Two more tiers are on the way, priced so that starting with Core never costs you anything later.</p>
       </div>
-      <div class="deal rise">
-        <div class="left">
-          <p class="tagline">Core License</p>
+
+      <div class="tiers rise">
+
+        <!-- CORE -->
+        <article class="tier tier-live">
+          <p class="tier-flag">Available now</p>
+          <p class="tier-name">Core</p>
+          <p class="tier-for">One person, one machine, Excel and CSV.</p>
+          <p class="tier-price"><sup>$</sup>39</p>
+          <p class="tier-terms">One payment, per device<br>Free updates for 1 year<br><span class="tier-founding">Founding price &mdash; first 150 licences</span></p>
+          <a class="btn btn-solid" href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20waitlist%5D%20pricing&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20waitlist%0Asource%3A%20site%0Apage%3A%20pricing%0Aplan%3A%20core%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A" data-goatcounter-click="cta-waitlist-pricing">Join the waitlist</a>
+          <p class="tier-try"><a href="/try/" data-goatcounter-click="cta-demo-pricing">Try it free for 7 days</a> first &mdash; no email required.</p>
           <ul class="incl">
             <li>Unlimited files, tables and projects &mdash; no time limit</li>
             <li>Excel and CSV sources</li>
@@ -770,53 +809,48 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
             <li>Export to masked Excel files</li>
             <li>Runs entirely on your machine, offline</li>
           </ul>
-          <p class="incl-note">SQL sources and DuckDB export are coming in a Pro upgrade &mdash; Core owners get a preferred upgrade price when it ships.</p>
-          <a class="btn btn-solid" href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20waitlist%5D%20pricing&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20waitlist%0Asource%3A%20site%0Apage%3A%20pricing%0Aplan%3A%20core%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A" data-goatcounter-click="cta-waitlist-pricing">Join the waitlist</a>
-          <p class="incl-note" style="margin-top:10px">No mail client set up? Email <a href="mailto:shiftmask@4optima.pl">shiftmask@4optima.pl</a> with <span style="white-space:nowrap">&ldquo;[ShiftMask waitlist]&rdquo;</span> in the subject, and your name and company in the message.</p>
-        </div>
-        <div class="right">
-          <p class="amount"><sup>$</sup>39</p>
-          <p class="terms">One payment, per device<br>Free updates for 1 year<br>Founding price &mdash; first 150 licenses</p>
-          <p class="terms" style="margin-top:14px"><a href="/try/" data-goatcounter-click="cta-demo-pricing">Try it free for 7 days</a> first &mdash; no email required.</p>
-        </div>
-      </div>
+        </article>
 
-      <div class="deal rise" style="margin-top:26px">
-        <div class="left">
-          <p class="tagline">Pro &middot; BI Bundle &mdash; coming soon</p>
-          <ul class="incl">
-            <li>Everything in the Core License</li>
-            <li><strong>DuckDB warehouse and .db export</strong> &mdash; hand your AI assistant a whole masked database instead of a folder of files</li>
-            <li><strong>SQL dialect translation</strong> &mdash; the query it writes against the masked data runs against your real warehouse</li>
-          </ul>
-          <p class="incl-note">Core License holders can upgrade at any time and keep everything they already paid for. One year of updates included, renewal optional at 60&#37; of what you paid.</p>
+        <!-- PRO -->
+        <article class="tier tier-soon">
+          <p class="tier-flag">Coming soon</p>
+          <p class="tier-name">Pro <span class="tier-sub">BI Bundle</span></p>
+          <p class="tier-for">The analyst whose AI assistant needs a whole database, not a folder.</p>
+          <p class="tier-price"><sup>$</sup>89</p>
+          <p class="tier-terms">Planned price<br>One payment, per device<br>Upgrade from Core &mdash; 50 USD</p>
           <a class="btn btn-line" href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20waitlist%5D%20pro&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20waitlist%0Asource%3A%20site%0Apage%3A%20pricing%0Aplan%3A%20pro%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A" data-goatcounter-click="cta-notify-pro">Tell me when Pro ships</a>
-        </div>
-        <div class="right">
-          <p class="amount"><sup>$</sup>89</p>
-          <p class="terms">Planned price<br>One payment, per device<br>Upgrade from Core &mdash; 50 USD</p>
-        </div>
-      </div>
-
-      <div class="deal rise" style="margin-top:26px">
-        <div class="left">
-          <p class="tagline">Team &middot; Enterprise &mdash; coming soon</p>
+          <p class="tier-try">&nbsp;</p>
           <ul class="incl">
-            <li>Everything in Pro</li>
-            <li><strong>Local PII scanner</strong> &mdash; a language model that runs on your machine and finds the identifying columns nobody labelled</li>
-            <li><strong>Multi-seat licensing and a licence console</strong> for the person who has to keep track of them</li>
-            <li><strong>Compliance reports</strong> &mdash; evidence of what was masked, when, and by whom</li>
+            <li class="incl-all">Everything in Core, plus</li>
+            <li><strong>DuckDB warehouse and .db export</strong> &mdash; hand your AI assistant a masked database</li>
+            <li><strong>SQL dialect translation</strong> &mdash; the query it writes runs against your real warehouse</li>
           </ul>
-          <p class="incl-note">This is the only tier sold as a subscription, and deliberately so: it is the only one where you keep receiving something &mdash; model updates and seat management &mdash; rather than a set of features that is yours once you buy it. Over 20 seats: talk to us.</p>
+        </article>
+
+        <!-- TEAM -->
+        <article class="tier tier-soon">
+          <p class="tier-flag">Coming soon</p>
+          <p class="tier-name">Team <span class="tier-sub">Enterprise</span></p>
+          <p class="tier-for">Several people, one person keeping track of the licences.</p>
+          <p class="tier-price"><sup>$</sup>35</p>
+          <p class="tier-terms">Planned price<br>Per seat, per month<br>or 350 USD per seat, per year</p>
           <a class="btn btn-line" href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20waitlist%5D%20team&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20waitlist%0Asource%3A%20site%0Apage%3A%20pricing%0Aplan%3A%20team%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A" data-goatcounter-click="cta-notify-team">Tell me when Team ships</a>
-        </div>
-        <div class="right">
-          <p class="amount"><sup>$</sup>35</p>
-          <p class="terms">Planned price<br>Per seat / month<br>or 350 USD per seat / year</p>
-        </div>
+          <p class="tier-try">Over 20 seats? <a href="mailto:shiftmask@4optima.pl">Talk to us.</a></p>
+          <ul class="incl">
+            <li class="incl-all">Everything in Pro, plus</li>
+            <li><strong>Local PII scanner</strong> &mdash; a language model on your machine finds the identifying columns nobody labelled</li>
+            <li><strong>Multi-seat licensing</strong> and a licence console</li>
+            <li><strong>Compliance reports</strong> &mdash; what was masked, when, by whom</li>
+          </ul>
+        </article>
+
       </div>
 
-      <p class="incl-note rise" style="max-width:68ch;margin:30px auto 0;text-align:center">Buying Core today does not make you a second-class customer later. What you pay for stays yours for good, and upgrades are priced as the difference, not as a fresh purchase.</p>
+      <div class="tier-notes rise">
+        <p class="incl-note">Buying Core today does not make you a second-class customer later. What you pay for stays yours for good, and upgrades are priced as the difference, not as a fresh purchase.</p>
+        <p class="incl-note">Team is the only tier sold as a subscription, and deliberately so: it is the only one where you keep receiving something &mdash; model updates and seat management &mdash; rather than a set of features that is yours once you buy it.</p>
+        <p class="incl-note">No mail client set up? Email <a href="mailto:shiftmask@4optima.pl">shiftmask@4optima.pl</a> with <span style="white-space:nowrap">&ldquo;[ShiftMask waitlist]&rdquo;</span> in the subject, and your name and company in the message.</p>
+      </div>
     </div>
   </section>
 

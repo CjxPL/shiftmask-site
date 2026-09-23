@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShiftMask for IT — what it installs and what leaves the machine</title>
+<meta name="description" content="The page to forward to your IT department: what ShiftMask installs and where, exactly what leaves the machine, how to verify the code signature, and which third-party components ship with it.">
+<link rel="canonical" href="https://shiftmask.com/for-it/">
+<meta name="theme-color" content="#07090F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  --void:#07090F;
+  --ink:#0E1320;
+  --surface:#141A28;
+  --raised:#1C2333;
+  --fog:#E6EAF3;
+  --muted:#8D96AD;
+  --dim:#828CA6;
+  --rule:#222A3B;
+  --rule-bright:#333D52;
+  --coral:#FF7B64;
+  --coral-solid:#FF5F45;
+  --cobalt:#8FA3FF;
+  --verified:#3FCB98;
+  --f-display:"Chivo","Helvetica Neue",Arial,sans-serif;
+  --f-sans:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --gut:clamp(20px,5vw,64px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--void);color:var(--fog);font-family:var(--f-sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--coral);text-underline-offset:4px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cobalt);outline-offset:4px;border-radius:3px}
+::selection{background:var(--coral-solid);color:var(--ink)}
+.shell{max-width:760px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+.wide{max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+.wordmark{font-family:var(--f-display);font-weight:800;letter-spacing:-.035em;line-height:1;color:var(--fog);white-space:nowrap}
+.wordmark .m{display:inline-block;transform:translateY(.12em)}
+.lockup{display:flex;align-items:center;gap:.42em;text-decoration:none}
+
+nav .bar{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;
+  position:sticky;top:0;z-index:50;background:rgba(7,9,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+nav .wordmark{font-size:22px}
+nav a.back{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+nav a.back:hover{color:var(--fog)}
+/* ---------- mobile menu ---------- */
+.menu-toggle{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;flex-shrink:0;
+  background:transparent;border:1px solid var(--rule-bright);border-radius:2px;
+  cursor:pointer;padding:0;
+}
+.menu-toggle:hover{border-color:var(--fog)}
+.menu-toggle-bars{position:relative;display:block;width:18px;height:2px;background:var(--fog);transition:background .15s ease}
+.menu-toggle-bars::before,.menu-toggle-bars::after{
+  content:"";position:absolute;left:0;width:18px;height:2px;background:var(--fog);
+  transition:transform .18s ease, opacity .18s ease;
+}
+.menu-toggle-bars::before{top:-6px}
+.menu-toggle-bars::after{top:6px}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars{background:transparent}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars::before{top:0;transform:rotate(45deg)}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars::after{top:0;transform:rotate(-45deg)}
+
+.mobile-menu{
+  display:block;overflow:hidden;max-height:0;
+  border-top:1px solid var(--rule);background:var(--ink);
+  transition:max-height .22s ease;
+}
+.mobile-menu.open{max-height:360px}
+.mobile-menu-inner{padding:6px var(--gut) 22px}
+.mobile-menu-eyebrow{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin:18px 0 4px;
+}
+.mobile-menu a{
+  display:block;font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:-.01em;
+  color:var(--fog);text-decoration:none;padding:14px 0;border-top:1px solid var(--rule);
+}
+.mobile-menu a:first-of-type{border-top:none}
+.mobile-menu a:hover,.mobile-menu a:active{color:var(--coral)}
+
+@media (prefers-reduced-motion:reduce){
+  .mobile-menu{transition:none}
+  .menu-toggle-bars,.menu-toggle-bars::before,.menu-toggle-bars::after{transition:none}
+}
+
+main{padding:clamp(48px,8vw,88px) 0 clamp(64px,9vw,110px)}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:0 0 14px}
+h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);letter-spacing:-.02em;line-height:1.05;margin:0 0 10px}
+.updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
+h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
+h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+p{color:var(--muted);margin:0 0 16px}
+ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+li{margin:0 0 8px}
+strong{color:var(--fog);font-weight:600}
+.callout{
+  background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--verified);
+  padding:18px 22px;margin:0 0 16px;border-radius:2px;
+}
+.callout p{color:var(--fog);margin:0;font-size:15.5px}
+.note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
+
+footer{border-top:1px solid var(--rule);padding:32px 0}
+footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
+footer .wordmark{font-size:18px}
+footer .flinks{display:flex;gap:24px;flex-wrap:wrap}
+footer .flinks a{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+footer .flinks a:hover{color:var(--fog)}
+footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin:0}
+/* ---------- cookie consent banner (RODO/GDPR) ---------- */
+.consent-banner{position:fixed;left:0;right:0;bottom:0;z-index:200;background:rgba(14,19,32,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule-bright);padding:20px var(--gut)}
+.consent-banner[hidden]{display:none}
+.consent-inner{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between}
+.consent-text{flex:1 1 420px;margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.consent-text a{color:var(--coral)}
+.consent-actions{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0}
+.consent-btn{font-family:var(--f-sans);font-weight:600;font-size:13px;padding:12px 20px;border:1px solid transparent;border-radius:2px;cursor:pointer;background:var(--coral-solid);color:var(--ink)}
+.consent-btn:hover{background:#FF7357}
+.consent-btn.secondary{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.consent-btn.secondary:hover{border-color:var(--fog)}
+.consent-widget{position:fixed;left:20px;bottom:20px;z-index:200;display:inline-flex;align-items:center;padding:11px 16px;background:rgba(14,19,32,.92);border:1px solid var(--rule-bright);border-radius:2px;color:var(--dim);font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .18s ease, color .18s ease}
+.consent-widget:hover{color:var(--fog);border-color:var(--fog)}
+.consent-widget[hidden]{display:none}
+
+/* ---------- subpage additions ---------- */
+h3{font-family:var(--f-display);font-weight:700;font-size:clamp(17px,1.9vw,19px);letter-spacing:-.005em;color:var(--fog);margin:28px 0 10px}
+pre{background:var(--ink);border:1px solid var(--rule);border-left:2px solid var(--cobalt);border-radius:2px;padding:16px 18px;overflow-x:auto;margin:0 0 16px}
+pre code{font-family:var(--f-mono);font-size:13px;line-height:1.7;color:var(--fog);white-space:pre}
+p code,li code{font-family:var(--f-mono);font-size:.88em;color:var(--fog);background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:1px 5px}
+.warn{background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--coral-solid);padding:18px 22px;margin:0 0 16px;border-radius:2px}
+.warn p{color:var(--fog);margin:0;font-size:15.5px}
+.warn p + p{margin-top:10px}
+.step{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cobalt);margin:0 0 6px}
+.lane{border-top:1px solid var(--rule);padding-top:20px;margin:40px 0 0}
+.lane:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lane h2{border-top:none;padding-top:0;margin-top:0}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border-radius:2px;margin:0 0 14px}
+.tag.now{background:rgba(63,203,152,.12);color:var(--verified);border:1px solid rgba(63,203,152,.35)}
+.tag.next{background:rgba(143,163,255,.12);color:var(--cobalt);border:1px solid rgba(143,163,255,.35)}
+.tag.later{background:var(--surface);color:var(--dim);border:1px solid var(--rule-bright)}
+h3{font-family:var(--f-display);font-weight:700;font-size:clamp(16px,1.9vw,18.5px);letter-spacing:-.01em;color:var(--fog);margin:26px 0 10px}
+code{font-family:var(--f-mono);font-size:.88em;color:var(--fog);background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:1px 5px;word-break:break-word}
+.callout p code{background:var(--ink)}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect x="5" y="27" width="32" height="32" rx="8" fill="#E6EAF3"/>
+    <rect x="11" y="37.5" width="20" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="11" y="45" width="13" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="27" y="5" width="32" height="32" rx="8" fill="#FF7B64"/>
+    <rect x="33" y="15.5" width="20" height="3.5" rx="1.75" fill="#07090F"/>
+    <rect x="33" y="23" width="13" height="3.5" rx="1.75" fill="#07090F"/>
+  </symbol>
+</svg>
+
+<nav>
+  <div class="wide bar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+      <span class="menu-toggle-bars" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="shell mobile-menu-inner">
+      <p class="mobile-menu-eyebrow">Menu</p>
+      <a href="/#how">Method</a>
+      <a href="/#survives">What survives</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/blog/">Blog</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="shell">
+    <p class="eyebrow">IT review</p>
+    <h1>What your IT department will ask</h1>
+    <p class="updated">Written to be forwarded. Everything below is verifiable on the file itself.</p>
+
+    <div class="callout">
+      <p>If your organisation does not let you install software on your own judgement, that is a reasonable policy and we are not asking you to work around it. Send this page to whoever decides. It answers the questions that decision needs, in the order they are usually asked.</p>
+    </div>
+
+    <h2>The short version</h2>
+    <p>ShiftMask is a desktop application for Windows 10 and 11. It reads spreadsheet files the user points it at, writes a masked copy beside them, and keeps the mapping in an encrypted file on the same machine. It installs for a single user, needs no administrator rights, installs no service and no driver, and does its work with no network connection at all. There is no account, no telemetry and no cloud component.</p>
+
+    <h2>What it installs, and where</h2>
+    <ul>
+      <li><strong>The application</strong> goes to <code>%LOCALAPPDATA%\ShiftMask\</code>.</li>
+      <li><strong>User data</strong> — projects, settings and the encrypted mapping vault — goes to <strong>a separate folder</strong>, <code>%LOCALAPPDATA%\4optima\ShiftMask\</code>. This separation is deliberate: uninstalling the application must not destroy a vault the user still needs.</li>
+      <li><strong>Nothing goes to <code>Program Files</code></strong>, and nothing to the roaming profile — so masked-data vaults are never synchronised to a file server by a roaming profile policy.</li>
+      <li><strong>The registry</strong> gets one entry, under <code>HKCU</code>, so the application appears in Add or remove programs for that user. Nothing is written under <code>HKLM</code>.</li>
+      <li><strong>No Windows service, no driver, no scheduled task, no autostart entry.</strong> The application runs only when the user starts it.</li>
+      <li><strong>Uninstalling</strong> is Add or remove programs, or <code>%LOCALAPPDATA%\ShiftMask\Update.exe --uninstall</code>.</li>
+    </ul>
+    <p>The installer requires no elevation and will not prompt for it. That answers the technical question. If your policy is about running unapproved executables rather than about administrator rights, the rest of this page is the part that matters.</p>
+
+    <h2>There is also a build that installs nothing</h2>
+    <p>The portable version is a ZIP archive: unpack it, run the executable inside. No installer, no registry entry, nothing written outside the folder you unpacked it into, and it can live on a network share or a removable drive. It does not update itself, so the user comes back to the download page for each new release.</p>
+
+    <h2>What leaves the machine</h2>
+    <p>This is the section most reviewers turn to first, so here is the complete list rather than a reassuring summary.</p>
+
+    <h3>While it is doing its work: nothing</h3>
+    <p>Loading files, detecting relationships, masking, writing the copy and substituting results back all happen locally. This is not a policy statement — it is enforced by an automated test that replaces the socket layer and fails if the application opens any connection other than loopback during those operations. The test runs on every build.</p>
+
+    <h3>Checking for a new version: one request, only when clicked</h3>
+    <p>If the user clicks <em>Check for updates</em>, the application makes a single HTTPS <code>GET</code> for a static JSON file hosted on GitHub. No query parameters, no request body, no cookies, no device identifier, no licence number. The <code>User-Agent</code> header deliberately carries neither the version nor the machine ID, because the server has no reason to know who is asking. Nothing happens automatically and nothing is downloaded or installed without a further, explicit action by the user.</p>
+
+    <h3>Activation: the application never contacts us</h3>
+    <p>The user reads a device ID off the screen, pastes it into a page in their own browser, and pastes a licence token back into the application. The token is a signed file; the application verifies it offline against a public key compiled into the product. A licensed installation on a machine with no internet access works indefinitely.</p>
+
+    <h3>Links: your own browser, as a separate process</h3>
+    <p>Buttons that lead to our website, the terms, or an email message hand the address to the operating system, which opens the user's default browser or mail client. The application itself opens no connection.</p>
+
+    <h3>One dependency that does reach the internet, once</h3>
+    <p>ShiftMask renders its interface with the <strong>Microsoft Edge WebView2 Runtime</strong>. Most managed Windows estates already have it. Where it is missing, the package carries Microsoft's own bootstrapper, which downloads the runtime from Microsoft — and it runs <strong>only after the user is shown what is missing and explicitly agrees</strong>. If that is not acceptable, the runtime can be installed in advance from Microsoft's offline installer; the procedure is on our <a href="/air-gapped/">air-gapped deployment page</a>.</p>
+
+    <div class="callout">
+      <p>No telemetry. No analytics inside the application. No crash reporting. No account, no sign-in, no licence check phoning home. Nothing about the user's files — not a file name, not a column name, not a value — is transmitted anywhere by the application, because the application does not transmit.</p>
+    </div>
+
+    <h2>Code signing, and how to verify it yourself</h2>
+    <p>Both the installer and the portable build are signed as <strong>4optima Sp. z o.o.</strong>, through Microsoft's Azure Trusted Signing service, with a timestamp — so the signature stays valid after the signing certificate expires.</p>
+    <ul>
+      <li>Right-click the file, choose <strong>Properties</strong>, open the <strong>Digital Signatures</strong> tab. The signer should read <em>4optima Sp. z o.o.</em></li>
+      <li>From PowerShell: <code>Get-AuthenticodeSignature .\ShiftMask-win-Setup.exe</code> should return <code>Valid</code>, with the certificate issued by <em>Microsoft ID Verified CS AOC CA 03</em>.</li>
+    </ul>
+    <p>Windows SmartScreen may still show a warning on a recent release. That is a reputation counter, not a verdict on the signature — a newly published file has not yet been installed by many people. The signature is the thing worth checking, and it is checkable with the two commands above.</p>
+
+    <h2>Third-party components</h2>
+    <p>The application ships a complete <code>THIRD-PARTY-NOTICES.txt</code> inside its own folder, listing every runtime dependency with its licence text — currently 28 packages, plus CPython and two typefaces. The build is wired to fail if any dependency arrives without a licence text, so that file cannot silently fall out of date.</p>
+    <p>The Python runtime is bundled inside the executable. No system-wide Python, no separate runtime and no additional framework has to be installed on the workstation.</p>
+
+    <h2>Data protection</h2>
+    <p>4optima never receives the user's data, because the product has no channel through which to send it. That makes us a supplier of software rather than a processor of your data, and it means adopting ShiftMask does not add a sub-processor to your records.</p>
+    <p>One point worth stating plainly, because it decides whether this tool fits your policy at all: ShiftMask produces a <strong>pseudonymised</strong> copy, not an anonymous one. The mapping between real and substitute values is kept, encrypted, on the user's machine — that is what allows results to be mapped back afterwards. Under the GDPR the masked copy remains personal data, handled under your existing obligations; what changes is that the copy you hand to an external tool no longer identifies anyone.</p>
+    <p>The vault holding that mapping is encrypted with Fernet, with the key derived from the user's passphrase through PBKDF2 at 600,000 iterations. The passphrase is never stored and cannot be recovered by us.</p>
+
+    <h2>Who publishes it</h2>
+    <p>ShiftMask is a product of <strong>4optima Sp. z o.o.</strong>, a company registered in Poland — the same legal entity named in the code signature. Registration numbers and the registered address are on the <a href="/imprint.html">legal page</a>. The organisation's identity was verified by Microsoft as part of issuing the signing certificate.</p>
+
+    <h2>More than a few seats</h2>
+    <p>Licences are per device today, and the installer is a per-user installer. If you are looking at a managed rollout, a shared licence pool or a deployment package for your software distribution system, write to us rather than working around it — those are on the roadmap and we would rather build them against a real requirement than a guess.</p>
+
+    <h2>Something not answered here</h2>
+    <p>Write to <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20it-review&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20it-review%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">shiftmask@4optima.pl</a> and say which question is open. A security review that ends in &ldquo;no&rdquo; because we failed to answer something is a worse outcome for us than a &ldquo;no&rdquo; on the merits.</p>
+
+    <p class="note">Everything on this page describes ShiftMask 0.2.5 and later. Where a statement is checkable on the file itself — the signature, the notices file, the install locations — check it rather than taking our word for it.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wide fbar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="flinks">
+      <a href="/#how">Method</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/blog/">Blog</a>
+      <a href="/support/">Support</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/eula/">Terms</a>
+      <a href="/imprint.html">Legal</a>
+      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20air-gapped&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20it-review%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
+    </div>
+    <p class="rights">ShiftMask is a product of <a href="/imprint.html" style="color:inherit">4optima Sp. z o.o.</a> &middot; &copy; 2026</p>
+  </div>
+</footer>
+
+<!-- Privacy-first analytics: no cookies, no cross-site profile. -->
+<script data-goatcounter="https://shiftmask.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<!-- Cookie consent banner (RODO/GDPR) — gates Google Analytics (GA4) behind explicit opt-in. GoatCounter above sets no cookies and is unaffected. -->
+<div id="consent-banner" class="consent-banner" hidden>
+  <div class="consent-inner">
+    <p class="consent-text">We'd like to use <strong>Google Analytics</strong> (sets cookies) to see which pages and links lead to downloads or purchases. It only runs if you accept — <a href="/privacy.html">Privacy Policy</a></p>
+    <div class="consent-actions">
+      <button type="button" class="consent-btn secondary" id="consent-reject">Reject</button>
+      <button type="button" class="consent-btn" id="consent-accept">Accept</button>
+    </div>
+  </div>
+</div>
+<button type="button" id="consent-widget" class="consent-widget" hidden aria-label="Cookie preferences">Cookies</button>
+
+<script>
+(function(){
+  var KEY = 'shiftmask_consent';
+  var GA_ID = 'G-5KEZY0VNNV';
+
+  function stored(){ try { return localStorage.getItem(KEY); } catch(e){ return null; } }
+  function store(v){ try { localStorage.setItem(KEY, v); } catch(e){} }
+
+  function loadGA(){
+    if (window.__smGaLoaded) return;
+    window.__smGaLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'granted'
+    });
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+  }
+
+  var consent = stored();
+  if (consent === 'granted') loadGA();
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var banner = document.getElementById('consent-banner');
+    var widget = document.getElementById('consent-widget');
+    var acceptBtn = document.getElementById('consent-accept');
+    var rejectBtn = document.getElementById('consent-reject');
+
+    function showBanner(){
+      if (banner) banner.hidden = false;
+      if (widget) widget.hidden = true;
+    }
+    function showWidget(){
+      if (banner) banner.hidden = true;
+      if (widget) widget.hidden = false;
+    }
+
+    if (consent) { showWidget(); } else { showBanner(); }
+
+    if (acceptBtn) acceptBtn.addEventListener('click', function(){
+      store('granted'); consent = 'granted'; loadGA(); showWidget();
+    });
+    if (rejectBtn) rejectBtn.addEventListener('click', function(){
+      store('denied'); consent = 'denied'; showWidget();
+    });
+    if (widget) widget.addEventListener('click', function(){ showBanner(); });
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  var toggle = document.getElementById('menu-toggle');
+  var panel = document.getElementById('mobile-menu');
+  if (!toggle || !panel) return;
+
+  function closeMenu(){
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
+    panel.classList.remove('open');
+  }
+  function openMenu(){
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close menu');
+    panel.classList.add('open');
+  }
+
+  toggle.addEventListener('click', function(){
+    var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  panel.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 760) closeMenu();
+  });
+})();
+</script>
+
+</body>
+</html>

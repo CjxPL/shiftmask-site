@@ -149,6 +149,12 @@ form{margin:0 0 28px}
 .btn-solid:hover:not(:disabled){background:#FF7357}
 .btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright);width:auto;padding:12px 18px;font-size:14px}
 .btn-line:hover{border-color:var(--fog)}
+/* Pole na ID pokazuje sie dopiero po swiadomym „mam juz aplikacje" - kto
+   przyszedl z cennika, najpierw widzi pobieranie, nie pytanie o ID. */
+.gate{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 36px}
+.gate .btn{width:auto}
+.gate .btn-line{padding:17px 22px;font-size:16px}
+.gate[hidden],form[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
 
 .status{
@@ -234,10 +240,15 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     <ol class="steps">
       <li><a href="/#download">Download and install ShiftMask</a> &mdash; about a minute, no administrator rights needed.</li>
       <li>Open it. The activation screen shows <em>This device&rsquo;s ID</em>; copy it.</li>
-      <li>Paste it below and press <strong>Start my 7 days</strong>. Copy the token back into the app.</li>
+      <li>Come back here, press <strong>I&rsquo;ve installed it</strong>, paste the ID and press <strong>Start my 7 days</strong>. Copy the token back into the app.</li>
     </ol>
 
-    <form id="demo-form" novalidate>
+    <div class="gate" id="gate">
+      <a class="btn btn-solid" href="/#download" data-goatcounter-click="try-download">Download ShiftMask</a>
+      <button type="button" class="btn btn-line" id="have-app" aria-expanded="false" aria-controls="demo-form" data-goatcounter-click="try-have-app">I&rsquo;ve installed it &mdash; enter my device ID</button>
+    </div>
+
+    <form id="demo-form" novalidate hidden>
       <div class="field mono">
         <label for="hardware_id">This device's ID</label>
         <input type="text" id="hardware_id" name="hardware_id" placeholder="A1B2C3D4E5F6A1B2" maxlength="16" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
@@ -441,5 +452,25 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 })();
 </script>
 
+<noscript><style>#demo-form[hidden]{display:block}</style></noscript>
+<script>
+/* /try/#device-id otwiera pole od razu - dla linku z samej aplikacji,
+   ktorej uzytkownik na pewno ma ja juz zainstalowana. */
+(function () {
+  var btn = document.getElementById("have-app");
+  var form = document.getElementById("demo-form");
+  var gate = document.getElementById("gate");
+  if (!btn || !form) return;
+  function open(focus) {
+    form.hidden = false;
+    btn.setAttribute("aria-expanded", "true");
+    if (gate) gate.hidden = true;
+    var input = document.getElementById("hardware_id");
+    if (focus && input) input.focus();
+  }
+  btn.addEventListener("click", function () { open(true); });
+  if (location.hash === "#device-id") open(false);
+})();
+</script>
 </body>
 </html>

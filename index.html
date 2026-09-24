@@ -773,6 +773,122 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
   .fl-steps h3{color:var(--fog)}
   .fl-steps .fl-n{color:var(--coral)}
 }
+
+/* =========================================================
+   MASKING — animated in/out diagram inside the method section
+   (all classes prefixed mk- on purpose: see DESIGN-BRIEF §5)
+   ========================================================= */
+.mk-wide{max-width:1440px;margin:clamp(40px,5vw,64px) auto 0;padding-left:var(--gut);padding-right:var(--gut)}
+.mk-fig{margin:0;position:relative;width:100%;overflow:hidden;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.mk-sizer{position:relative;width:100%;aspect-ratio:1440/650;overflow:hidden}
+.mk-stage{position:absolute;left:0;top:0;width:1440px;height:810px;transform-origin:0 0;transform:scale(var(--mk-s,.8)) translateY(-150px);color:#E6EAF3;font-family:var(--f-sans)}
+.mk-stage p{margin:0}
+.mk-hint{display:none;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--dim);margin:14px 0 0}
+@media (max-width:699px){.mk-wide{padding-left:0;padding-right:0}.mk-fig{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}.mk-hint{display:block}}
+.mk-wrap.mk-off *{animation-play-state:paused!important}
+.mk-mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.mk-disp{font-family:Chivo,'IBM Plex Sans',sans-serif}
+.mk-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#8E97AE}
+.mk-layer{position:absolute;left:0;top:0;width:1440px;height:810px;pointer-events:none}
+.mk-rib{fill:none;stroke-width:10;stroke-linecap:round;opacity:.07}
+.mk-line{fill:none;stroke-width:1.2;opacity:.38}
+.mk-march{fill:none;stroke-width:1.6;stroke-dasharray:2 10;stroke-linecap:round;animation:mk-march calc(1.1s*var(--k,1)) linear infinite}
+.mk-w{stroke:#E6EAF3}.mk-c{stroke:#FF7B64}.mk-b{stroke:#8FA3FF}
+@keyframes mk-march{to{stroke-dashoffset:-24}}
+.mk-p{position:absolute;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;offset-rotate:0deg;opacity:0;animation-name:mk-travel;animation-timing-function:cubic-bezier(.45,.05,.55,.95);animation-iteration-count:infinite}
+.mk-p.mk-real{background:#E6EAF3;box-shadow:0 0 8px rgba(230,234,243,.9),0 0 18px rgba(230,234,243,.35)}
+.mk-p.mk-mask{background:#FF7B64;box-shadow:0 0 8px rgba(255,123,100,.95),0 0 20px rgba(255,123,100,.45)}
+@keyframes mk-travel{0%{offset-distance:0%;opacity:0}15%{opacity:1}85%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.mk-card{position:absolute;box-sizing:border-box;background:#0E1320;border:1px solid #23293A;border-radius:6px;overflow:hidden}
+.mk-fbar{height:32px;box-sizing:border-box;padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #23293A;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8E97AE}
+.mk-trow{display:grid;height:26px;align-items:center;padding:0 14px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:500}
+.mk-thead{height:24px;font-size:9.5px;font-weight:600;letter-spacing:.14em;color:#858DA3;text-transform:uppercase;border-bottom:1px solid #23293A}
+.mk-cell{position:relative;height:26px;display:flex;align-items:center;white-space:nowrap}
+.mk-r{justify-content:flex-end}
+.mk-ph{position:absolute;left:0;top:9px;height:8px;border-radius:2px;background:rgba(142,151,174,.16)}
+.mk-r .mk-ph{left:auto;right:0}
+.mk-val{position:relative}
+.mk-ring{position:absolute;left:-5px;right:-5px;top:3px;bottom:3px;border:1px solid #8FA3FF;border-radius:3px;box-shadow:0 0 12px rgba(143,163,255,.45)}
+.mk-step{position:absolute;left:500px;width:440px;height:68px;box-sizing:border-box;padding:0 16px;display:flex;align-items:center;gap:14px;background:#0E1320;border:1px solid #23293A;border-radius:6px}
+.mk-halo{position:absolute;inset:-1px;border-radius:6px;border:1px solid rgba(255,123,100,.7);background:rgba(255,123,100,.07);box-shadow:0 0 30px rgba(255,123,100,.15)}
+.mk-halo.mk-kb{border-color:rgba(143,163,255,.75);background:rgba(143,163,255,.07);box-shadow:0 0 30px rgba(143,163,255,.18)}
+.mk-num{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;width:22px;flex-shrink:0}
+.mk-chip{height:20px;min-width:78px;box-sizing:border-box;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.14em;color:#07090F}
+@keyframes mk-blink{0%,100%{opacity:1}50%{opacity:.4}}
+.mk-live{animation:mk-blink calc(1.8s*var(--k,1)) ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){
+  .mk-wrap *{animation:none!important}
+  .mk-p,.mk-halo,.mk-ph{display:none}
+  .mk-f1,.mk-f2,.mk-f3,.mk-f4,.mk-f5,.mk-v1,.mk-v2,.mk-v3,.mk-v4,.mk-v5{opacity:1}
+}
+@keyframes mk-f1{0%,10%{opacity:0}14%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f1{opacity:0;animation:mk-f1 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e1{0%,10%{opacity:1}13%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e1{animation:mk-e1 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v1{0%,10%{opacity:.32}14%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v1{opacity:.32;animation:mk-v1 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f2{0%,28%{opacity:0}32%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f2{opacity:0;animation:mk-f2 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e2{0%,28%{opacity:1}31%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e2{animation:mk-e2 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v2{0%,28%{opacity:.32}32%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v2{opacity:.32;animation:mk-v2 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f3{0%,46%{opacity:0}50%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f3{opacity:0;animation:mk-f3 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e3{0%,46%{opacity:1}49%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e3{animation:mk-e3 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v3{0%,46%{opacity:.32}50%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v3{opacity:.32;animation:mk-v3 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f4{0%,64%{opacity:0}68%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f4{opacity:0;animation:mk-f4 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e4{0%,64%{opacity:1}67%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e4{animation:mk-e4 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v4{0%,64%{opacity:.32}68%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v4{opacity:.32;animation:mk-v4 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f5{0%,82%{opacity:0}86%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f5{opacity:0;animation:mk-f5 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e5{0%,82%{opacity:1}85%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e5{animation:mk-e5 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v5{0%,82%{opacity:.32}86%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v5{opacity:.32;animation:mk-v5 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-w1{0%,10%{opacity:0}12%,27%{opacity:1}29%,100%{opacity:0}}
+.mk-w1{opacity:0;animation:mk-w1 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n1{0%,10%{color:#858DA3}12%,27%{color:#FF7B64}29%,100%{color:#858DA3}}
+.mk-n1{color:#858DA3;animation:mk-n1 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w2{0%,28%{opacity:0}30%,45%{opacity:1}47%,100%{opacity:0}}
+.mk-w2{opacity:0;animation:mk-w2 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n2{0%,28%{color:#858DA3}30%,45%{color:#FF7B64}47%,100%{color:#858DA3}}
+.mk-n2{color:#858DA3;animation:mk-n2 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w3{0%,46%{opacity:0}48%,63%{opacity:1}65%,100%{opacity:0}}
+.mk-w3{opacity:0;animation:mk-w3 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n3{0%,46%{color:#858DA3}48%,63%{color:#FF7B64}65%,100%{color:#858DA3}}
+.mk-n3{color:#858DA3;animation:mk-n3 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w4{0%,64%{opacity:0}66%,81%{opacity:1}83%,100%{opacity:0}}
+.mk-w4{opacity:0;animation:mk-w4 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n4{0%,64%{color:#858DA3}66%,81%{color:#FF7B64}83%,100%{color:#858DA3}}
+.mk-n4{color:#858DA3;animation:mk-n4 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w5{0%,82%{opacity:0}84%,94%{opacity:1}96%,100%{opacity:0}}
+.mk-w5{opacity:0;animation:mk-w5 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n5{0%,82%{color:#858DA3}84%,94%{color:#FF7B64}96%,100%{color:#858DA3}}
+.mk-n5{color:#858DA3;animation:mk-n5 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-prog{0%,10%{transform:scaleX(0)}82%,94%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+.mk-prog{transform-origin:0 50%;transform:scaleX(0);animation:mk-prog calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-tl{0%,47%{transform:translateX(0);opacity:1}57%,95%{transform:translateX(-934.3px);opacity:1}97%{transform:translateX(-934.3px);opacity:0}98%{transform:translateX(0);opacity:0}100%{transform:translateX(0);opacity:1}}
+.mk-tl{animation:mk-tl calc(16s*var(--k,1)) cubic-bezier(.6,.05,.25,1) infinite}
+@keyframes mk-tc{0%,48%{background:#E6EAF3;box-shadow:0 0 10px rgba(230,234,243,.8)}55%,95%{background:#FF7B64;box-shadow:0 0 12px rgba(255,123,100,.9)}98%,100%{background:#E6EAF3;box-shadow:0 0 10px rgba(230,234,243,.8)}}
+.mk-tdot{position:absolute;top:-5px;width:10px;height:10px;margin-left:-5px;border-radius:50%;animation:mk-tc calc(16s*var(--k,1)) linear infinite}
+.mk-i0q0{offset-path:path('M440 261 C 470 261, 470 300, 500 300');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-i0q1{offset-path:path('M440 261 C 470 261, 470 300, 500 300');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-i0q2{offset-path:path('M440 261 C 470 261, 470 300, 500 300');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
+.mk-i1q0{offset-path:path('M440 461 C 470 461, 470 420, 500 420');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-i1q1{offset-path:path('M440 461 C 470 461, 470 420, 500 420');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-i1q2{offset-path:path('M440 461 C 470 461, 470 420, 500 420');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
+.mk-o0q0{offset-path:path('M940 300 C 970 300, 970 261, 1000 261');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-o0q1{offset-path:path('M940 300 C 970 300, 970 261, 1000 261');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-o0q2{offset-path:path('M940 300 C 970 300, 970 261, 1000 261');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
+.mk-o1q0{offset-path:path('M940 420 C 970 420, 970 461, 1000 461');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-o1q1{offset-path:path('M940 420 C 970 420, 970 461, 1000 461');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-o1q2{offset-path:path('M940 420 C 970 420, 970 461, 1000 461');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
 </style>
 </head>
 <body>
@@ -1035,6 +1151,109 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
         <p class="eyebrow">The method</p>
         <h2>Three moves. None in the cloud.</h2>
       </div>
+    </div>
+    <div class="mk-wide mk-wrap" id="mk-wrap">
+      <figure class="mk-fig" id="mk-fig" role="img" aria-label="Animated diagram: a customers table and an invoices table go into ShiftMask. It finds the keys, replaces names and emails with consistent stand-ins, shifts every date by the same offset and rescales amounts by one hidden factor. The masked copy keeps joins, the gaps between dates and the ratios between amounts; the map back to the originals stays in an encrypted vault on the machine.">
+        <div class="mk-sizer" id="mk-sizer">
+          <div class="mk-stage" aria-hidden="true">
+
+
+
+
+<span class="mk-eyebrow" style="position: absolute; left: 40px; top: 164px">In · your files</span>
+<span class="mk-eyebrow" style="position: absolute; left: 1000px; top: 164px; color: #FF7B64">Out · masked copy</span>
+<div class="mk-mono" style="position: absolute; left: 500px; top: 160px; width: 440px; display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; font-weight: 600; letter-spacing: .2em; color: #E6EAF3">
+<span style="display: flex; align-items: center; gap: 8px"><span class="mk-live" style="width: 6px; height: 6px; border-radius: 50%; background: #3FCB98"></span>SHIFTMASK</span>
+<span style="color: #3FCB98">OFFLINE · THIS MACHINE</span>
+</div>
+<div style="position: absolute; left: 500px; top: 190px; width: 440px; height: 2px; background: #23293A; overflow: hidden"><div class="mk-prog" style="width: 100%; height: 2px; background: #FF7B64"></div></div>
+
+<svg class="mk-layer" width="1440" height="810"><path d="M440 261 C 470 261, 470 300, 500 300" class="mk-rib mk-w"></path><path d="M440 261 C 470 261, 470 300, 500 300" class="mk-line mk-w"></path><path d="M440 261 C 470 261, 470 300, 500 300" class="mk-march mk-w"></path><path d="M440 461 C 470 461, 470 420, 500 420" class="mk-rib mk-w"></path><path d="M440 461 C 470 461, 470 420, 500 420" class="mk-line mk-w"></path><path d="M440 461 C 470 461, 470 420, 500 420" class="mk-march mk-w"></path><path d="M940 300 C 970 300, 970 261, 1000 261" class="mk-rib mk-c"></path><path d="M940 300 C 970 300, 970 261, 1000 261" class="mk-line mk-c"></path><path d="M940 300 C 970 300, 970 261, 1000 261" class="mk-march mk-c"></path><path d="M940 420 C 970 420, 970 461, 1000 461" class="mk-rib mk-c"></path><path d="M940 420 C 970 420, 970 461, 1000 461" class="mk-line mk-c"></path><path d="M940 420 C 970 420, 970 461, 1000 461" class="mk-march mk-c"></path></svg>
+<div class="mk-card" style="left: 40px; top: 190px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">customers.xlsx</span><span style="color: #8E97AE">REAL</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span>customer_id</span><span>name</span><span>email</span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3"><span class="mk-ring mk-w1"></span>C-10482</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">Nowak Logistics</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">biuro@nowak-log.pl</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">C-10483</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">Baltic Foods</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">orders@baltic.pl</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">C-10484</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">Kowalski &amp; Syn</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">k.kowalski@ks.pl</span></span></div></div><div class="mk-card" style="left: 40px; top: 390px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">invoices.csv</span><span style="color: #8E97AE">REAL</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span>invoice_date</span><span>customer_id</span><span style="text-align: right">amount</span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">2026-08-14</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3"><span class="mk-ring mk-w1"></span>C-10482</span></span><span class="mk-cell mk-r"><span class="mk-val" style="color: #E6EAF3">18,420.00</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">2026-08-15</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">C-10483</span></span><span class="mk-cell mk-r"><span class="mk-val" style="color: #E6EAF3">4,990.50</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">2026-08-28</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3"><span class="mk-ring mk-w1"></span>C-10482</span></span><span class="mk-cell mk-r"><span class="mk-val" style="color: #E6EAF3">7,110.00</span></span></div></div><div class="mk-card" style="left: 1000px; top: 190px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">customers · masked copy</span><span style="color: #FF7B64">SHIFTED</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span>customer_id</span><span>name</span><span>email</span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 60%"></span><span class="mk-val mk-f1" style="color: #8FA3FF"><span class="mk-ring mk-w1"></span>ID_7f3a2c9e</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 72%"></span><span class="mk-val mk-f2" style="color: #FF7B64">Lis sp. j.</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 54%"></span><span class="mk-val mk-f2" style="color: #FF7B64">kontakt@lis.example</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 60%"></span><span class="mk-val mk-f1" style="color: #8FA3FF">ID_b41d06a2</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 72%"></span><span class="mk-val mk-f2" style="color: #FF7B64">Wróbel S.A.</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 54%"></span><span class="mk-val mk-f2" style="color: #FF7B64">biuro@wrobel.example</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 60%"></span><span class="mk-val mk-f1" style="color: #8FA3FF">ID_e90c14d7</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 72%"></span><span class="mk-val mk-f2" style="color: #FF7B64">Zając i Wsp.</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 54%"></span><span class="mk-val mk-f2" style="color: #FF7B64">info@zajac.example</span></span></div></div><div class="mk-card" style="left: 1000px; top: 390px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">invoices · masked copy</span><span style="color: #FF7B64">SHIFTED</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span>invoice_date</span><span>customer_id</span><span style="text-align: right">amount</span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e3" style="width: 62%"></span><span class="mk-val mk-f3" style="color: #FF7B64">2025-10-29</span></span><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 66%"></span><span class="mk-val mk-f1" style="color: #8FA3FF"><span class="mk-ring mk-w1"></span>ID_7f3a2c9e</span></span><span class="mk-cell mk-r"><span class="mk-ph mk-e4" style="width: 48%"></span><span class="mk-val mk-f4" style="color: #FF7B64">25,235.40</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e3" style="width: 62%"></span><span class="mk-val mk-f3" style="color: #FF7B64">2025-10-30</span></span><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 66%"></span><span class="mk-val mk-f1" style="color: #8FA3FF">ID_b41d06a2</span></span><span class="mk-cell mk-r"><span class="mk-ph mk-e4" style="width: 48%"></span><span class="mk-val mk-f4" style="color: #FF7B64">6,836.99</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e3" style="width: 62%"></span><span class="mk-val mk-f3" style="color: #FF7B64">2025-11-12</span></span><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 66%"></span><span class="mk-val mk-f1" style="color: #8FA3FF"><span class="mk-ring mk-w1"></span>ID_7f3a2c9e</span></span><span class="mk-cell mk-r"><span class="mk-ph mk-e4" style="width: 48%"></span><span class="mk-val mk-f4" style="color: #FF7B64">9,740.70</span></span></div></div>
+<svg class="mk-layer" width="1440" height="810"><path d="M109 332 C 109 372, 234 360, 234 390" class="mk-f1" style="fill: none; stroke: #8FA3FF; stroke-width: 1.4; stroke-dasharray: 3 4"></path><path d="M1069 332 C 1069 372, 1194 360, 1194 390" class="mk-f1" style="fill: none; stroke: #8FA3FF; stroke-width: 1.4; stroke-dasharray: 3 4"></path></svg>
+<div class="mk-step" style="top: 224px">
+<span class="mk-halo mk-w1 mk-kb"></span>
+<span class="mk-num mk-n1" style="position: relative">01</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Find the keys</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">customer_id links both tables, so it gets one stand-in everywhere.</span>
+</div>
+</div>
+<div class="mk-step" style="top: 302px">
+<span class="mk-halo mk-w2"></span>
+<span class="mk-num mk-n2" style="position: relative">02</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Replace identities</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Names and emails become consistent stand-ins. Same input, same output.</span>
+</div>
+</div>
+<div class="mk-step" style="top: 380px">
+<span class="mk-halo mk-w3"></span>
+<span class="mk-num mk-n3" style="position: relative">03</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Shift every date</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">One offset for the whole project. Gaps between dates stay exact.</span>
+</div>
+</div>
+<div class="mk-step" style="top: 458px">
+<span class="mk-halo mk-w4"></span>
+<span class="mk-num mk-n4" style="position: relative">04</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Rescale amounts</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">One hidden factor per group. Totals, shares and trends keep their shape.</span>
+</div>
+</div>
+
+<div class="mk-layer"><span class="mk-p mk-real mk-i0q0"></span><span class="mk-p mk-real mk-i0q1"></span><span class="mk-p mk-real mk-i0q2"></span><span class="mk-p mk-real mk-i1q0"></span><span class="mk-p mk-real mk-i1q1"></span><span class="mk-p mk-real mk-i1q2"></span><span class="mk-p mk-mask mk-o0q0"></span><span class="mk-p mk-mask mk-o0q1"></span><span class="mk-p mk-mask mk-o0q2"></span><span class="mk-p mk-mask mk-o1q0"></span><span class="mk-p mk-mask mk-o1q1"></span><span class="mk-p mk-mask mk-o1q2"></span></div>
+
+<div style="position: absolute; left: 200px; top: 660px; width: 1180px; height: 1px; background: #23293A"></div><div style="position: absolute; left: 200.0px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 205.0px; top: 666px; font-size: 10px; color: #858DA3">Oct 2025</span><div style="position: absolute; left: 300.2px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 305.2px; top: 666px; font-size: 10px; color: #858DA3">Nov</span><div style="position: absolute; left: 397.2px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 402.2px; top: 666px; font-size: 10px; color: #858DA3">Dec</span><div style="position: absolute; left: 497.4px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 502.4px; top: 666px; font-size: 10px; color: #858DA3">Jan 2026</span><div style="position: absolute; left: 597.6px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 602.6px; top: 666px; font-size: 10px; color: #858DA3">Feb</span><div style="position: absolute; left: 688.2px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 693.2px; top: 666px; font-size: 10px; color: #858DA3">Mar</span><div style="position: absolute; left: 788.4px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 793.4px; top: 666px; font-size: 10px; color: #858DA3">Apr</span><div style="position: absolute; left: 885.4px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 890.4px; top: 666px; font-size: 10px; color: #858DA3">May</span><div style="position: absolute; left: 985.6px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 990.6px; top: 666px; font-size: 10px; color: #858DA3">Jun</span><div style="position: absolute; left: 1082.6px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 1087.6px; top: 666px; font-size: 10px; color: #858DA3">Jul</span><div style="position: absolute; left: 1182.8px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 1187.8px; top: 666px; font-size: 10px; color: #858DA3">Aug</span><div style="position: absolute; left: 1283.0px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 1288.0px; top: 666px; font-size: 10px; color: #858DA3">Sep</span><span style="position: absolute; left: 1219.8px; top: 655px; width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; border: 1px dashed rgba(230,234,243,.35)"></span><span style="position: absolute; left: 1223.1px; top: 655px; width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; border: 1px dashed rgba(230,234,243,.35)"></span><span style="position: absolute; left: 1265.1px; top: 655px; width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; border: 1px dashed rgba(230,234,243,.35)"></span><div class="mk-tl" style="position: absolute; left: 1224.8px; top: 660px; width: 45.3px; height: 0"><span class="mk-tdot" style="left: 0.0px"></span><span class="mk-tdot" style="left: 3.2px"></span><span class="mk-tdot" style="left: 45.3px"></span><div style="position: absolute; left: 0; top: -26px; width: 45.3px; height: 8px; box-sizing: border-box; border: 1px solid #8E97AE; border-bottom: none"></div><span class="mk-mono" style="position: absolute; left: -17.4px; top: -44px; width: 80px; text-align: center; font-size: 10px; font-weight: 600; color: #E6EAF3">14 days</span></div><div class="mk-f3" style="position: absolute; left: 302.5px; top: 606px; width: 910.3px; height: 0; border-top: 1px dashed rgba(255,123,100,.7)"></div><svg class="mk-f3" width="10" height="10" style="position: absolute; left: 300.5px; top: 601px"><path d="M8 1 L2 5 L8 9" fill="none" stroke="#FF7B64" stroke-width="1.4"></path></svg><span class="mk-mono mk-f3" style="position: absolute; left: 647.7px; top: 596px; width: 220px; text-align: center; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; color: #FF7B64"><span style="background: #07090F; padding: 0 10px">−289 DAYS · EVERY DATE</span></span><span class="mk-eyebrow" style="position: absolute; left: 40px; top: 598px">Dates on a timeline</span><span class="mk-mono" style="position: absolute; left: 40px; top: 652px; font-size: 10px; color: #858DA3">invoice_date</span>
+
+<div style="position: absolute; left: 40px; top: 704px; width: 1360px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 24px">
+<div class="mk-v1" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Joins</span>
+<span class="mk-chip" style="background: #3FCB98">KEPT</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">customer_id resolves across both tables.</span>
+</div>
+<div class="mk-v2" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Identities</span>
+<span class="mk-chip" style="background: #FF7B64">REPLACED</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Names and emails replaced, the same way every time.</span>
+</div>
+<div class="mk-v3" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Date gaps</span>
+<span class="mk-chip" style="background: #3FCB98">KEPT</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">14 days apart before. 14 days apart after.</span>
+</div>
+<div class="mk-v4" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Ratios</span>
+<span class="mk-chip" style="background: #3FCB98">KEPT</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Every amount × the same hidden factor.</span>
+</div>
+<div class="mk-v5" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Map to originals</span>
+<span class="mk-chip" style="background: #3FCB98">LOCAL</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Encrypted vault on this machine. Never shared.</span>
+</div>
+
+</div>
+
+
+          </div>
+        </div>
+      </figure>
+      <p class="mk-hint shell" aria-hidden="true">Swipe to follow the data &rarr;</p>
+    </div>
+    <div class="shell">
       <div class="ladder">
         <div class="rung rise">
           <span class="n">01 / READ</span>
@@ -1522,6 +1741,34 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     new IntersectionObserver(function(entries){
       entries.forEach(function(en){ sec.classList.toggle('fl-off', !en.isIntersecting); });
     }, { threshold: 0 }).observe(sec);
+  }
+})();
+</script>
+
+<script>
+(function(){
+  // Masking diagram in the method section: scale the fixed 1440px stage
+  // to the figure width and pause its animations while off-screen.
+  var wrap = document.getElementById('mk-wrap');
+  var fig = document.getElementById('mk-fig');
+  var sizer = document.getElementById('mk-sizer');
+  if (!wrap || !fig || !sizer) { return; }
+  var fit = function(){
+    var w = fig.clientWidth;
+    var narrow = window.matchMedia && window.matchMedia('(max-width:699px)').matches;
+    var s = narrow ? Math.max(w / 1440, 0.62) : w / 1440;
+    sizer.style.width = Math.round(1440 * s) + 'px';
+    sizer.style.height = Math.round(650 * s) + 'px';
+    sizer.style.aspectRatio = 'auto';
+    sizer.style.setProperty('--mk-s', s.toFixed(4));
+  };
+  fit();
+  if ('ResizeObserver' in window) { new ResizeObserver(fit).observe(fig); }
+  else { window.addEventListener('resize', fit); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ wrap.classList.toggle('mk-off', !en.isIntersecting); });
+    }, { threshold: 0 }).observe(wrap);
   }
 })();
 </script>

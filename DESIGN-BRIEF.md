@@ -55,11 +55,13 @@ Inspiracją była ciemna estetyka fintechowa (`finance.elementra.themerex.net`).
 --rule-bright:#333D52;
 --coral:#FF7B64;       /* Coral jako tekst na ciemnym */
 --coral-solid:#FF5F45; /* wypełnienia, pasmo, kontur nagłówka */
---cobalt:#8FA3FF;      /* focus */
+--cobalt:#8FA3FF;      /* przyciski główne i focus — jak w aplikacji */
 --verified:#3FCB98;    /* stan pozytywny */
 ```
 
 Na paśmie Coral tekst wyłącznie w `--ink` (#0E1320).
+
+**Przycisk główny jest Cobaltem, nie Coralem** (decyzja właściciela 2026-09-24). Ta sama reguła co w aplikacji: Coral oznacza zamaskowane dane, akcja ma własny kolor. Coral zostaje na paśmie „0”, w nagłówku konturowym i w etykietach „Replaced/Rescaled”.
 `--dim` było wcześniej `#5E6880` i dawało 3,57:1 — za mało. Nie cofać.
 
 ## 5. Stan weryfikacji

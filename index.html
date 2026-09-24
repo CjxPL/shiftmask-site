@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ShiftMask — Anonymize Excel &amp; SQL Data Before Using AI</title>
-<meta name="description" content="ShiftMask makes a safe local copy of your Excel, CSV and SQL data. Relations intact, dates shifted, values masked — so AI never sees a real record.">
+<title>ShiftMask — Anonymize Excel &amp; CSV Data Before Using AI</title>
+<meta name="description" content="ShiftMask makes a safe local copy of your Excel and CSV data. Relations intact, dates shifted, values masked — so AI never sees a real record.">
 <link rel="canonical" href="https://shiftmask.com/">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://shiftmask.com/">
-<meta property="og:title" content="ShiftMask — Anonymize Excel &amp; SQL Data Before Using AI">
+<meta property="og:title" content="ShiftMask — Anonymize Excel &amp; CSV Data Before Using AI">
 <meta property="og:description" content="Give AI your data. Keep your data. Relations intact, dates shifted, values masked — the real records never leave your machine.">
 <meta property="og:image" content="https://shiftmask.com/og.png">
 <meta property="og:image:width" content="1200">
@@ -257,6 +257,19 @@ p{margin:0 0 18px}
 .tbl th:first-child,.tbl td:first-child{padding-left:20px}
 .tbl th:last-child,.tbl td:last-child{padding-right:20px;text-align:right}
 .key{color:var(--muted)}
+/* Ten sam klient w obu tabelach: jeden oryginal, zawsze ta sama nazwa zastepcza. */
+.tbl td.same{color:var(--coral)}
+.offset-strip .pair{display:inline-flex;align-items:center;gap:inherit;white-space:nowrap}
+/* Na 375 px cztery kolumny nie miescily sie i kwota znikala za krawedzia. */
+@media (max-width:480px){
+  .tbl{font-size:10px}
+  .tbl th{font-size:8.5px;letter-spacing:.06em;padding:11px 6px 8px}
+  .tbl td{padding:9px 6px}
+  .tbl th:first-child,.tbl td:first-child{padding-left:12px}
+  .tbl th:last-child,.tbl td:last-child{padding-right:12px}
+  .offset-strip{gap:8px;letter-spacing:.08em;flex-wrap:wrap}
+  .offset-strip > span:not(.pair){display:none}
+}
 
 .rd{
   display:inline-block;background:var(--fog);color:transparent;
@@ -630,7 +643,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     </div>
     <div class="shell hero-grid">
       <div>
-        <p class="lede">ShiftMask builds a safe local copy of your Excel, CSV and SQL — table relations intact, every date shifted by one offset, every name masked. The real records never leave your machine.</p>
+        <p class="lede">ShiftMask builds a safe local copy of your Excel and CSV files — table relations intact, every date shifted by one offset, every name masked. The real records never leave your machine.</p>
         <div class="cta-row">
           <!-- TODO: podmień na prawdziwy link do pobrania -->
           <a class="btn btn-solid" href="#download" data-goatcounter-click="cta-download-hero">Download for Windows</a>
@@ -649,16 +662,16 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
             <table class="tbl">
               <thead><tr><th>customer_id</th><th>name</th><th>invoice_date</th><th>amount</th></tr></thead>
               <tbody>
-                <tr><td class="key">C-10482</td><td>Nowak Logistics</td><td>2026-08-14</td><td>18,420.00</td></tr>
+                <tr><td class="key same">C-10482</td><td class="same">Nowak Logistics</td><td>2026-08-14</td><td>18,420.00</td></tr>
                 <tr><td class="key">C-10483</td><td>Baltic Foods</td><td>2026-08-15</td><td>4,990.50</td></tr>
-                <tr><td class="key">C-10482</td><td>Nowak Logistics</td><td>2026-08-28</td><td>7,110.00</td></tr>
+                <tr><td class="key same">C-10482</td><td class="same">Nowak Logistics</td><td>2026-08-28</td><td>7,110.00</td></tr>
               </tbody>
             </table>
           </div>
         </div>
 
         <div class="offset-strip">
-          <span>offset</span><b>&minus;289 days</b><span>&middot;</span><span>deterministic mask</span>
+          <span class="pair"><span>dates</span><b>&minus;289 days</b></span><span>&middot;</span><span class="pair"><span>amounts</span><b>&times; hidden factor</b></span>
         </div>
 
         <div class="slab">
@@ -670,9 +683,9 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
             <table class="tbl">
               <thead><tr><th>customer_id</th><th>name</th><th>invoice_date</th><th>amount</th></tr></thead>
               <tbody>
-                <tr><td class="key">C-10482</td><td><span class="rd">Nowak Logistics</span></td><td class="d"><span class="flip">2025-10-29</span></td><td>18,420.00</td></tr>
-                <tr><td class="key">C-10483</td><td><span class="rd">Baltic Foods</span></td><td class="d"><span class="flip">2025-10-30</span></td><td>4,990.50</td></tr>
-                <tr><td class="key">C-10482</td><td><span class="rd">Nowak Logistics</span></td><td class="d"><span class="flip">2025-11-12</span></td><td>7,110.00</td></tr>
+                <tr><td class="same"><span class="flip">ID_7f3a2c9e</span></td><td class="same"><span class="flip">Lis sp. j.</span></td><td class="d"><span class="flip">2025-10-29</span></td><td class="d"><span class="flip">25,235.40</span></td></tr>
+                <tr><td class="d"><span class="flip">ID_b41d06a2</span></td><td class="d"><span class="flip">Wr&oacute;bel S.A.</span></td><td class="d"><span class="flip">2025-10-30</span></td><td class="d"><span class="flip">6,836.99</span></td></tr>
+                <tr><td class="same"><span class="flip">ID_7f3a2c9e</span></td><td class="same"><span class="flip">Lis sp. j.</span></td><td class="d"><span class="flip">2025-11-12</span></td><td class="d"><span class="flip">9,740.70</span></td></tr>
               </tbody>
             </table>
           </div>
@@ -725,10 +738,24 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
         </div>
         <div class="row">
           <div>
-            <p class="t">Personal data</p>
-            <p class="d2">Names, emails, phone numbers, addresses and free-text identifiers are replaced by generated stand-ins. Nothing in the copy you share reads as a real person &mdash; the map back to the originals stays encrypted in a vault on your machine.</p>
+            <p class="t">Proportions between amounts</p>
+            <p class="d2">Every amount in a group is multiplied by the same hidden factor, so totals, shares, ratios and trends keep their shape.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Clients, products and people</p>
+            <p class="d2">Company names, product labels, people, emails, phone numbers, account numbers and identifiers become consistent stand-ins &mdash; the same original always gets the same stand-in, in every file and every run. The map back to the originals stays encrypted in a vault on your machine.</p>
           </div>
           <span class="verdict gone">Replaced</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">The real figures</p>
+            <p class="d2">Nobody reading the copy sees what anyone actually paid. Rescaling hides the figures from a reader, not from someone who already knows one real amount in that column &mdash; <a href="/for-it/">we say so plainly</a>.</p>
+          </div>
+          <span class="verdict gone">Rescaled</span>
         </div>
       </div>
     </div>
@@ -746,7 +773,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
           <span class="n">01 / READ</span>
           <div class="body">
             <h3>Point it at your files</h3>
-            <p>Excel workbooks, CSV files or a SQL database. ShiftMask reads the schema and detects primary and foreign keys to map how your tables actually connect. You confirm or correct the map.</p>
+            <p>Excel workbooks or CSV files. ShiftMask reads their structure and detects primary and foreign keys to map how your tables actually connect. You confirm or correct the map. SQL databases come with Pro.</p>
             <div class="rung-shot"><div class="rung-shot-bar"><span></span><span></span><span></span></div><img src="/screens/step-read.png" alt="ShiftMask Read step: drop zone for Excel or CSV files, with files already added and read on this machine" width="1280" height="655" loading="lazy"></div>
           </div>
         </div>
@@ -762,7 +789,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
           <span class="n">03 / BUILD</span>
           <div class="body">
             <h3>Hand the copy to a model</h3>
-            <p>Send the safe package to ChatGPT, Claude, Gemini or a coding agent. You get back a dashboard, report or app. Point that code at your real database offline and it runs unchanged.</p>
+            <p>Send the safe package to ChatGPT, Claude, Gemini or a coding agent. You get back a dashboard, report or app. Point that code at your real data offline and it runs unchanged.</p>
             <div class="rung-shot"><div class="rung-shot-bar"><span></span><span></span><span></span></div><img src="/screens/step-build.png" alt="ShiftMask Build step: original data and the masked copy shown side by side before anything is sent to a model" width="1280" height="655" loading="lazy"></div>
           </div>
         </div>
@@ -808,8 +835,8 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
           <p class="tier-for">One person, one machine, Excel and CSV.</p>
           <p class="tier-price"><sup>$</sup>39</p>
           <p class="tier-terms">One payment, per device<br>Free updates for 1 year<br><span class="tier-founding">Founding price &mdash; first 150 licences</span></p>
-          <a class="btn btn-solid" href="/try/" data-goatcounter-click="cta-demo-pricing">Try it free for 7 days</a>
-          <p class="tier-try">Full product, no email address, no card. Buy when it has earned it.</p>
+          <a class="btn btn-solid" href="#download" data-goatcounter-click="cta-demo-pricing">Start the free 7-day trial</a>
+          <p class="tier-try">Download, install, then activate seven days of the full product. No email, no card. Buy when it has earned it.</p>
           <ul class="incl">
             <li>Unlimited files, tables and projects &mdash; no time limit</li>
             <li>Excel and CSV sources</li>
@@ -916,22 +943,13 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
           <p class="ss-why">Why does Windows do this? The file <strong>is</strong> signed by 4optima. The warning is about reputation &mdash; a new release simply hasn't been installed by many people yet. <a href="#ss-details">How to verify the file yourself &darr;</a></p>
         </div>
-        <p class="cta-note"><span class="pulse"></span> Needs Microsoft Edge WebView2 Runtime &middot; most machines have it, a fresh Windows install often does not</p>
+        <p class="cta-note"><span class="pulse"></span> Uses Microsoft Edge WebView2 Runtime &middot; if it is missing, ShiftMask asks and installs it for you</p>
       </div>
 
       <div class="qa rise" id="ss-details" style="margin-top:52px">
         <div class="item">
-          <h3>Windows may still warn you. Here is exactly why.</h3>
-          <p>The installer <strong>is</strong> signed, by <em>4optima Sp. z o.o.</em> Windows can still show a warning, and the reason is not the signature &mdash; it is reputation. SmartScreen counts how many people have installed a given file; a release published days ago has not been installed by many yet. That counter goes up on its own. We would rather tell you this here than let it surprise you.</p>
-        </div>
-        <div class="item">
           <h3>First, your browser may block the download</h3>
           <p>Edge or Chrome may report that the file could not be scanned. Open the downloads list, click the three dots next to <em>ShiftMask-win-Setup.exe</em>, and choose <strong>Keep</strong>.</p>
-        </div>
-        <div class="item">
-          <h3>Then Windows asks before running it &mdash; in two steps, not one</h3>
-          <p><strong>Step one.</strong> A panel appears: <em>Windows protected your PC</em>, with the text <em>Microsoft Defender SmartScreen prevented an unrecognised app from starting</em>. The only button offered is <em>Don't run</em>. This is where most people give up, and it is not a dead end &mdash; it just looks like one.</p>
-          <p><strong>Step two.</strong> Click the <strong>More info</strong> link, which sits in the body text above that button and is easy to miss. The panel expands and now shows two things it was hiding: the publisher line, which should read <em>4optima Sp. z o.o.</em>, and a <strong>Run anyway</strong> button. If the publisher says anything else, stop and write to us.</p>
         </div>
         <div class="item">
           <h3>Do not take our word for it &mdash; check the file yourself</h3>
@@ -963,6 +981,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
           <p>Two different things get called Copilot, and they need different answers.</p>
           <p><strong>If it means pasting a real spreadsheet into Copilot and asking it to anonymise the contents</strong> &mdash; by the time it can do that, the data has already left your machine. The masking happens after the exposure instead of preventing it. ShiftMask runs before anything is sent, and that is the whole difference.</p>
           <p><strong>If it means Microsoft 365 Copilot with enterprise data protection</strong>, the guarantee is real and worth having: your prompts stay inside your tenant and are not used to train foundation models. But it answers a different question from the one a client contract asks. An NDA is usually about where a client&rsquo;s data may be processed and who may see it, not about whether a model trains on it. If you hold data for several clients, or for one whose contract names the systems their data may enter, &ldquo;it stayed in our tenant&rdquo; is an argument you have to make and win. With a masked copy there is no argument to make, because what you pasted was not their data.</p>
+          <p>For the practical side of Copilot inside Excel, see <a href="/blog/copilot-excel-sensitive-data.html">How to use Copilot in Excel safely with sensitive data</a>.</p>
         </div>
         <div class="item">
           <h3>My company does not let me install software. Can I still use it?</h3>
@@ -981,7 +1000,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
         </div>
         <div class="item">
           <h3>How do I anonymize an Excel file for AI?</h3>
-          <p>Open the workbook in ShiftMask, confirm which columns hold personal data — it proposes a classification automatically — and export. You get a new workbook or a DuckDB file with the same sheets, columns and relationships, and with names, identifiers and dates replaced by consistent stand-ins. The map back to the real values stays in an encrypted vault on your machine &mdash; that is what lets you swap the real data back in later, and it is why the export is pseudonymised rather than irreversibly anonymised.</p>
+          <p>Open the workbook in ShiftMask, confirm which columns hold personal data — it proposes a classification automatically — and export. You get a new workbook with the same sheets, columns and relationships, and with names, identifiers and dates replaced by consistent stand-ins. The map back to the real values stays in an encrypted vault on your machine &mdash; that is what lets you swap the real data back in later, and it is why the export is pseudonymised rather than irreversibly anonymised.</p>
         </div>
         <div class="item">
           <h3>Does this make me GDPR compliant?</h3>
@@ -1230,7 +1249,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
         }
       },
       "operatingSystem": "Windows",
-      "description": "Desktop app that builds a safe local copy of Excel, CSV and SQL data — relations intact, dates shifted, values masked — so data can be used with AI tools without exposing real records.",
+      "description": "Desktop app that builds a safe local copy of Excel and CSV data — relations intact, dates shifted, values masked — so data can be used with AI tools without exposing real records.",
       "offers": {
         "@type": "Offer",
         "price": "39",
@@ -1244,9 +1263,11 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       "mainEntity": [
         {"@type":"Question","name":"Can I try ShiftMask before buying?","acceptedAnswer":{"@type":"Answer","text":"Yes. There is a seven-day trial of the full product: every feature, no row limits and no watermark, with no purchase, email address or account required. Install ShiftMask, copy the device ID it shows, and request a trial token at shiftmask.com/try."}},
         {"@type":"Question","name":"Is it safe to put company data into ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"Not the real data. Anything you paste leaves your control, and most public AI tools give no contractual guarantee about where it goes. ShiftMask lets you send a structurally identical copy in which no value is a real name, account or identifier, and you still get working code back."}},
+        {"@type":"Question","name":"We use Microsoft Copilot. Is our data not already protected?","acceptedAnswer":{"@type":"Answer","text":"It depends which Copilot is meant. Pasting a real spreadsheet into Copilot and asking it to anonymise the contents means the data has already left your machine before anything is masked. Microsoft 365 Copilot with enterprise data protection keeps prompts inside your tenant and does not use them to train foundation models, which is a real guarantee, but a client contract usually asks where the data may be processed and who may see it. A masked copy avoids that question, because what you paste is not the client's data."}},
+        {"@type":"Question","name":"My company does not let me install software. Can I still use it?","acceptedAnswer":{"@type":"Answer","text":"The installer needs no administrator rights and installs for one user only. If the policy is about installers, a portable build runs from an unpacked folder with no installer and no registry entry. If the policy is about running any unapproved program, someone has to approve it; the page shiftmask.com/for-it/ lists what gets installed, what leaves the machine, and how to verify the code signature."}},
         {"@type":"Question","name":"Does my data leave my computer?","acceptedAnswer":{"@type":"Answer","text":"No. ShiftMask is a desktop application. It reads files locally, builds the masked copy in a local DuckDB database, and writes the output to your disk."}},
         {"@type":"Question","name":"Does masking break my Power BI time intelligence?","acceptedAnswer":{"@type":"Answer","text":"No. Random date replacement destroys intervals, which breaks YTD, YoY and rolling calculations. ShiftMask moves every date by one shared offset, so the distance between any two events is unchanged and time-based measures return the same shape."}},
-        {"@type":"Question","name":"How do I anonymize an Excel file for AI?","acceptedAnswer":{"@type":"Answer","text":"Open the workbook in ShiftMask, confirm which columns hold personal data, and export. You get a workbook or DuckDB file with the same sheets, columns and relationships, and with names, identifiers and dates replaced by consistent stand-ins. The map back to the real values stays in an encrypted vault on your machine, so the export is pseudonymised rather than irreversibly anonymised."}},
+        {"@type":"Question","name":"How do I anonymize an Excel file for AI?","acceptedAnswer":{"@type":"Answer","text":"Open the workbook in ShiftMask, confirm which columns hold personal data, and export. You get a new workbook with the same sheets, columns and relationships, and with names, identifiers and dates replaced by consistent stand-ins. The map back to the real values stays in an encrypted vault on your machine, so the export is pseudonymised rather than irreversibly anonymised."}},
         {"@type":"Question","name":"Does ShiftMask make me GDPR compliant?","acceptedAnswer":{"@type":"Answer","text":"No tool can make that promise. ShiftMask replaces the personal data in the copy you share with stand-ins, which is usually the hard part of using public AI tools lawfully. Because the map back is kept, encrypted, on your machine, that copy is pseudonymised under GDPR rather than anonymised, and your obligations still depend on your own processes."}},
         {"@type":"Question","name":"Can I get a refund?","acceptedAnswer":{"@type":"Answer","text":"Yes, within 14 days, no questions asked. Purchases are handled by Lemon Squeezy as merchant of record, so the refund is processed by them. A licence token, once issued, cannot be revoked: it is verified entirely offline, which is what lets ShiftMask run on machines with no internet."}},
         {"@type":"Question","name":"I am replacing my computer. What happens to my licence?","acceptedAnswer":{"@type":"Answer","text":"You get a new token at no charge, with no limit on how many times. Use the transfer button on the activation screen and send the request from the address you bought with. A new token arrives within one working day. This is handled by a person rather than automatically, because self-service would require keeping a record of every activation on a server."}},

@@ -113,6 +113,12 @@ main{padding:clamp(48px,8vw,88px) 0 clamp(64px,9vw,110px)}
 }
 h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);letter-spacing:-.02em;line-height:1.05;margin:0 0 16px}
 .lede{color:var(--muted);font-size:17px;margin:0 0 40px;max-width:52ch}
+/* Kto przychodzi z cennika, zwykle jeszcze nic nie zainstalowal. */
+.lede:has(+ .steps){margin-bottom:18px}
+.steps{margin:0 0 36px;padding-left:22px;color:var(--muted);font-size:15.5px;line-height:1.55}
+.steps li{margin:0 0 8px}
+.steps a{color:var(--coral)}
+.steps strong,.steps em{color:var(--fog)}
 
 form{margin:0 0 28px}
 .field{margin:0 0 20px}
@@ -224,7 +230,12 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
   <div class="shell">
     <p class="eyebrow">Free trial</p>
     <h1>Try it on your own files</h1>
-    <p class="lede">Seven days of the full product &mdash; every feature, no row limits, no watermark. No purchase, no email address, no account. Install ShiftMask, copy the device ID it shows you, and paste it below.</p>
+    <p class="lede">Seven days of the full product &mdash; every feature, no row limits, no watermark. No purchase, no email address, no account.</p>
+    <ol class="steps">
+      <li><a href="/#download">Download and install ShiftMask</a> &mdash; about a minute, no administrator rights needed.</li>
+      <li>Open it. The activation screen shows <em>This device&rsquo;s ID</em>; copy it.</li>
+      <li>Paste it below and press <strong>Start my 7 days</strong>. Copy the token back into the app.</li>
+    </ol>
 
     <form id="demo-form" novalidate>
       <div class="field mono">
@@ -246,13 +257,13 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
     </div>
 
     <div class="callout">
-      <p>What this page sends: the device ID you typed, and nothing else. No email address is asked for and none is stored. The app itself never sends anything anywhere &mdash; this page is the one place that talks to the network.</p>
+      <p>What this page sends: the device ID you typed, and nothing else. No email address is asked for and none is stored. The app itself sends nothing on its own &mdash; this page is the one place that talks to the network.</p>
     </div>
 
     <div class="aside">
       <p><strong>One trial per machine.</strong> Asking again returns the same token with the same end date, so there is no point coming back for another seven days. We would rather say that plainly than pretend not to notice.</p>
       <p>When the seven days are up, the app stops and your files are untouched &mdash; nothing is deleted and nothing is held hostage. <a href="/#pricing">Buy a licence</a> and the same install carries on where it left off.</p>
-      <p>Haven't installed it yet? <a href="/#pricing">Get ShiftMask &rarr;</a> &middot; Terms: <a href="/eula/">licence agreement</a></p>
+      <p>Haven't installed it yet? <a href="/#download">Download ShiftMask &rarr;</a> &middot; Terms: <a href="/eula/">licence agreement</a></p>
     </div>
   </div>
 </main>

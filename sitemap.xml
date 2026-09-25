@@ -8,7 +8,7 @@
   </url>
   <url>
     <loc>https://shiftmask.com/blog/</loc>
-    <lastmod>2026-09-01</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -65,5 +65,11 @@
     <lastmod>2026-09-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://shiftmask.com/blog/pbip-files-ai-real-data.html</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

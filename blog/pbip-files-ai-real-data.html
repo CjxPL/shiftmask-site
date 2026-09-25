@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Blog — ShiftMask</title>
-<meta name="description" content="Practical guides on anonymizing Excel, CSV and SQL data before using AI tools — Copilot, Claude, ChatGPT — safely, without breaking joins or formulas.">
-<link rel="canonical" href="https://shiftmask.com/blog/">
+<title>Sending Only PBIP Files to AI? Where Real Data Still Hides</title>
+<meta name="description" content="A PBIP project looks like pure metadata. We checked our own cash-flow report and found employee names, amounts and a full data copy. Here's where to look.">
+<link rel="canonical" href="https://shiftmask.com/blog/pbip-files-ai-real-data.html">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -152,14 +152,29 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 .consent-widget{position:fixed;left:20px;bottom:20px;z-index:200;display:inline-flex;align-items:center;padding:11px 16px;background:rgba(14,19,32,.92);border:1px solid var(--rule-bright);border-radius:2px;color:var(--dim);font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .18s ease, color .18s ease}
 .consent-widget:hover{color:var(--fog);border-color:var(--fog)}
 .consent-widget[hidden]{display:none}
+code{font-family:var(--f-mono);font-size:.9em;color:var(--fog)}
 </style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Blog",
-  "name": "ShiftMask Blog",
-  "url": "https://shiftmask.com/blog/",
-  "description": "Practical guides on anonymizing Excel, CSV and SQL data before using AI tools safely."
+  "@type": "Article",
+  "headline": "Sending Only PBIP Files to AI? Here's Where Real Data Still Hides",
+  "description": "A Power BI project saved as PBIP looks like pure metadata. We checked our own cash-flow report and found employee names, internal amounts and a full local copy of the data. Here are the four places to check before you share a PBIP folder with an AI tool.",
+  "author": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
+  "publisher": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
+  "datePublished": "2026-09-25",
+  "mainEntityOfPage": "https://shiftmask.com/blog/pbip-files-ai-real-data.html"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "Does a PBIP file contain my data source passwords?", "acceptedAnswer": {"@type": "Answer", "text": "No. Power BI Desktop keeps credentials on your machine, outside the project files. Connection details such as server names, database names and file paths are stored, though."}},
+    {"@type": "Question", "name": "Can I open a PBIP project without cache.abf?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Power BI Desktop opens the full model and report definition without data. The data comes back on the next refresh."}},
+    {"@type": "Question", "name": "Is PBIP enough if I only want help with DAX?", "acceptedAnswer": {"@type": "Answer", "text": "Usually, after deleting cache.abf and checking tables created with Enter data. Writing or reviewing a measure depends on table and column names, relationships and filter context, not on the values. It stops being enough when you need the AI to check a result."}}
+  ]
 }
 </script>
 </head>
@@ -199,22 +214,60 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Blog</p>
-    <h1>Guides for using AI safely with real data</h1>
-    <p class="updated">Practical, no-nonsense walkthroughs &mdash; not theory. Mask locally, keep the structure, hand AI tools something safe to work with.</p>
-    
-    <p class="entry-meta">Guide &middot; 6 min read</p>
-    <h2><a href="/blog/pbip-files-ai-real-data.html">Sending Only PBIP Files to AI? Here's Where Real Data Still Hides</a></h2>
-    <p>A PBIP project looks like pure metadata. We checked our own cash-flow report and found employee names, internal amounts and a full copy of the data. Four places to check before you share one. <a href="/blog/pbip-files-ai-real-data.html">Read the guide &rarr;</a></p>
+    <p class="eyebrow">Guide</p>
+    <h1>Sending Only PBIP Files to AI? Here's Where Real Data Still Hides</h1>
+    <p class="updated">Published 2026-09-25 &middot; 6 min read</p>
 
-    <p class="entry-meta">Guide &middot; 5 min read</p>
-    <h2><a href="/blog/copilot-excel-sensitive-data.html">How to Use Copilot in Excel Safely With Sensitive Data</a></h2>
-    <p>Copilot and Claude for Excel read your live workbook directly — there's no chat window to intercept. Here's the workflow that keeps sensitive cells out of it anyway. <a href="/blog/copilot-excel-sensitive-data.html">Read the guide &rarr;</a></p>
+    <div class="callout">
+      <p>A PBIP folder is mostly definitions: tables, relationships, DAX, Power Query and report layout. Real data can still travel with it in four places: the <code>.pbi\cache.abf</code> file, tables typed in with Enter data, saved filter and slicer values, and connection details. Delete the cache and check the other three, and the definition alone is fine for model and DAX work. When the AI has to look at actual numbers, give it a masked copy of the data instead.</p>
+    </div>
 
-    <p class="entry-meta">Guide &middot; 5 min read</p>
-    <h2><a href="/blog/prepare-data-for-chatgpt-claude.html">How to Prepare Data for ChatGPT or Claude Without Losing Structure</a></h2>
-    <p>Masking the file before you paste it is half the job. Here's what to do with an answer that names a customer ID nobody on your team recognizes. <a href="/blog/prepare-data-for-chatgpt-claude.html">Read the guide &rarr;</a></p>
+    <p>A comment in a Polish Power BI group, under a post about masking data before it goes to AI: "I only send PBIP files to AI." It's a sensible habit. A Power BI project saved as PBIP is a folder of text files, and most of what's in it is structure: which tables exist, how they relate, what each measure calculates. No invoices, no customer list. At least that's the assumption.</p>
 
+    <p>We wanted to know how far that assumption holds, so we ran the check on one of our own projects: the cash-flow report 4optima uses for its own finances.</p>
+
+    <h2>What we found in our own cash-flow project</h2>
+    <p>Most of the report's tables load from Power BI dataflows. Those were fine; the project stores a reference to the source, not the rows. Filters and slicers came out clean as well: the year 2026, category names like "Planned" and "Invoiced", a business line code. Nothing about customers or people.</p>
+
+    <p>Two other places were not clean. Five tables had been typed in with Enter data, and two of them held real records: a staff table with first names, surnames and employment dates, and a table of intercompany amounts by year. The folder also held <code>cache.abf</code>, around 600&nbsp;KB, which is a full local copy of every imported table. And one query pointed at a file on our SharePoint whose name makes it obvious it holds salaries. The salaries weren't in the project. The address was.</p>
+
+    <p>Put plainly: if we had zipped that folder and dropped it into a chat, we'd have handed over employee names, internal amounts and the whole dataset in compressed form.</p>
+
+    <h2>Four places where data hides in a PBIP folder</h2>
+    <ol>
+      <li><strong><code>.pbi\cache.abf</code> in the semantic model folder.</strong> <a href="https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-dataset">Microsoft's documentation</a> describes it as a local cached copy of the model and its data from the last edit. The default PBIP <code>.gitignore</code> excludes it, but that only helps when the project goes through Git. Zip the folder or share it from OneDrive and the cache goes along.</li>
+      <li><strong>Tables created with Enter data.</strong> They're stored inside the table's Power Query as compressed Base64 text. It looks like noise, but one line of code decodes it, and an AI model reading your Power Query will decode it without being asked. Mapping tables, price lists, the "temporary" staff list someone pasted in two years ago: it all lives here.</li>
+      <li><strong>Saved filter and slicer values.</strong> Every visual's JSON file stores the conditions it filters on. Ours were harmless. In a sales report with a slicer set to one key account, that customer's name sits in the file as plain text.</li>
+      <li><strong>Connection details and parameters.</strong> Server names, database names, SharePoint addresses, file names. Passwords aren't in PBIP files, but the map of where your data lives is.</li>
+    </ol>
+    <p>If you use DAX query view, glance at the <code>DAXQueries</code> folder too. Saved test queries often have a customer name or invoice number typed straight into them.</p>
+
+    <h2>The one-minute cleanup</h2>
+    <p>Copy the project folder, and in the copy delete <code>.pbi\cache.abf</code> and <code>.pbi\localSettings.json</code>. Power BI Desktop opens a project without the cache; it simply shows the model with no data. Then find the tables built with Enter data (search the <code>definition</code> folder for <code>Binary.FromText</code>) and either swap the rows for made-up ones or move the table to a proper source. Skim the filter values and parameters.</p>
+
+    <p>For work on measures, relationships or Power Query, that's all you need. The AI sees how the report is built, which is exactly what it's working on.</p>
+
+    <h2>Where the definition alone stops being enough</h2>
+    <p>The trouble starts when the question is about numbers. "Why does this measure show 1.2 million when finance says 1.4?" can't be answered from a definition file. Neither can "check that the totals on this page add up" or "the year-over-year measure breaks in January, find out why." Those need rows, and rows are exactly what you were trying to keep out.</p>
+
+    <p>That gap is what ShiftMask is for. It doesn't open PBIP files. It works one step earlier, on your Excel and CSV sources, locally. It builds a copy where names and IDs become consistent placeholders across every file at once, so relationships still join, and every date moves by the same offset, so year-over-year and running-total measures still behave. Point the project's source parameter at the masked folder, refresh, and the cache now holds masked data. The AI can look at real-shaped numbers, and when you switch the parameter back, the same measures run on the real data.</p>
+
+    <p>Two honest limits. ShiftMask works on Excel and CSV files, so a table that lives only in a dataflow has to be exported first, or handled with the cleanup above. And Enter data tables still need a manual step: copy the rows into Excel, mask them, paste them back.</p>
+
+    <h2>FAQ</h2>
+    <p><strong>Does a PBIP file contain my data source passwords?</strong></p>
+    <p>No. Power BI Desktop keeps credentials on your machine, outside the project files. Connection details such as server names, database names and file paths are stored, though.</p>
+
+    <p><strong>Can I open a PBIP project without cache.abf?</strong></p>
+    <p>Yes. Power BI Desktop opens the full model and report definition without data. The data comes back on the next refresh.</p>
+
+    <p><strong>Is PBIP enough if I only want help with DAX?</strong></p>
+    <p>Usually, after the cleanup. Writing or reviewing a measure depends on table and column names, relationships and filter context, not on the values. It stops being enough the moment you need the AI to check a result.</p>
+
+    <div class="cta-block">
+      <p>Open the <code>.pbi</code> folder of your last project and look at the size of <code>cache.abf</code>. That's how much data would have gone out with "just the definition".</p>
+      <a class="btn btn-solid" href="/try/" data-goatcounter-click="cta-blog-pbip">Try ShiftMask free for 7 days &rarr;</a>
+    </div>
   </div>
 </main>
 
@@ -232,7 +285,7 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
       <a href="/privacy.html">Privacy</a>
       <a href="/eula/">Terms</a>
       <a href="/imprint.html">Legal</a>
-      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20blog-index&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20blog-index%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
+      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20blog-pbip&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20blog-pbip%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
     </div>
     <p class="rights">ShiftMask is a product of <a href="/imprint.html" style="color:inherit">4optima Sp. z o.o.</a> &middot; &copy; 2026</p>
   </div>

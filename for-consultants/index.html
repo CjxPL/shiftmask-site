@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sending Only PBIP Files to AI? Where Real Data Still Hides</title>
-<meta name="description" content="A PBIP project looks like pure metadata. We checked our own cash-flow report and found employee names, amounts and a full data copy. Here's where to look.">
-<link rel="canonical" href="https://shiftmask.com/blog/pbip-files-ai-real-data.html">
+<title>ShiftMask for BI consultants: quote on client data you never receive</title>
+<meta name="description" content="Clients who can&#39;t send data for a quote can mask a sample on their own computer with the ShiftMask trial. You see the structure, not the people. The workflow, a message to send, and the limits.">
+<link rel="canonical" href="https://shiftmask.com/for-consultants/">
 <meta name="theme-color" content="#07090F">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
@@ -102,10 +102,8 @@ h1{font-family:var(--f-display);font-weight:900;font-size:clamp(34px,5vw,52px);l
 .updated{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);margin:0 0 48px}
 h2{font-family:var(--f-display);font-weight:800;font-size:clamp(20px,2.4vw,25px);letter-spacing:-.01em;margin:44px 0 14px;padding-top:20px;border-top:1px solid var(--rule)}
 h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
-h2 a{color:inherit;text-decoration:none}
-h2 a:hover{color:var(--coral)}
 p{color:var(--muted);margin:0 0 16px}
-ol,ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
+ul{margin:0 0 16px;padding-left:22px;color:var(--muted)}
 li{margin:0 0 8px}
 strong{color:var(--fog);font-weight:600}
 .callout{
@@ -114,22 +112,6 @@ strong{color:var(--fog);font-weight:600}
 }
 .callout p{color:var(--fog);margin:0;font-size:15.5px}
 .note{font-family:var(--f-mono);font-size:12.5px;color:var(--dim);background:var(--surface);border:1px dashed var(--rule-bright);padding:12px 16px;border-radius:2px}
-.entry-meta{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:0 0 8px}
-.cta-block{margin-top:48px;padding-top:28px;border-top:1px solid var(--rule)}
-
-/* ---------- buttons ---------- */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:10px;
-  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
-  padding:17px 26px;border:1px solid transparent;border-radius:2px;
-  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
-}
-.btn:hover{transform:translate(2px,-2px)}
-.btn-solid{background:var(--cobalt);color:var(--ink)}
-.btn-solid:hover{background:#A9B8FF}
-.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
-.btn-line:hover{border-color:var(--fog)}
-@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
 
 footer{border-top:1px solid var(--rule);padding:32px 0}
 footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
@@ -152,32 +134,42 @@ footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;colo
 .consent-widget{position:fixed;left:20px;bottom:20px;z-index:200;display:inline-flex;align-items:center;padding:11px 16px;background:rgba(14,19,32,.92);border:1px solid var(--rule-bright);border-radius:2px;color:var(--dim);font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .18s ease, color .18s ease}
 .consent-widget:hover{color:var(--fog);border-color:var(--fog)}
 .consent-widget[hidden]{display:none}
-code{font-family:var(--f-mono);font-size:.9em;color:var(--fog)}
-</style>
+
+/* ---------- subpage additions ---------- */
+h3{font-family:var(--f-display);font-weight:700;font-size:clamp(17px,1.9vw,19px);letter-spacing:-.005em;color:var(--fog);margin:28px 0 10px}
+pre{background:var(--ink);border:1px solid var(--rule);border-left:2px solid var(--cobalt);border-radius:2px;padding:16px 18px;overflow-x:auto;margin:0 0 16px}
+pre code{font-family:var(--f-mono);font-size:13px;line-height:1.7;color:var(--fog);white-space:pre}
+p code,li code{font-family:var(--f-mono);font-size:.88em;color:var(--fog);background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:1px 5px}
+.warn{background:var(--surface);border:1px solid var(--rule);border-left:2px solid var(--coral-solid);padding:18px 22px;margin:0 0 16px;border-radius:2px}
+.warn p{color:var(--fog);margin:0;font-size:15.5px}
+.warn p + p{margin-top:10px}
+.step{font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--cobalt);margin:0 0 6px}
+.lane{border-top:1px solid var(--rule);padding-top:20px;margin:40px 0 0}
+.lane:first-of-type{border-top:none;padding-top:0;margin-top:0}
+.lane h2{border-top:none;padding-top:0;margin-top:0}
+.tag{display:inline-block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;padding:4px 9px;border-radius:2px;margin:0 0 14px}
+.tag.now{background:rgba(63,203,152,.12);color:var(--verified);border:1px solid rgba(63,203,152,.35)}
+.tag.next{background:rgba(143,163,255,.12);color:var(--cobalt);border:1px solid rgba(143,163,255,.35)}
+.tag.later{background:var(--surface);color:var(--dim);border:1px solid var(--rule-bright)}
+h3{font-family:var(--f-display);font-weight:700;font-size:clamp(16px,1.9vw,18.5px);letter-spacing:-.01em;color:var(--fog);margin:26px 0 10px}
+code{font-family:var(--f-mono);font-size:.88em;color:var(--fog);background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:1px 5px;word-break:break-word}
+.callout p code{background:var(--ink)}
+.cta-block{margin-top:48px;padding-top:28px;border-top:1px solid var(--rule)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;padding:17px 26px;border:1px solid transparent;border-radius:2px;text-decoration:none;cursor:pointer;margin:6px 0;transition:transform .18s ease, background .18s ease, border-color .18s ease}
+.btn:hover{transform:translate(2px,-2px)}
+.btn-solid{background:var(--cobalt);color:var(--ink)}
+.btn-solid:hover{background:#A9B8FF}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.btn-line:hover{border-color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+p.note{font-family:var(--f-sans);font-size:15px;line-height:1.6;color:var(--fog)}</style>
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "Sending Only PBIP Files to AI? Here's Where Real Data Still Hides",
-  "description": "A Power BI project saved as PBIP looks like pure metadata. We checked our own cash-flow report and found employee names, internal amounts and a full local copy of the data. Here are the four places to check before you share a PBIP folder with an AI tool.",
-  "author": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
-  "publisher": {"@type": "Organization", "name": "4optima Sp. z o.o.", "url": "https://4optima.pl"},
-  "datePublished": "2026-09-25",
-  "mainEntityOfPage": "https://shiftmask.com/blog/pbip-files-ai-real-data.html"
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {"@type": "Question", "name": "Does a PBIP file contain my data source passwords?", "acceptedAnswer": {"@type": "Answer", "text": "No. Power BI Desktop keeps credentials on your machine, outside the project files. Connection details such as server names, database names and file paths are stored, though."}},
-    {"@type": "Question", "name": "Can I open a PBIP project without cache.abf?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Power BI Desktop opens the full model and report definition without data. The data comes back on the next refresh."}},
-    {"@type": "Question", "name": "Is PBIP enough if I only want help with DAX?", "acceptedAnswer": {"@type": "Answer", "text": "Usually, after deleting cache.abf and checking tables created with Enter data. Writing or reviewing a measure depends on table and column names, relationships and filter context, not on the values. It stops being enough when you need the AI to check a result."}}
-  ]
-}
-</script>
-</head>
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Does the client need administrator rights to install ShiftMask?","acceptedAnswer":{"@type":"Answer","text":"No. It installs for a single user, with no service and no driver, and there is a portable build that installs nothing at all."}},
+{"@type":"Question","name":"Do I need ShiftMask myself to open the masked sample?","acceptedAnswer":{"@type":"Answer","text":"No. The masked copy is ordinary Excel or CSV. You need your own licence only when you mask data yourself."}},
+{"@type":"Question","name":"Can the client get real values back into something built on the masked copy?","acceptedAnswer":{"@type":"Answer","text":"Yes. The vault on the client's machine puts real names and IDs back into results built on the masked copy. It deliberately does not reverse the date shift or the amount scaling."}}
+]}
+</script></head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -214,61 +206,55 @@ code{font-family:var(--f-mono);font-size:.9em;color:var(--fog)}
 
 <main>
   <div class="shell">
-    <p class="eyebrow">Guide</p>
-    <h1>Sending Only PBIP Files to AI? Here's Where Real Data Still Hides</h1>
-    <p class="updated">Published 2026-09-25 &middot; 6 min read</p>
+    <p class="eyebrow">For BI consultants</p>
+    <h1>Quote on your client's data without receiving it</h1>
+    <p class="updated">For consultants and small BI agencies. Written from how we use it at 4optima.</p>
 
     <div class="callout">
-      <p>A PBIP folder is mostly definitions: tables, relationships, DAX, Power Query and report layout. Real data can still travel with it in four places: the <code>.pbi\cache.abf</code> file, tables typed in with Enter data, saved filter and slicer values, and connection details. Delete the cache and check the other three, and the definition alone is fine for model and DAX work. When the AI has to look at actual numbers, give it a masked copy of the data instead.</p>
+      <p>You need to see the data before you can price the work, and the client can't send it. Instead of asking for an export, send the client a link to the 7-day trial. They mask a sample on their own computer and send you the copy. You see the real structure. No real name, ID or amount leaves their building.</p>
     </div>
 
-    <p>A comment in a Polish Power BI group, under a post about masking data before it goes to AI: "I only send PBIP files to AI." It's a sensible habit. A Power BI project saved as PBIP is a folder of text files, and most of what's in it is structure: which tables exist, how they relate, what each measure calculates. No invoices, no customer list. At least that's the assumption.</p>
+    <p>The client wants a fixed price. You want to see the data first, because the price depends on how many sources there are, how they join and how messy they are. Then comes the answer every consultant has heard: legal won't let us send an export to a company we haven't hired yet.</p>
 
-    <p>We wanted to know how far that assumption holds, so we ran the check on one of our own projects: the cash-flow report 4optima uses for its own finances.</p>
+    <p>Both sides are being reasonable. The usual result is a quote padded for risk, or a quote that grows halfway through the project. Neither helps you win the next one.</p>
 
-    <h2>What we found in our own cash-flow project</h2>
-    <p>Most of the report's tables load from Power BI dataflows. Those were fine; the project stores a reference to the source, not the rows. Filters and slicers came out clean as well: the year 2026, category names like "Planned" and "Invoiced", a business line code. Nothing about customers or people.</p>
-
-    <p>Two other places were not clean. Five tables had been typed in with Enter data, and two of them held real records: a staff table with first names, surnames and employment dates, and a table of intercompany amounts by year. The folder also held <code>cache.abf</code>, around 600&nbsp;KB, which is a full local copy of every imported table. And one query pointed at a file on our SharePoint whose name makes it obvious it holds salaries. The salaries weren't in the project. The address was.</p>
-
-    <p>Put plainly: if we had zipped that folder and dropped it into a chat, we'd have handed over employee names, internal amounts and the whole dataset in compressed form.</p>
-
-    <h2>Four places where data hides in a PBIP folder</h2>
+    <h2>The workflow</h2>
     <ol>
-      <li><strong><code>.pbi\cache.abf</code> in the semantic model folder.</strong> <a href="https://learn.microsoft.com/en-us/power-bi/developer/projects/projects-dataset">Microsoft's documentation</a> describes it as a local cached copy of the model and its data from the last edit. The default PBIP <code>.gitignore</code> excludes it, but that only helps when the project goes through Git. Zip the folder or share it from OneDrive and the cache goes along.</li>
-      <li><strong>Tables created with Enter data.</strong> They're stored inside the table's Power Query as compressed Base64 text. It looks like noise, but one line of code decodes it, and an AI model reading your Power Query will decode it without being asked. Mapping tables, price lists, the "temporary" staff list someone pasted in two years ago: it all lives here.</li>
-      <li><strong>Saved filter and slicer values.</strong> Every visual's JSON file stores the conditions it filters on. Ours were harmless. In a sales report with a slicer set to one key account, that customer's name sits in the file as plain text.</li>
-      <li><strong>Connection details and parameters.</strong> Server names, database names, SharePoint addresses, file names. Passwords aren't in PBIP files, but the map of where your data lives is.</li>
+      <li><strong>Send the client the trial link</strong>, <a href="/try/">shiftmask.com/try</a>. Seven days of the full product, no account. The interface is available in English and Polish.</li>
+      <li><strong>The client masks a sample of their Excel or CSV files.</strong> Names, customer IDs, emails and tax numbers become stand-ins, and the same value gets the same stand-in in every file. Every date moves by one offset. Amounts are rescaled so proportions and totals still hold. The masking runs on their computer, offline.</li>
+      <li><strong>They send you the masked copy with the brief.</strong> The map back to real values stays in an encrypted vault on their machine. You never hold it.</li>
+      <li><strong>You quote on what the data actually looks like</strong>: row counts, keys that don't match, gaps, date ranges, how many files have to be joined.</li>
     </ol>
-    <p>If you use DAX query view, glance at the <code>DAXQueries</code> folder too. Saved test queries often have a customer name or invoice number typed straight into them.</p>
+    <p>If you win the project, you can keep building on the masked copy until handover. The report runs against the same columns and relationships, so switching its source to the real files is a step the client takes on their own machine.</p>
 
-    <h2>The one-minute cleanup</h2>
-    <p>Copy the project folder, and in the copy delete <code>.pbi\cache.abf</code> and <code>.pbi\localSettings.json</code>. Power BI Desktop opens a project without the cache; it simply shows the model with no data. Then find the tables built with Enter data (search the <code>definition</code> folder for <code>Binary.FromText</code>) and either swap the rows for made-up ones or move the table to a proper source. Skim the filter values and parameters.</p>
+    <h2>What a masked sample tells you, and what it doesn't</h2>
+    <p>It tells you about structure: which columns exist, which keys join and where the joins fail, how many blanks and distinct values there are, how far the dates span and how seasonal they are, what shape the amounts have. That is what a quote depends on.</p>
+    <p>It won't tell you whether a real number is right. Amounts are rescaled, so you can't check a customer's revenue against the finance report. Dates are shifted, so you can't tell which month the data really ends. And ShiftMask masks the columns it recognises: free-text fields such as comments or descriptions, and the names of files and sheets, need a look from the client before sending. Say so in your request, not after the files arrive.</p>
 
-    <p>For work on measures, relationships or Power Query, that's all you need. The AI sees how the report is built, which is exactly what it's working on.</p>
+    <h2>A message you can send</h2>
+    <p class="note">Before I can give you a fixed price I need to see how your data is built, not what's in it. Please download ShiftMask (shiftmask.com/try, free for 7 days), run it on a sample of the files we discussed and send me the masked copy. The masking runs on your computer and the key to reverse it stays with you. Before sending, please check comment or description columns and the file names for anything that identifies a person or a customer.</p>
 
-    <h2>Where the definition alone stops being enough</h2>
-    <p>The trouble starts when the question is about numbers. "Why does this measure show 1.2 million when finance says 1.4?" can't be answered from a definition file. Neither can "check that the totals on this page add up" or "the year-over-year measure breaks in January, find out why." Those need rows, and rows are exactly what you were trying to keep out.</p>
+    <h2>How we use it at 4optima</h2>
+    <p>ShiftMask is made by 4optima, which also delivers Power BI projects in Poland. We offer prospects exactly this: a quote on a masked sample, and if they order the project, the ShiftMask licence is included in the project price. <a href="https://powerbi.com.pl/wycena-na-probce-danych/">Our offer page</a> is in Polish, but the structure is easy to follow. Copy the idea if it fits your practice.</p>
 
-    <p>That gap is what ShiftMask is for. It doesn't open PBIP files. It works one step earlier, on your Excel and CSV sources, locally. It builds a copy where names and IDs become consistent placeholders across every file at once, so relationships still join, and every date moves by the same offset, so year-over-year and running-total measures still behave. Point the project's source parameter at the masked folder, refresh, and the cache now holds masked data. The AI can look at real-shaped numbers, and when you switch the parameter back, the same measures run on the real data.</p>
-
-    <p>Two honest limits. ShiftMask works on Excel and CSV files, so a table that lives only in a dataflow has to be exported first, or handled with the cleanup above. And Enter data tables still need a manual step: copy the rows into Excel, mask them, paste them back.</p>
-
-    <p>If you are a consultant, the same masked copy also solves an older problem: pricing a project for a client who can't send you data. <a href="/for-consultants/">Here is the workflow</a>.</p>
+    <h2>Who pays for the licence</h2>
+    <p>A Core licence is a one-time purchase per device, $39 at the founding price for the first 150 licences, with a year of updates included. The client can buy it, or you can buy it and fold it into your price: activation only needs the device ID shown on the client's screen, so the token can go to them by email.</p>
 
     <h2>FAQ</h2>
-    <p><strong>Does a PBIP file contain my data source passwords?</strong></p>
-    <p>No. Power BI Desktop keeps credentials on your machine, outside the project files. Connection details such as server names, database names and file paths are stored, though.</p>
+    <p><strong>Does the client need administrator rights to install it?</strong></p>
+    <p>No. It installs for a single user, with no service and no driver, and there is a portable build that installs nothing at all. If their IT department wants details, <a href="/for-it/">this page is written for them</a>.</p>
 
-    <p><strong>Can I open a PBIP project without cache.abf?</strong></p>
-    <p>Yes. Power BI Desktop opens the full model and report definition without data. The data comes back on the next refresh.</p>
+    <p><strong>Do I need ShiftMask myself to open the sample?</strong></p>
+    <p>No. The masked copy is ordinary Excel or CSV. You need your own licence only when you mask data yourself.</p>
 
-    <p><strong>Is PBIP enough if I only want help with DAX?</strong></p>
-    <p>Usually, after the cleanup. Writing or reviewing a measure depends on table and column names, relationships and filter context, not on the values. It stops being enough the moment you need the AI to check a result.</p>
+    <p><strong>Can the client get real values back into something I built on the copy?</strong></p>
+    <p>Yes. The vault on their machine puts real names and IDs back into results built on the masked copy. It deliberately does not reverse the date shift or the amount scaling, because in a file that came back from someone else there is no way to tell a scaled amount from one that was calculated.</p>
 
     <div class="cta-block">
-      <p>Open the <code>.pbi</code> folder of your last project and look at the size of <code>cache.abf</code>. That's how much data would have gone out with "just the definition".</p>
-      <a class="btn btn-solid" href="/try/" data-goatcounter-click="cta-blog-pbip">Try ShiftMask free for 7 days &rarr;</a>
+      <p>Next time a client says they can't send data, send them a link instead of asking for an export.</p>
+      <a class="btn btn-solid" href="/try/" data-goatcounter-click="cta-consultants-try">Try ShiftMask free for 7 days &rarr;</a>
+      &nbsp;
+      <a class="btn btn-line" href="/for-it/" data-goatcounter-click="cta-consultants-it">What your client's IT will ask</a>
     </div>
   </div>
 </main>
@@ -282,12 +268,13 @@ code{font-family:var(--f-mono);font-size:.9em;color:var(--fog)}
     <div class="flinks">
       <a href="/#how">Method</a>
       <a href="/#pricing">Pricing</a>
+      <a href="/#faq">FAQ</a>
       <a href="/blog/">Blog</a>
       <a href="/support/">Support</a>
       <a href="/privacy.html">Privacy</a>
       <a href="/eula/">Terms</a>
       <a href="/imprint.html">Legal</a>
-      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20blog-pbip&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20blog-pbip%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
+      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20air-gapped&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20consultants%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
     </div>
     <p class="rights">ShiftMask is a product of <a href="/imprint.html" style="color:inherit">4optima Sp. z o.o.</a> &middot; &copy; 2026</p>
   </div>
@@ -366,6 +353,7 @@ code{font-family:var(--f-mono);font-size:.9em;color:var(--fog)}
   });
 })();
 </script>
+
 
 <script>
 (function(){

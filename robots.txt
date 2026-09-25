@@ -3,3 +3,4 @@ Allow: /
 
 Sitemap: https://shiftmask.com/sitemap.xml
 Disallow: /social/
+Disallow: /v2/

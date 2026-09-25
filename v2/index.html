@@ -1,0 +1,2200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>ShiftMask — Anonymize Excel &amp; CSV Data Before Using AI</title>
+<meta name="description" content="ShiftMask makes a safe local copy of your Excel and CSV data. Relations intact, dates shifted, values masked — so AI never sees a real record.">
+<link rel="canonical" href="https://shiftmask.com/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://shiftmask.com/">
+<meta property="og:title" content="ShiftMask — Anonymize Excel &amp; CSV Data Before Using AI">
+<meta property="og:description" content="Give AI your data. Keep your data. Relations intact, dates shifted, values masked — the real records never leave your machine.">
+<meta property="og:image" content="https://shiftmask.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#07090F">
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+/* =========================================================
+   ShiftMask — dark-committed. Every colour is painted
+   explicitly so the page holds on any host background.
+   ========================================================= */
+:root{
+  --void:#07090F;
+  --ink:#0E1320;
+  --surface:#141A28;
+  --raised:#1C2333;
+  --fog:#E6EAF3;
+  --muted:#8D96AD;
+  --dim:#828CA6;
+  --rule:#222A3B;
+  --rule-bright:#333D52;
+
+  --coral:#FF7B64;
+  --coral-solid:#FF5F45;
+  --cobalt:#8FA3FF;
+  --verified:#3FCB98;
+
+  --f-display:"Chivo","Helvetica Neue",Arial,sans-serif;
+  --f-sans:"IBM Plex Sans","Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+
+  --gut:clamp(20px,5vw,64px);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--fog);
+  font-family:var(--f-sans);
+  font-size:17px;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* faint spreadsheet field over the whole page */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background-image:
+    repeating-linear-gradient(to right, rgba(143,163,255,.055) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(to bottom, rgba(143,163,255,.04) 0 1px, transparent 1px 44px);
+  mask-image:radial-gradient(ellipse 120% 90% at 50% 0%, #000 15%, transparent 78%);
+  -webkit-mask-image:radial-gradient(ellipse 120% 90% at 50% 0%, #000 15%, transparent 78%);
+}
+main,nav,footer{position:relative;z-index:1}
+
+.shell{max-width:1280px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+
+a{color:var(--coral);text-underline-offset:4px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--cobalt);outline-offset:4px;border-radius:3px}
+
+::selection{background:var(--coral-solid);color:var(--ink)}
+
+/* ---------- wordmark ---------- */
+.wordmark{
+  font-family:var(--f-display);font-weight:800;letter-spacing:-.035em;
+  line-height:1;color:var(--fog);white-space:nowrap;
+}
+.wordmark .m{display:inline-block;transform:translateY(.12em)}
+.lockup{display:flex;align-items:center;gap:.42em;text-decoration:none}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(7,9,15,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+nav .bar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0}
+nav .wordmark{font-size:24px}
+nav .menu{display:flex;align-items:center;gap:30px}
+nav .menu a:not(.btn){
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+}
+nav .menu a:not(.btn):hover{color:var(--fog)}
+@media (max-width:760px){nav .menu a.nav-hide{display:none}}
+
+/* ---------- mobile menu ---------- */
+.menu-toggle{
+  display:none;align-items:center;justify-content:center;
+  width:44px;height:44px;flex-shrink:0;
+  background:transparent;border:1px solid var(--rule-bright);border-radius:2px;
+  cursor:pointer;padding:0;
+}
+.menu-toggle:hover{border-color:var(--fog)}
+.menu-toggle-bars{position:relative;display:block;width:18px;height:2px;background:var(--fog);transition:background .15s ease}
+.menu-toggle-bars::before,.menu-toggle-bars::after{
+  content:"";position:absolute;left:0;width:18px;height:2px;background:var(--fog);
+  transition:transform .18s ease, opacity .18s ease;
+}
+.menu-toggle-bars::before{top:-6px}
+.menu-toggle-bars::after{top:6px}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars{background:transparent}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars::before{top:0;transform:rotate(45deg)}
+.menu-toggle[aria-expanded="true"] .menu-toggle-bars::after{top:0;transform:rotate(-45deg)}
+
+.mobile-menu{
+  display:none;overflow:hidden;max-height:0;
+  border-top:1px solid var(--rule);background:var(--ink);
+  transition:max-height .22s ease;
+}
+.mobile-menu.open{max-height:360px}
+.mobile-menu-inner{padding:6px var(--gut) 22px}
+.mobile-menu-eyebrow{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--dim);margin:18px 0 4px;
+}
+.mobile-menu a{
+  display:block;font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:-.01em;
+  color:var(--fog);text-decoration:none;padding:14px 0;border-top:1px solid var(--rule);
+}
+.mobile-menu a:first-of-type{border-top:none}
+.mobile-menu a:hover,.mobile-menu a:active{color:var(--coral)}
+
+@media (max-width:760px){
+  .menu-toggle{display:inline-flex}
+  .mobile-menu{display:block}
+}
+@media (prefers-reduced-motion:reduce){
+  .mobile-menu{transition:none}
+  .menu-toggle-bars,.menu-toggle-bars::before,.menu-toggle-bars::after{transition:none}
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--f-sans);font-weight:600;font-size:16px;line-height:1;
+  padding:17px 26px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+}
+.btn:hover{transform:translate(2px,-2px)}
+.btn-solid{background:var(--cobalt);color:var(--ink)}
+.btn-solid:hover{background:#A9B8FF}
+.btn-line{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.btn-line:hover{border-color:var(--fog)}
+.btn-sm{padding:12px 18px;font-size:14px}
+.btn-dark{background:var(--ink);color:var(--fog)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+
+/* ---------- shared type ---------- */
+.eyebrow{
+  font-family:var(--f-mono);font-size:12px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--coral);
+  display:flex;align-items:center;gap:12px;margin:0 0 26px;
+}
+.eyebrow::before{content:"";width:34px;height:2px;background:var(--coral-solid);flex:none}
+
+h1{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(44px,8.4vw,124px);
+  line-height:.98;letter-spacing:-.048em;
+  margin:0;text-wrap:balance;
+}
+h2{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(34px,5.4vw,72px);
+  line-height:.98;letter-spacing:-.04em;
+  margin:0 0 24px;text-wrap:balance;max-width:19ch;
+}
+h3{font-family:var(--f-display);font-weight:700;font-size:22px;letter-spacing:-.02em;margin:0 0 10px}
+p{margin:0 0 18px}
+.lede{font-size:clamp(18px,1.9vw,22px);line-height:1.5;color:var(--muted);max-width:52ch}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero{padding:clamp(40px,7vw,86px) 0 clamp(70px,9vw,130px);position:relative;overflow:hidden}
+.hero-grid{display:grid;margin-top:clamp(34px,4.5vw,58px);grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(30px,5vw,70px);align-items:center}
+@media (max-width:1000px){.hero-grid{grid-template-columns:1fr;gap:48px}}
+
+.hero h1 .stroke{
+  color:transparent;
+  -webkit-text-stroke:2px var(--coral-solid);
+  paint-order:stroke fill;
+}
+@media (max-width:700px){.hero h1 .stroke{-webkit-text-stroke-width:1.3px}}
+
+.hero .lede{margin-bottom:36px}
+.cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.cta-note{
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);margin:24px 0 0;display:flex;align-items:center;gap:10px;
+}
+.pulse{width:7px;height:7px;border-radius:50%;background:var(--verified);flex:none;box-shadow:0 0 0 0 rgba(63,203,152,.5);animation:pulse 2.6s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 9px rgba(63,203,152,0)}100%{box-shadow:0 0 0 0 rgba(63,203,152,0)}}
+@media (prefers-reduced-motion:reduce){.pulse{animation:none}}
+
+/* --- the transform object --- */
+.rig{position:relative;min-width:0}
+.rig::after{
+  content:"";position:absolute;right:-28%;top:-30%;width:112%;aspect-ratio:1;
+  background:radial-gradient(closest-side, rgba(255,95,69,.20), rgba(255,95,69,.05) 55%, transparent 72%);
+  pointer-events:none;z-index:0;
+}
+.slab{
+  position:relative;z-index:1;
+  background:linear-gradient(180deg,var(--surface),var(--ink));
+  border:1px solid var(--rule);
+  box-shadow:0 40px 90px -50px rgba(0,0,0,.95);
+}
+.slab + .slab{margin-top:14px}
+.slab-top{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:15px 20px;border-bottom:1px solid var(--rule);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);
+}
+.slab-top .who{display:flex;align-items:center;gap:9px}
+.dot{width:6px;height:6px;border-radius:50%;flex:none}
+.dot.a{background:var(--fog)}
+.dot.b{background:var(--coral-solid)}
+.slab-top .tagm{color:var(--coral);letter-spacing:.14em}
+
+.tbl{width:100%;border-collapse:collapse;font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+.tscroll{overflow-x:auto;min-width:0;max-width:100%}
+.tbl th{
+  text-align:left;font-weight:500;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--dim);padding:13px 12px 9px;white-space:nowrap;border-bottom:1px solid var(--rule);
+}
+.tbl td{padding:10px 12px;border-bottom:1px solid rgba(34,42,59,.6);white-space:nowrap;color:var(--fog)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl th:first-child,.tbl td:first-child{padding-left:20px}
+.tbl th:last-child,.tbl td:last-child{padding-right:20px;text-align:right}
+.key{color:var(--muted)}
+/* Ten sam klient w obu tabelach: jeden oryginal, zawsze ta sama nazwa zastepcza. */
+.tbl td.same{color:var(--coral)}
+.offset-strip .pair{display:inline-flex;align-items:center;gap:inherit;white-space:nowrap}
+/* Na 375 px cztery kolumny nie miescily sie i kwota znikala za krawedzia. */
+@media (max-width:480px){
+  .tbl{font-size:10px}
+  .tbl th{font-size:8.5px;letter-spacing:.06em;padding:11px 6px 8px}
+  .tbl td{padding:9px 6px}
+  .tbl th:first-child,.tbl td:first-child{padding-left:12px}
+  .tbl th:last-child,.tbl td:last-child{padding-right:12px}
+  .offset-strip{gap:8px;letter-spacing:.08em;flex-wrap:wrap}
+  .offset-strip > span:not(.pair){display:none}
+}
+
+.rd{
+  display:inline-block;background:var(--fog);color:transparent;
+  border-radius:1px;padding:0 3px;user-select:none;
+  transform:scaleX(0);transform-origin:left center;
+  transition:transform .5s cubic-bezier(.2,.8,.2,1);
+}
+.rd.on{transform:scaleX(1)}
+.d{color:var(--coral);font-weight:500}
+.flip{display:inline-block;opacity:0;transform:translateY(-6px);transition:opacity .45s ease,transform .45s ease}
+.flip.on{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .rd{transition:opacity .6s ease;transform:none}
+  .rd.on{opacity:1}
+  .flip{transition:opacity .6s ease;transform:none}
+}
+
+.offset-strip{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  padding:12px 20px;margin:14px 0;
+  border:1px dashed var(--rule-bright);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);
+}
+.offset-strip b{font-weight:600;color:var(--fog);letter-spacing:.06em}
+.offset-strip{transition:border-color .6s ease}
+.offset-strip.beat{animation:beat 1.1s cubic-bezier(.2,.8,.2,1)}
+@keyframes beat{
+  0%{border-color:var(--rule-bright);box-shadow:0 0 0 0 rgba(255,95,69,.38)}
+  35%{border-color:var(--coral-solid);box-shadow:0 0 0 8px rgba(255,95,69,0)}
+  100%{border-color:var(--rule-bright);box-shadow:0 0 0 0 rgba(255,95,69,0)}
+}
+@media (prefers-reduced-motion:reduce){
+  .offset-strip.beat{animation:none;border-color:var(--coral-solid)}
+}
+
+/* =========================================================
+   CORAL BAND — the one loud moment
+   ========================================================= */
+.band{background:var(--coral-solid);color:var(--ink);padding:clamp(64px,9vw,120px) 0;position:relative;overflow:hidden}
+.band::after{
+  content:"";position:absolute;right:-110px;bottom:-140px;width:460px;height:460px;
+  background:
+    linear-gradient(rgba(15,19,32,.13),rgba(15,19,32,.13)) 0 100%/46% 46% no-repeat,
+    linear-gradient(rgba(15,19,32,.13),rgba(15,19,32,.13)) 100% 0/46% 46% no-repeat;
+  pointer-events:none;
+}
+.band-grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center;position:relative;z-index:1}
+@media (max-width:860px){.band-grid{grid-template-columns:1fr;gap:24px}}
+.band .zero{
+  font-family:var(--f-display);font-weight:900;
+  font-size:clamp(110px,20vw,260px);line-height:.8;letter-spacing:-.06em;
+  margin:0;color:var(--ink);
+}
+.band h2{color:var(--ink);font-size:clamp(28px,4vw,52px);margin-bottom:14px}
+.band .say{color:rgba(15,19,32,.78);font-size:clamp(16px,1.7vw,19px);max-width:46ch;margin:0}
+.band .kicker{
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(15,19,32,.66);margin:0 0 16px;
+}
+
+/* =========================================================
+   SURVIVES — sticky heading, scrolling rows
+   ========================================================= */
+.survives{padding:clamp(78px,11vw,150px) 0}
+.split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(32px,6vw,90px);align-items:start}
+@media (max-width:960px){.split{grid-template-columns:1fr;gap:36px}}
+.split .hold{position:sticky;top:56px}
+@media (max-width:960px){.split .hold{position:static}}
+
+.rows{border-top:1px solid var(--rule)}
+.row{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:baseline;
+  padding:30px 0 32px;border-bottom:1px solid var(--rule);
+}
+.row .t{font-family:var(--f-display);font-weight:800;font-size:clamp(24px,3.2vw,38px);letter-spacing:-.03em;line-height:1.05;margin:0 0 10px}
+.row .d2{color:var(--muted);font-size:16.5px;margin:0;max-width:50ch}
+/* Etykieta stanu jak w aplikacji (.sm-status): wypelnienie, tekst Vault Ink,
+   promien 3px, mono uppercase. Zielen = zachowane, Coral = zamienione. */
+.verdict{
+  font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:5px 10px;border-radius:3px;white-space:nowrap;color:var(--ink);
+}
+.verdict.keep{background:var(--verified)}
+.verdict.gone{background:var(--coral)}
+
+/* =========================================================
+   STEPS — each one shifted further right
+   ========================================================= */
+.steps{padding:clamp(70px,10vw,140px) 0;position:relative}
+.ladder{margin-top:60px;display:flex;flex-direction:column;gap:0}
+.rung{
+  border-top:1px solid var(--rule);
+  padding:34px 0 38px;
+  display:grid;grid-template-columns:92px minmax(0,1fr);gap:clamp(18px,3vw,44px);
+}
+.rung:last-child{border-bottom:1px solid var(--rule)}
+.rung .n{
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.16em;color:var(--coral);padding-top:8px;
+}
+.rung .body{max-width:60ch}
+.rung h3{font-size:clamp(21px,2.6vw,30px);letter-spacing:-.025em}
+.rung p{color:var(--muted);margin:0;font-size:16.5px}
+/* the shift: each rung steps right */
+.rung:nth-child(2){padding-left:clamp(0px,4vw,64px)}
+.rung:nth-child(3){padding-left:clamp(0px,8vw,128px)}
+@media (max-width:760px){
+  .rung{grid-template-columns:1fr;gap:10px}
+  .rung:nth-child(2),.rung:nth-child(3){padding-left:0}
+}
+
+/* screenshots inside each method step */
+.rung-shot{
+  margin-top:24px;max-width:640px;overflow:hidden;
+  border:1px solid var(--rule);border-radius:2px;
+  background:linear-gradient(180deg,var(--surface),var(--ink));
+  box-shadow:0 30px 70px -40px rgba(0,0,0,.9);
+}
+.rung-shot-bar{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid var(--rule)}
+.rung-shot-bar span{width:7px;height:7px;border-radius:50%;background:var(--rule-bright);flex:none}
+.rung-shot img{display:block;width:100%;height:auto}
+@media (max-width:760px){.rung-shot{max-width:100%}}
+
+/* =========================================================
+   AUDIENCE
+   ========================================================= */
+.who-sec{padding:clamp(60px,9vw,120px) 0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:52px}
+.two > div{background:var(--void);padding:clamp(28px,4vw,48px)}
+.two .who-lab{font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--coral);margin:0 0 18px}
+.two p{color:var(--muted);margin:0;font-size:16.5px}
+
+/* =========================================================
+   PRICING
+   ========================================================= */
+.pricing{padding:clamp(70px,10vw,140px) 0}
+.tiers{
+  margin-top:50px;
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch;
+}
+@media (max-width:980px){.tiers{grid-template-columns:1fr;max-width:560px}}
+.tier{
+  position:relative;display:flex;flex-direction:column;
+  background:var(--surface);border:1px solid var(--rule-bright);border-radius:16px;
+  padding:clamp(24px,3vw,34px);
+}
+.tier-live{
+  border-color:var(--coral-solid);
+  box-shadow:0 0 0 1px var(--coral-solid),0 24px 60px rgba(255,95,69,.10);
+}
+.tier-soon{border-style:dashed}
+.tier-soon .tier-name,.tier-soon .tier-price{color:var(--muted)}
+.tier-flag{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  margin:0 0 18px;color:var(--dim);
+}
+.tier-live .tier-flag{color:var(--ink);background:var(--coral-solid);display:inline-block;padding:5px 10px;border-radius:999px;align-self:flex-start}
+.tier-name{
+  font-family:var(--f-display);font-weight:800;font-size:clamp(24px,2.4vw,30px);letter-spacing:-.025em;
+  margin:0;color:var(--fog);line-height:1.1;
+}
+.tier-sub{font-family:var(--f-mono);font-weight:400;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-left:8px;vertical-align:middle}
+.tier-for{color:var(--muted);font-size:15px;line-height:1.5;margin:10px 0 0;min-height:3em}
+.tier-price{
+  font-family:var(--f-display);font-weight:900;font-size:clamp(54px,5.6vw,72px);line-height:.9;letter-spacing:-.05em;
+  margin:22px 0 0;color:var(--fog);
+}
+.tier-price sup{font-size:.4em;vertical-align:super;letter-spacing:-.02em;margin-right:.06em}
+.tier-terms{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:14px 0 0;line-height:1.85;min-height:calc(1.85em*3)}
+.tier-founding{color:var(--coral)}
+.tier .btn{margin-top:22px;width:100%;text-align:center;justify-content:center}
+.tier-try{font-family:var(--f-mono);font-size:12px;letter-spacing:.02em;color:var(--dim);margin:12px 0 0;line-height:1.6;min-height:1.6em}
+.tier-try a{color:var(--cobalt)}
+.tier .incl{margin:26px 0 0;padding-top:24px;border-top:1px solid var(--rule);gap:12px}
+.tier .incl li{font-size:15px}
+.tier .incl li.incl-all{padding-left:0;color:var(--fog);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase}
+.tier .incl li.incl-all::before{display:none}
+.tier-notes{margin-top:34px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:900px}
+@media (max-width:980px){.tier-notes{grid-template-columns:1fr;max-width:560px}}
+.tier-notes .incl-note{margin:0;max-width:none}
+.incl{list-style:none;margin:0 0 16px;padding:0;display:flex;flex-direction:column;gap:14px}
+.incl li{position:relative;padding-left:30px;color:var(--muted);font-size:16.5px}
+.incl li::before{
+  content:"";position:absolute;left:0;top:.48em;width:12px;height:7px;
+  border-left:2px solid var(--verified);border-bottom:2px solid var(--verified);transform:rotate(-45deg);
+}
+.incl-note{font-family:var(--f-mono);font-size:12.5px;letter-spacing:.02em;color:var(--dim);line-height:1.6;margin:0 0 34px;max-width:44ch}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+.faq{padding:clamp(60px,9vw,120px) 0}
+.qa{border-top:1px solid var(--rule)}
+.qa .item{
+  display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(20px,5vw,80px);
+  padding:32px 0;border-bottom:1px solid var(--rule);
+}
+@media (max-width:860px){.qa .item{grid-template-columns:1fr;gap:12px}}
+.qa h3{font-size:clamp(19px,2.2vw,25px);letter-spacing:-.025em;margin:0;line-height:1.2}
+/* Kazdy akapit odpowiedzi to osobne dziecko siatki, wiec drugi i kolejne
+   ladowaly w LEWEJ kolumnie, pod pytaniem. Pytanie trzyma kolumne 1,
+   wszystkie akapity odpowiedzi stoja jeden pod drugim w kolumnie 2. */
+.qa .item > h3{grid-column:1}
+.qa .item > p{grid-column:2}
+/* `gap` ustawia odstep w OBU osiach, wiec kolejne akapity odpowiedzi
+   dzielilo 80 px. Odstep poziomy zostaje, pionowy schodzi do akapitu. */
+.qa .item{row-gap:14px}
+@media (max-width:860px){.qa .item > h3,.qa .item > p{grid-column:1}}
+.qa p{color:var(--muted);margin:0;font-size:16.5px}
+
+/* =========================================================
+   CLOSER + FOOTER
+   ========================================================= */
+.closer{padding:clamp(70px,11vw,150px) 0 clamp(50px,7vw,90px);text-align:left}
+.closer h2{font-size:clamp(38px,7.4vw,104px);margin-bottom:34px}
+footer{border-top:1px solid var(--rule);padding:36px 0 56px}
+footer .fbar{display:flex;flex-wrap:wrap;gap:22px;justify-content:space-between;align-items:center}
+footer .wordmark{font-size:19px}
+footer .flinks{display:flex;gap:24px;flex-wrap:wrap}
+footer .flinks a{font-family:var(--f-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);text-decoration:none}
+footer .flinks a:hover{color:var(--fog)}
+footer .rights{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--dim);margin:0}
+/* ---------- cookie consent banner (RODO/GDPR) ---------- */
+.consent-banner{position:fixed;left:0;right:0;bottom:0;z-index:200;background:rgba(14,19,32,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--rule-bright);padding:20px var(--gut)}
+.consent-banner[hidden]{display:none}
+.consent-inner{max-width:1280px;margin:0 auto;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between}
+.consent-text{flex:1 1 420px;margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+.consent-text a{color:var(--coral)}
+.consent-actions{display:flex;gap:12px;flex-wrap:wrap;flex-shrink:0}
+.consent-btn{font-family:var(--f-sans);font-weight:600;font-size:13px;padding:12px 20px;border:1px solid transparent;border-radius:2px;cursor:pointer;background:var(--cobalt);color:var(--ink)}
+.consent-btn:hover{background:#A9B8FF}
+.consent-btn.secondary{background:transparent;color:var(--fog);border-color:var(--rule-bright)}
+.consent-btn.secondary:hover{border-color:var(--fog)}
+.consent-widget{position:fixed;left:20px;bottom:20px;z-index:200;display:inline-flex;align-items:center;padding:11px 16px;background:rgba(14,19,32,.92);border:1px solid var(--rule-bright);border-radius:2px;color:var(--dim);font-family:var(--f-mono);font-weight:500;font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:border-color .18s ease, color .18s ease}
+.consent-widget:hover{color:var(--fog);border-color:var(--fog)}
+.consent-widget[hidden]{display:none}
+
+/* ---------- scroll reveal ---------- */
+.rise{opacity:0;transform:translateY(22px)}
+.rise.in{opacity:1;transform:none;transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){.rise{opacity:1;transform:none}.rise.in{transition:none}}
+
+/* ---- SmartScreen guide (Download) ---- */
+.ss-guide{
+  background:var(--surface);
+  border:1px solid var(--rule-bright);
+  border-radius:16px;
+  padding:clamp(22px,4vw,36px);
+}
+.ss-title{
+  font-family:var(--f-display);font-weight:800;letter-spacing:-.02em;
+  font-size:clamp(20px,2.6vw,26px);line-height:1.2;margin:0;color:var(--fog);
+}
+.ss-lede{margin:10px 0 0;color:var(--muted);font-size:16px;line-height:1.55;max-width:62ch}
+.ss-steps{
+  display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:26px;
+}
+.ss-step{display:flex;flex-direction:column}
+.ss-panel{flex:1}
+.ss-step-head{
+  display:flex;align-items:center;gap:10px;margin:0 0 12px;
+  font-family:var(--f-display);font-weight:700;font-size:15px;color:var(--fog);
+}
+.ss-num{
+  flex:0 0 auto;width:28px;height:28px;border-radius:50%;
+  background:var(--coral-solid);color:var(--ink);
+  font-family:var(--f-mono);font-weight:700;font-size:13px;
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.ss-arrow{color:var(--coral);align-self:center;padding-top:38px}
+/* the schematic panel: same anatomy as the real dialog, deliberately NOT a screenshot */
+.ss-panel{
+  position:relative;
+  background:#4E5C6C;color:#E9EDF2;
+  border-radius:6px;padding:20px 22px 20px;min-height:250px;
+  display:flex;flex-direction:column;
+  box-shadow:0 12px 32px rgba(0,0,0,.4);
+  font-family:"Segoe UI",var(--f-sans);
+}
+.ss-p-x{position:absolute;top:0;right:0;width:44px;height:34px;background:#f0f2f5;border-radius:0 6px 0 0}
+.ss-p-x::before,.ss-p-x::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.5px;background:#222;transform:translate(-50%,-50%) rotate(45deg)}
+.ss-p-x::after{transform:translate(-50%,-50%) rotate(-45deg)}
+.ss-p-title{margin:6px 0 14px;font-size:22px;font-weight:300;color:#fff;letter-spacing:-.01em;padding-right:44px}
+.ss-p-body{margin:0;font-size:13px;line-height:1.5;color:#E9EDF2}
+.ss-target{position:relative;display:inline-block;color:#fff;text-decoration:underline;margin-top:6px;padding:1px 3px}
+.ss-p-meta{display:grid;grid-template-columns:auto 1fr;column-gap:14px;row-gap:6px;margin:14px 0 0;font-size:13px;line-height:1.4}
+.ss-p-meta dt{color:#C9D1DC;margin:0}
+.ss-p-meta dd{margin:0;color:#fff}
+.ss-p-meta mark{background:rgba(255,95,69,.28);color:#fff;padding:0 3px;border-radius:3px;box-shadow:0 0 0 1.5px var(--coral-solid)}
+.ss-tick{display:inline-block;vertical-align:-3px;margin-left:8px;width:15px;height:15px;border-radius:50%;background:var(--verified);position:relative}
+.ss-tick::after{content:"";position:absolute;left:5px;top:2px;width:3.5px;height:7.5px;border:solid #07090F;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.ss-p-actions{display:flex;justify-content:flex-end;gap:14px;margin-top:auto;padding-top:26px;padding-bottom:6px}
+.ss-p-btn{
+  position:relative;display:inline-block;min-width:130px;text-align:center;
+  padding:9px 16px;border-radius:2px;
+  background:#fff;color:#111;font-size:13px;font-weight:600;
+}
+.ss-p-btn-go{background:#fff}
+/* the coral ring marks the thing to click */
+.ss-ring{
+  position:absolute;inset:-7px -9px;border:2.5px solid var(--coral-solid);border-radius:8px;
+  box-shadow:0 0 0 5px rgba(255,95,69,.22);pointer-events:none;
+  animation:ss-pulse 2.2s ease-in-out infinite;
+}
+@keyframes ss-pulse{0%,100%{box-shadow:0 0 0 5px rgba(255,95,69,.22)}50%{box-shadow:0 0 0 10px rgba(255,95,69,.06)}}
+@media (prefers-reduced-motion:reduce){.ss-ring{animation:none}}
+.ss-note{
+  position:absolute;left:22px;right:22px;bottom:-14px;
+  display:inline-block;width:max-content;max-width:calc(100% - 44px);
+  background:var(--coral-solid);color:var(--ink);
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;font-weight:600;
+  padding:5px 10px;border-radius:6px;
+}
+.ss-note-1{left:22px;right:auto}
+.ss-note-2{left:auto;right:22px}
+.ss-why{margin:34px 0 0;color:var(--muted);font-size:15px;line-height:1.55;max-width:70ch}
+.ss-why a{color:var(--cobalt)}
+@media (max-width:900px){
+  .ss-steps{grid-template-columns:1fr;gap:30px}
+  .ss-arrow{display:none}
+  .ss-note{position:static;display:block;width:auto;max-width:none;margin:16px -22px -20px;border-radius:0 0 8px 8px;text-align:center}
+}
+
+/* =========================================================
+   FLOW — animated diagram: where ShiftMask sits in a project
+   (all classes prefixed fl- on purpose: see DESIGN-BRIEF §5)
+   ========================================================= */
+.fl-sec{padding:clamp(70px,10vw,140px) 0 clamp(40px,6vw,80px)}
+.fl-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,80px);align-items:end}
+.fl-head h2{margin:0}
+.fl-head .lede{margin:0}
+@media (max-width:960px){.fl-head{grid-template-columns:1fr}}
+.fl-wide{max-width:1440px;margin:0 auto;padding-left:var(--gut);padding-right:var(--gut)}
+.fl-fig{margin:clamp(36px,5vw,64px) 0 0;position:relative;width:100%;overflow:hidden;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.fl-sizer{position:relative;width:100%;aspect-ratio:1440/560;overflow:hidden}
+.fl-hint{display:none;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--dim);margin:14px 0 0}
+@media (max-width:699px){.fl-wide{padding-left:0;padding-right:0}.fl-fig{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}.fl-hint{display:block}}
+.fl-stage{position:absolute;left:0;top:0;width:1440px;height:810px;transform-origin:0 0;transform:scale(var(--fl-s,.8)) translateY(-140px);color:#E6EAF3;font-family:var(--f-sans)}
+.fl-abs{position:absolute}
+.fl-layer{position:absolute;left:0;top:0;width:1440px;height:810px;pointer-events:none}
+.fl-mono{font-family:var(--f-mono)}
+.fl-disp{font-family:var(--f-display)}
+.fl-lab{font-family:var(--f-mono);font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#828CA6}
+.fl-card{position:absolute;box-sizing:border-box;background:#0E1320;border:1px solid #222A3B;border-radius:6px}
+.fl-rib{fill:none;stroke-width:10;stroke-linecap:round;opacity:.07}
+.fl-line{fill:none;stroke-width:1.2;opacity:.38}
+.fl-march{fill:none;stroke-width:1.6;stroke-dasharray:2 10;stroke-linecap:round;animation:fl-march calc(1.1s*var(--fl-k,1)) linear infinite}
+.fl-w{stroke:#E6EAF3}.fl-c{stroke:#FF7B64}
+.fl-barrier{stroke:#8D96AD;stroke-width:1.4;stroke-dasharray:14 6 2 6;opacity:.7}
+@keyframes fl-march{to{stroke-dashoffset:-24}}
+.fl-p{position:absolute;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;offset-rotate:0deg;offset-distance:0%;opacity:0;animation-name:fl-travel;animation-timing-function:cubic-bezier(.45,.05,.55,.95);animation-iteration-count:infinite}
+.fl-real{background:#E6EAF3;box-shadow:0 0 8px rgba(230,234,243,.9),0 0 18px rgba(230,234,243,.35)}
+.fl-mask{background:#FF7B64;box-shadow:0 0 8px rgba(255,123,100,.95),0 0 20px rgba(255,123,100,.45)}
+.fl-key{background:#8FA3FF;width:7px;height:7px;box-shadow:0 0 8px rgba(143,163,255,.95),0 0 20px rgba(143,163,255,.4)}
+.fl-pkt{width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:2px;background:#0E1320;border:1.5px solid #E6EAF3;box-sizing:border-box}
+.fl-far{width:4px;height:4px;margin:-2px 0 0 -2px}
+@keyframes fl-travel{0%{offset-distance:0%;opacity:0}10%{opacity:1}88%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes fl-spin{to{transform:rotate(360deg)}}
+@keyframes fl-spinr{to{transform:rotate(-360deg)}}
+@keyframes fl-pulse{0%,100%{opacity:.25}12%{opacity:1}40%{opacity:.25}}
+@keyframes fl-breathe{0%,100%{box-shadow:0 0 30px rgba(255,123,100,.18),inset 0 0 20px rgba(255,123,100,.08)}50%{box-shadow:0 0 54px rgba(255,123,100,.32),inset 0 0 26px rgba(255,123,100,.14)}}
+@keyframes fl-blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+@keyframes fl-ping{0%{transform:scale(1);opacity:.6}100%{transform:scale(2.6);opacity:0}}
+.fl-spin{animation:fl-spin calc(40s*var(--fl-k,1)) linear infinite}
+.fl-spinr{animation:fl-spinr calc(60s*var(--fl-k,1)) linear infinite}
+.fl-comet{animation:fl-spin calc(3.2s*var(--fl-k,1)) linear infinite;background:conic-gradient(from 0deg,rgba(255,123,100,0) 0deg,rgba(255,123,100,0) 250deg,rgba(255,123,100,.9) 358deg,rgba(255,123,100,0) 360deg);-webkit-mask:radial-gradient(circle,transparent 86px,#000 87px,#000 90px,transparent 91px);mask:radial-gradient(circle,transparent 86px,#000 87px,#000 90px,transparent 91px)}
+.fl-core{animation:fl-breathe calc(4s*var(--fl-k,1)) ease-in-out infinite}
+.fl-dot{position:absolute;left:50%;top:50%;width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;animation:fl-pulse calc(2.4s*var(--fl-k,1)) ease-in-out infinite}
+.fl-live{animation:fl-blink calc(1.8s*var(--fl-k,1)) ease-in-out infinite}
+.fl-ping{animation:fl-ping calc(1.8s*var(--fl-k,1)) ease-out infinite}
+.fl-after{opacity:0;animation:fl-reveal calc(6s*var(--fl-k,1)) ease-in-out infinite}
+@keyframes fl-reveal{0%,8%{opacity:0;transform:translateX(-6px)}16%,86%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}
+.fl-scan{animation:fl-scan calc(6s*var(--fl-k,1)) ease-in-out infinite}
+@keyframes fl-scan{0%{transform:translateY(0);opacity:0}6%{opacity:1}40%{transform:translateY(76px);opacity:1}48%,100%{transform:translateY(76px);opacity:0}}
+.fl-legend{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:22px;font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;color:var(--dim)}
+.fl-legend span{display:flex;align-items:center;gap:8px}
+.fl-legend i{width:8px;height:8px;border-radius:50%;flex:none}
+.fl-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin-top:40px;list-style:none;padding:0}
+@media (max-width:960px){.fl-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.fl-steps{grid-template-columns:1fr;gap:22px}}
+.fl-steps li{display:flex;flex-direction:column;gap:10px}
+.fl-track{height:2px;background:var(--rule);position:relative;overflow:hidden}
+.fl-track b{position:absolute;inset:0;background:var(--coral-solid);transform:scaleX(0);transform-origin:0 50%}
+.fl-steps .fl-n{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.14em;color:var(--dim)}
+.fl-steps h3{font-size:19px;margin:0;color:#A3ABBF}
+.fl-steps p{margin:0;font-size:15px;line-height:1.55;color:var(--muted)}
+.fl-sec.fl-off *,.fl-sec.fl-off *::before{animation-play-state:paused!important}
+
+.fl-s0q0{offset-path:path('M210 300 C 330 300, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-0.00s*var(--fl-k,1))}
+.fl-s0q1{offset-path:path('M210 300 C 330 300, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-1.07s*var(--fl-k,1))}
+.fl-s0q2{offset-path:path('M210 300 C 330 300, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-2.13s*var(--fl-k,1))}
+.fl-s1q0{offset-path:path('M210 390 C 330 390, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-0.45s*var(--fl-k,1))}
+.fl-s1q1{offset-path:path('M210 390 C 330 390, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-1.52s*var(--fl-k,1))}
+.fl-s1q2{offset-path:path('M210 390 C 330 390, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-2.58s*var(--fl-k,1))}
+.fl-s2q0{offset-path:path('M210 480 C 330 480, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-0.90s*var(--fl-k,1))}
+.fl-s2q1{offset-path:path('M210 480 C 330 480, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-1.97s*var(--fl-k,1))}
+.fl-s2q2{offset-path:path('M210 480 C 330 480, 340 390, 460 390');animation-duration:calc(3.2s*var(--fl-k,1));animation-delay:calc(-3.03s*var(--fl-k,1))}
+.fl-o0q0{offset-path:path('M660 390 C 750 390, 740 280, 836 280');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-0.00s*var(--fl-k,1))}
+.fl-o0q1{offset-path:path('M660 390 C 750 390, 740 280, 836 280');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-0.70s*var(--fl-k,1))}
+.fl-o0q2{offset-path:path('M660 390 C 750 390, 740 280, 836 280');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-1.40s*var(--fl-k,1))}
+.fl-o0q3{offset-path:path('M660 390 C 750 390, 740 280, 836 280');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-2.10s*var(--fl-k,1))}
+.fl-o1q0{offset-path:path('M660 390 C 750 390, 740 390, 836 390');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-0.50s*var(--fl-k,1))}
+.fl-o1q1{offset-path:path('M660 390 C 750 390, 740 390, 836 390');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-1.20s*var(--fl-k,1))}
+.fl-o1q2{offset-path:path('M660 390 C 750 390, 740 390, 836 390');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-1.90s*var(--fl-k,1))}
+.fl-o1q3{offset-path:path('M660 390 C 750 390, 740 390, 836 390');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-2.60s*var(--fl-k,1))}
+.fl-o2q0{offset-path:path('M660 390 C 750 390, 740 500, 836 500');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-1.00s*var(--fl-k,1))}
+.fl-o2q1{offset-path:path('M660 390 C 750 390, 740 500, 836 500');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-1.70s*var(--fl-k,1))}
+.fl-o2q2{offset-path:path('M660 390 C 750 390, 740 500, 836 500');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-2.40s*var(--fl-k,1))}
+.fl-o2q3{offset-path:path('M660 390 C 750 390, 740 500, 836 500');animation-duration:calc(2.8s*var(--fl-k,1));animation-delay:calc(-3.10s*var(--fl-k,1))}
+.fl-d0q0{offset-path:path('M1064 280 C 1110 280, 1120 330, 1165 330');animation-duration:calc(3.6s*var(--fl-k,1));animation-delay:calc(-0.00s*var(--fl-k,1))}
+.fl-d0q1{offset-path:path('M1064 280 C 1110 280, 1120 330, 1165 330');animation-duration:calc(3.6s*var(--fl-k,1));animation-delay:calc(-1.80s*var(--fl-k,1))}
+.fl-d1q0{offset-path:path('M1064 390 C 1110 390, 1120 390, 1165 390');animation-duration:calc(3.6s*var(--fl-k,1));animation-delay:calc(-0.90s*var(--fl-k,1))}
+.fl-d1q1{offset-path:path('M1064 390 C 1110 390, 1120 390, 1165 390');animation-duration:calc(3.6s*var(--fl-k,1));animation-delay:calc(-2.70s*var(--fl-k,1))}
+.fl-d2q0{offset-path:path('M1064 500 C 1110 500, 1120 450, 1165 450');animation-duration:calc(3.6s*var(--fl-k,1));animation-delay:calc(-1.80s*var(--fl-k,1))}
+.fl-d2q1{offset-path:path('M1064 500 C 1110 500, 1120 450, 1165 450');animation-duration:calc(3.6s*var(--fl-k,1));animation-delay:calc(-3.60s*var(--fl-k,1))}
+.fl-a0q0{offset-path:path('M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548');animation-duration:calc(8.0s*var(--fl-k,1));animation-delay:calc(-0.00s*var(--fl-k,1))}
+.fl-a0q1{offset-path:path('M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548');animation-duration:calc(8.0s*var(--fl-k,1));animation-delay:calc(-1.14s*var(--fl-k,1))}
+.fl-a0q2{offset-path:path('M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548');animation-duration:calc(8.0s*var(--fl-k,1));animation-delay:calc(-2.29s*var(--fl-k,1))}
+.fl-a0q3{offset-path:path('M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548');animation-duration:calc(8.0s*var(--fl-k,1));animation-delay:calc(-3.43s*var(--fl-k,1))}
+.fl-a0q4{offset-path:path('M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548');animation-duration:calc(8.0s*var(--fl-k,1));animation-delay:calc(-4.57s*var(--fl-k,1))}
+.fl-a0q5{offset-path:path('M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548');animation-duration:calc(8.0s*var(--fl-k,1));animation-delay:calc(-5.71s*var(--fl-k,1))}
+.fl-a0q6{offset-path:path('M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548');animation-duration:calc(8.0s*var(--fl-k,1));animation-delay:calc(-6.86s*var(--fl-k,1))}
+.fl-r0{transform:rotate(0.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.000s*var(--fl-k,1))}
+.fl-r1{transform:rotate(10.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.067s*var(--fl-k,1))}
+.fl-r2{transform:rotate(20.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.133s*var(--fl-k,1))}
+.fl-r3{transform:rotate(30.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.200s*var(--fl-k,1))}
+.fl-r4{transform:rotate(40.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.267s*var(--fl-k,1))}
+.fl-r5{transform:rotate(50.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.333s*var(--fl-k,1))}
+.fl-r6{transform:rotate(60.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.400s*var(--fl-k,1))}
+.fl-r7{transform:rotate(70.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-0.467s*var(--fl-k,1))}
+.fl-r8{transform:rotate(80.0deg) translateX(80px);background:#8D96AD;animation-delay:calc(-0.533s*var(--fl-k,1))}
+.fl-r9{transform:rotate(90.0deg) translateX(80px);background:#8D96AD;animation-delay:calc(-0.600s*var(--fl-k,1))}
+.fl-r10{transform:rotate(100.0deg) translateX(80px);background:#8D96AD;animation-delay:calc(-0.667s*var(--fl-k,1))}
+.fl-r11{transform:rotate(110.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-0.733s*var(--fl-k,1))}
+.fl-r12{transform:rotate(120.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-0.800s*var(--fl-k,1))}
+.fl-r13{transform:rotate(130.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-0.867s*var(--fl-k,1))}
+.fl-r14{transform:rotate(140.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-0.933s*var(--fl-k,1))}
+.fl-r15{transform:rotate(150.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.000s*var(--fl-k,1))}
+.fl-r16{transform:rotate(160.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.067s*var(--fl-k,1))}
+.fl-r17{transform:rotate(170.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.133s*var(--fl-k,1))}
+.fl-r18{transform:rotate(180.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.200s*var(--fl-k,1))}
+.fl-r19{transform:rotate(190.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.267s*var(--fl-k,1))}
+.fl-r20{transform:rotate(200.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.333s*var(--fl-k,1))}
+.fl-r21{transform:rotate(210.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.400s*var(--fl-k,1))}
+.fl-r22{transform:rotate(220.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.467s*var(--fl-k,1))}
+.fl-r23{transform:rotate(230.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.533s*var(--fl-k,1))}
+.fl-r24{transform:rotate(240.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.600s*var(--fl-k,1))}
+.fl-r25{transform:rotate(250.0deg) translateX(80px);background:#E6EAF3;animation-delay:calc(-1.667s*var(--fl-k,1))}
+.fl-r26{transform:rotate(260.0deg) translateX(80px);background:#8D96AD;animation-delay:calc(-1.733s*var(--fl-k,1))}
+.fl-r27{transform:rotate(270.0deg) translateX(80px);background:#8D96AD;animation-delay:calc(-1.800s*var(--fl-k,1))}
+.fl-r28{transform:rotate(280.0deg) translateX(80px);background:#8D96AD;animation-delay:calc(-1.867s*var(--fl-k,1))}
+.fl-r29{transform:rotate(290.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-1.933s*var(--fl-k,1))}
+.fl-r30{transform:rotate(300.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-2.000s*var(--fl-k,1))}
+.fl-r31{transform:rotate(310.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-2.067s*var(--fl-k,1))}
+.fl-r32{transform:rotate(320.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-2.133s*var(--fl-k,1))}
+.fl-r33{transform:rotate(330.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-2.200s*var(--fl-k,1))}
+.fl-r34{transform:rotate(340.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-2.267s*var(--fl-k,1))}
+.fl-r35{transform:rotate(350.0deg) translateX(80px);background:#FF7B64;animation-delay:calc(-2.333s*var(--fl-k,1))}
+@keyframes fl-on1{0%{opacity:1}23%{opacity:1}25.5%{opacity:0}97.5%{opacity:0}100%{opacity:1}}
+.fl-on1{animation:fl-on1 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-on2{0%{opacity:0}23%{opacity:0}25.5%{opacity:1}48%{opacity:1}50.5%{opacity:0}100%{opacity:0}}
+.fl-on2{animation:fl-on2 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-on3{0%{opacity:0}48%{opacity:0}50.5%{opacity:1}73%{opacity:1}75.5%{opacity:0}100%{opacity:0}}
+.fl-on3{animation:fl-on3 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-on4{0%{opacity:0}73%{opacity:0}75.5%{opacity:1}97.5%{opacity:1}100%{opacity:0}}
+.fl-on4{animation:fl-on4 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-tc1{0%{color:#E6EAF3}23%{color:#E6EAF3}25.5%{color:#A3ABBF}97.5%{color:#A3ABBF}100%{color:#E6EAF3}}
+.fl-tc1{animation:fl-tc1 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-tc2{0%{color:#A3ABBF}23%{color:#A3ABBF}25.5%{color:#E6EAF3}48%{color:#E6EAF3}50.5%{color:#A3ABBF}100%{color:#A3ABBF}}
+.fl-tc2{animation:fl-tc2 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-tc3{0%{color:#A3ABBF}48%{color:#A3ABBF}50.5%{color:#E6EAF3}73%{color:#E6EAF3}75.5%{color:#A3ABBF}100%{color:#A3ABBF}}
+.fl-tc3{animation:fl-tc3 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-tc4{0%{color:#A3ABBF}73%{color:#A3ABBF}75.5%{color:#E6EAF3}97.5%{color:#E6EAF3}100%{color:#A3ABBF}}
+.fl-tc4{animation:fl-tc4 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-nc1{0%{color:#FF7B64}23%{color:#FF7B64}25.5%{color:#828CA6}97.5%{color:#828CA6}100%{color:#FF7B64}}
+.fl-nc1{animation:fl-nc1 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-nc2{0%{color:#828CA6}23%{color:#828CA6}25.5%{color:#FF7B64}48%{color:#FF7B64}50.5%{color:#828CA6}100%{color:#828CA6}}
+.fl-nc2{animation:fl-nc2 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-nc3{0%{color:#828CA6}48%{color:#828CA6}50.5%{color:#FF7B64}73%{color:#FF7B64}75.5%{color:#828CA6}100%{color:#828CA6}}
+.fl-nc3{animation:fl-nc3 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-nc4{0%{color:#828CA6}73%{color:#828CA6}75.5%{color:#FF7B64}97.5%{color:#FF7B64}100%{color:#828CA6}}
+.fl-nc4{animation:fl-nc4 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-bar1{0%{transform:scaleX(0)}25%{transform:scaleX(1)}25.4%{transform:scaleX(0)}100%{transform:scaleX(0)}}
+.fl-bar1{animation:fl-bar1 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-bar2{0%{transform:scaleX(0)}25%{transform:scaleX(0)}50%{transform:scaleX(1)}50.4%{transform:scaleX(0)}100%{transform:scaleX(0)}}
+.fl-bar2{animation:fl-bar2 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-bar3{0%{transform:scaleX(0)}50%{transform:scaleX(0)}75%{transform:scaleX(1)}75.4%{transform:scaleX(0)}100%{transform:scaleX(0)}}
+.fl-bar3{animation:fl-bar3 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-bar4{0%{transform:scaleX(0)}75%{transform:scaleX(0)}99.6%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+.fl-bar4{animation:fl-bar4 calc(16s*var(--fl-k,1)) linear infinite}
+@keyframes fl-grow{0%,74%{transform:scaleY(.12)}82%,97%{transform:scaleY(1)}100%{transform:scaleY(.12)}}
+.fl-g0{height:34px;transform-origin:50% 100%;animation:fl-grow calc(16s*var(--fl-k,1)) cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(0.00s*var(--fl-k,1))}
+.fl-g1{height:52px;transform-origin:50% 100%;animation:fl-grow calc(16s*var(--fl-k,1)) cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(0.08s*var(--fl-k,1))}
+.fl-g2{height:40px;transform-origin:50% 100%;animation:fl-grow calc(16s*var(--fl-k,1)) cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(0.16s*var(--fl-k,1))}
+.fl-g3{height:64px;transform-origin:50% 100%;animation:fl-grow calc(16s*var(--fl-k,1)) cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(0.24s*var(--fl-k,1))}
+.fl-g4{height:58px;transform-origin:50% 100%;animation:fl-grow calc(16s*var(--fl-k,1)) cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(0.32s*var(--fl-k,1))}
+.fl-g5{height:76px;transform-origin:50% 100%;animation:fl-grow calc(16s*var(--fl-k,1)) cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(0.40s*var(--fl-k,1))}
+.fl-g6{height:70px;transform-origin:50% 100%;animation:fl-grow calc(16s*var(--fl-k,1)) cubic-bezier(.2,.8,.2,1) infinite;animation-delay:calc(0.48s*var(--fl-k,1))}
+@media (prefers-reduced-motion:reduce){
+  .fl-sec *{animation:none!important}
+  .fl-p,.fl-zone,.fl-scan{display:none}
+  .fl-after{opacity:1}
+  .fl-g0,.fl-g1,.fl-g2,.fl-g3,.fl-g4,.fl-g5,.fl-g6{transform:none}
+  .fl-steps h3{color:var(--fog)}
+  .fl-steps .fl-n{color:var(--coral)}
+}
+
+/* =========================================================
+   MASKING — animated in/out diagram inside the method section
+   (all classes prefixed mk- on purpose: see DESIGN-BRIEF §5)
+   ========================================================= */
+.mk-wide{max-width:1440px;margin:clamp(40px,5vw,64px) auto 0;padding-left:var(--gut);padding-right:var(--gut)}
+.mk-fig{margin:0;position:relative;width:100%;overflow:hidden;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.mk-sizer{position:relative;width:100%;aspect-ratio:1440/650;overflow:hidden}
+.mk-stage{position:absolute;left:0;top:0;width:1440px;height:810px;transform-origin:0 0;transform:scale(var(--mk-s,.8)) translateY(-150px);color:#E6EAF3;font-family:var(--f-sans)}
+.mk-stage p{margin:0}
+.mk-hint{display:none;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--dim);margin:14px 0 0}
+@media (max-width:699px){.mk-wide{padding-left:0;padding-right:0}.mk-fig{overflow-x:auto;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}.mk-hint{display:block}}
+.mk-wrap.mk-off *{animation-play-state:paused!important}
+.mk-mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+.mk-disp{font-family:Chivo,'IBM Plex Sans',sans-serif}
+.mk-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#8E97AE}
+.mk-layer{position:absolute;left:0;top:0;width:1440px;height:810px;pointer-events:none}
+.mk-rib{fill:none;stroke-width:10;stroke-linecap:round;opacity:.07}
+.mk-line{fill:none;stroke-width:1.2;opacity:.38}
+.mk-march{fill:none;stroke-width:1.6;stroke-dasharray:2 10;stroke-linecap:round;animation:mk-march calc(1.1s*var(--k,1)) linear infinite}
+.mk-w{stroke:#E6EAF3}.mk-c{stroke:#FF7B64}.mk-b{stroke:#8FA3FF}
+@keyframes mk-march{to{stroke-dashoffset:-24}}
+.mk-p{position:absolute;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;offset-rotate:0deg;opacity:0;animation-name:mk-travel;animation-timing-function:cubic-bezier(.45,.05,.55,.95);animation-iteration-count:infinite}
+.mk-p.mk-real{background:#E6EAF3;box-shadow:0 0 8px rgba(230,234,243,.9),0 0 18px rgba(230,234,243,.35)}
+.mk-p.mk-mask{background:#FF7B64;box-shadow:0 0 8px rgba(255,123,100,.95),0 0 20px rgba(255,123,100,.45)}
+@keyframes mk-travel{0%{offset-distance:0%;opacity:0}15%{opacity:1}85%{opacity:1}100%{offset-distance:100%;opacity:0}}
+.mk-card{position:absolute;box-sizing:border-box;background:#0E1320;border:1px solid #23293A;border-radius:6px;overflow:hidden}
+.mk-fbar{height:32px;box-sizing:border-box;padding:0 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #23293A;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:#8E97AE}
+.mk-trow{display:grid;height:26px;align-items:center;padding:0 14px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:500}
+.mk-thead{height:24px;font-size:9.5px;font-weight:600;letter-spacing:.14em;color:#858DA3;text-transform:uppercase;border-bottom:1px solid #23293A}
+.mk-cell{position:relative;height:26px;display:flex;align-items:center;white-space:nowrap}
+.mk-r{justify-content:flex-end}
+.mk-ph{position:absolute;left:0;top:9px;height:8px;border-radius:2px;background:rgba(142,151,174,.16)}
+.mk-r .mk-ph{left:auto;right:0}
+.mk-val{position:relative}
+.mk-ring{position:absolute;left:-5px;right:-5px;top:3px;bottom:3px;border:1px solid #8FA3FF;border-radius:3px;box-shadow:0 0 12px rgba(143,163,255,.45)}
+.mk-step{position:absolute;left:500px;width:440px;height:68px;box-sizing:border-box;padding:0 16px;display:flex;align-items:center;gap:14px;background:#0E1320;border:1px solid #23293A;border-radius:6px}
+.mk-halo{position:absolute;inset:-1px;border-radius:6px;border:1px solid rgba(255,123,100,.7);background:rgba(255,123,100,.07);box-shadow:0 0 30px rgba(255,123,100,.15)}
+.mk-halo.mk-kb{border-color:rgba(143,163,255,.75);background:transparent;box-shadow:0 0 30px rgba(143,163,255,.18)}
+.mk-num{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.12em;width:22px;flex-shrink:0}
+.mk-chip{height:20px;min-width:78px;box-sizing:border-box;padding:0 8px;display:inline-flex;align-items:center;justify-content:center;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;letter-spacing:.14em;color:#07090F}
+@keyframes mk-blink{0%,100%{opacity:1}50%{opacity:.4}}
+.mk-live{animation:mk-blink calc(1.8s*var(--k,1)) ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){
+  .mk-wrap *{animation:none!important}
+  .mk-p,.mk-halo,.mk-ph{display:none}
+  .mk-f1,.mk-f2,.mk-f3,.mk-f4,.mk-f5,.mk-v1,.mk-v2,.mk-v3,.mk-v4,.mk-v5{opacity:1}
+}
+@keyframes mk-f1{0%,10%{opacity:0}14%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f1{opacity:0;animation:mk-f1 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e1{0%,10%{opacity:1}13%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e1{animation:mk-e1 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v1{0%,10%{opacity:.32}14%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v1{opacity:.32;animation:mk-v1 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f2{0%,28%{opacity:0}32%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f2{opacity:0;animation:mk-f2 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e2{0%,28%{opacity:1}31%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e2{animation:mk-e2 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v2{0%,28%{opacity:.32}32%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v2{opacity:.32;animation:mk-v2 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f3{0%,46%{opacity:0}50%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f3{opacity:0;animation:mk-f3 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e3{0%,46%{opacity:1}49%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e3{animation:mk-e3 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v3{0%,46%{opacity:.32}50%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v3{opacity:.32;animation:mk-v3 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f4{0%,64%{opacity:0}68%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f4{opacity:0;animation:mk-f4 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e4{0%,64%{opacity:1}67%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e4{animation:mk-e4 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v4{0%,64%{opacity:.32}68%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v4{opacity:.32;animation:mk-v4 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-f5{0%,82%{opacity:0}86%,94%{opacity:1}98%,100%{opacity:0}}
+.mk-f5{opacity:0;animation:mk-f5 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-e5{0%,82%{opacity:1}85%,95%{opacity:0}99%,100%{opacity:1}}
+.mk-e5{animation:mk-e5 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-v5{0%,82%{opacity:.32}86%,94%{opacity:1}98%,100%{opacity:.32}}
+.mk-v5{opacity:.32;animation:mk-v5 calc(16s*var(--k,1)) ease-out infinite}
+@keyframes mk-w1{0%,10%{opacity:0}12%,27%{opacity:1}29%,100%{opacity:0}}
+.mk-w1{opacity:0;animation:mk-w1 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n1{0%,10%{color:#858DA3}12%,27%{color:#FF7B64}29%,100%{color:#858DA3}}
+.mk-n1{color:#858DA3;animation:mk-n1 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w2{0%,28%{opacity:0}30%,45%{opacity:1}47%,100%{opacity:0}}
+.mk-w2{opacity:0;animation:mk-w2 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n2{0%,28%{color:#858DA3}30%,45%{color:#FF7B64}47%,100%{color:#858DA3}}
+.mk-n2{color:#858DA3;animation:mk-n2 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w3{0%,46%{opacity:0}48%,63%{opacity:1}65%,100%{opacity:0}}
+.mk-w3{opacity:0;animation:mk-w3 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n3{0%,46%{color:#858DA3}48%,63%{color:#FF7B64}65%,100%{color:#858DA3}}
+.mk-n3{color:#858DA3;animation:mk-n3 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w4{0%,64%{opacity:0}66%,81%{opacity:1}83%,100%{opacity:0}}
+.mk-w4{opacity:0;animation:mk-w4 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n4{0%,64%{color:#858DA3}66%,81%{color:#FF7B64}83%,100%{color:#858DA3}}
+.mk-n4{color:#858DA3;animation:mk-n4 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-w5{0%,82%{opacity:0}84%,94%{opacity:1}96%,100%{opacity:0}}
+.mk-w5{opacity:0;animation:mk-w5 calc(16s*var(--k,1)) ease-in-out infinite}
+@keyframes mk-n5{0%,82%{color:#858DA3}84%,94%{color:#FF7B64}96%,100%{color:#858DA3}}
+.mk-n5{color:#858DA3;animation:mk-n5 calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-prog{0%,10%{transform:scaleX(0)}82%,94%{transform:scaleX(1)}98%,100%{transform:scaleX(0)}}
+.mk-prog{transform-origin:0 50%;transform:scaleX(0);animation:mk-prog calc(16s*var(--k,1)) linear infinite}
+@keyframes mk-tl{0%,47%{transform:translateX(0);opacity:1}57%,95%{transform:translateX(-934.3px);opacity:1}97%{transform:translateX(-934.3px);opacity:0}98%{transform:translateX(0);opacity:0}100%{transform:translateX(0);opacity:1}}
+.mk-tl{animation:mk-tl calc(16s*var(--k,1)) cubic-bezier(.6,.05,.25,1) infinite}
+@keyframes mk-tc{0%,48%{background:#E6EAF3;box-shadow:0 0 10px rgba(230,234,243,.8)}55%,95%{background:#FF7B64;box-shadow:0 0 12px rgba(255,123,100,.9)}98%,100%{background:#E6EAF3;box-shadow:0 0 10px rgba(230,234,243,.8)}}
+.mk-tdot{position:absolute;top:-5px;width:10px;height:10px;margin-left:-5px;border-radius:50%;animation:mk-tc calc(16s*var(--k,1)) linear infinite}
+.mk-i0q0{offset-path:path('M440 261 C 470 261, 470 300, 500 300');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-i0q1{offset-path:path('M440 261 C 470 261, 470 300, 500 300');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-i0q2{offset-path:path('M440 261 C 470 261, 470 300, 500 300');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
+.mk-i1q0{offset-path:path('M440 461 C 470 461, 470 420, 500 420');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-i1q1{offset-path:path('M440 461 C 470 461, 470 420, 500 420');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-i1q2{offset-path:path('M440 461 C 470 461, 470 420, 500 420');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
+.mk-o0q0{offset-path:path('M940 300 C 970 300, 970 261, 1000 261');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-o0q1{offset-path:path('M940 300 C 970 300, 970 261, 1000 261');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-o0q2{offset-path:path('M940 300 C 970 300, 970 261, 1000 261');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
+.mk-o1q0{offset-path:path('M940 420 C 970 420, 970 461, 1000 461');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.00s*var(--k,1))}
+.mk-o1q1{offset-path:path('M940 420 C 970 420, 970 461, 1000 461');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.47s*var(--k,1))}
+.mk-o1q2{offset-path:path('M940 420 C 970 420, 970 461, 1000 461');animation-duration:calc(1.4s*var(--k,1));animation-delay:calc(-0.93s*var(--k,1))}
+
+/* =========================================================
+   HERO GRAPHIC — the "ShiftMask pass" between the two tables
+   (replaces the old offset strip; classes prefixed hx-)
+   ========================================================= */
+.hx-gate{position:relative;z-index:1;height:calc(150px * var(--hx-s,1));overflow:hidden}
+.hx-stage{position:absolute;left:0;top:0;width:638px;height:150px;transform-origin:0 0;transform:scale(var(--hx-s,1))}
+.hx-layer{position:absolute;left:0;top:0;width:638px;height:150px;pointer-events:none}
+.hx-base{fill:none;stroke-width:1;opacity:.3}
+.hx-march{fill:none;stroke-width:1.4;stroke-dasharray:2 9;stroke-linecap:round;animation:hx-march 1.1s linear infinite}
+@keyframes hx-march{to{stroke-dashoffset:-22}}
+.hx-p{position:absolute;left:0;top:0;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;offset-rotate:0deg;opacity:0;animation:hx-travel 1.3s cubic-bezier(.45,.05,.55,.95) infinite}
+.hx-real{background:#E6EAF3;box-shadow:0 0 8px rgba(230,234,243,.9),0 0 16px rgba(230,234,243,.35)}
+.hx-mask{background:#FF7B64;box-shadow:0 0 8px rgba(255,123,100,.95),0 0 18px rgba(255,123,100,.45)}
+.hx-key{background:#8FA3FF;box-shadow:0 0 8px rgba(143,163,255,.95),0 0 18px rgba(143,163,255,.4)}
+@keyframes hx-travel{0%{offset-distance:0%;opacity:0}15%{opacity:1}85%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes hx-spin{to{transform:rotate(360deg)}}
+@keyframes hx-pulse{0%,100%{opacity:.25}12%{opacity:1}40%{opacity:.25}}
+.hx-core{position:absolute;left:269px;top:25px;width:100px;height:100px}
+.hx-core > *{position:absolute;border-radius:50%}
+.hx-glow{inset:-18px;background:radial-gradient(circle,rgba(255,123,100,.28),rgba(255,123,100,0) 70%);animation:hx-halo 12s ease-in-out infinite}
+@keyframes hx-halo{0%,6%{opacity:.35}10%,78%{opacity:1}90%,100%{opacity:.35}}
+.hx-disc{inset:0;border:1px solid var(--rule);background:var(--void)}
+.hx-comet{inset:0;animation:hx-spin 2.4s linear infinite;background:conic-gradient(from 0deg,rgba(255,123,100,0) 0deg,rgba(255,123,100,0) 240deg,rgba(255,123,100,.95) 358deg,rgba(255,123,100,0) 360deg);-webkit-mask:radial-gradient(circle,transparent 42px,#000 43px,#000 46px,transparent 47px);mask:radial-gradient(circle,transparent 42px,#000 43px,#000 46px,transparent 47px)}
+.hx-ring-dots{inset:0}
+.hx-dot{position:absolute;left:50%;top:50%;width:3px;height:3px;margin:-1.5px 0 0 -1.5px;border-radius:50%;animation:hx-pulse 2s ease-in-out infinite}
+.hx-center{left:22px;top:22px;width:56px;height:56px;box-sizing:border-box;background:var(--ink);border:1px solid rgba(255,123,100,.55);display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-weight:800;font-size:10px;letter-spacing:.02em;color:var(--fog)}
+.hx-chip{position:absolute;height:30px;box-sizing:border-box;padding:0 12px;display:flex;align-items:center;gap:8px;border:1px dashed var(--rule-bright);border-radius:3px;background:var(--void);font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:var(--dim)}
+.hx-chip b,.hx-chips b{font-weight:600;color:var(--fog);letter-spacing:.06em}
+.hx-lab{position:absolute;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:var(--dim)}
+.hx-chips{display:none;flex-wrap:wrap;justify-content:center;gap:8px;margin:2px 0 12px;font-family:var(--f-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.hx-chips span{border:1px dashed var(--rule-bright);border-radius:3px;padding:6px 9px}
+@media (max-width:699px){.hx-side{display:none}.hx-chips{display:flex}}
+.hx-kv,.hx-c{position:relative;display:inline-block}
+.hx-ring{position:absolute;left:-6px;right:-6px;top:-4px;bottom:-4px;border:1px solid #8FA3FF;border-radius:3px;box-shadow:0 0 12px rgba(143,163,255,.45)}
+.hx-ph{position:absolute;left:0;right:0;top:50%;height:8px;margin-top:-4px;border-radius:2px;background:rgba(141,150,173,.16)}
+.hx-id{color:#8FA3FF}.hx-m{color:#FF7B64}
+.hx-rig.hx-off *{animation-play-state:paused!important}
+
+@keyframes hx-f1{0%,8%{opacity:0;transform:translateY(-5px)}12%,92%{opacity:1;transform:none}97%,100%{opacity:0;transform:none}}
+.hx-f1{display:inline-block;opacity:0;animation:hx-f1 12s ease-out infinite}
+@keyframes hx-e1{0%,8%{opacity:1}11%,93%{opacity:0}98%,100%{opacity:1}}
+.hx-e1{animation:hx-e1 12s linear infinite}
+@keyframes hx-c1{0%,8%{border-color:#333D52;color:#828CA6}10%,22%{border-color:#FF5F45;color:#FF7B64}26%,100%{border-color:#333D52;color:#828CA6}}
+.hx-c1{animation:hx-c1 12s linear infinite}
+@keyframes hx-f2{0%,26%{opacity:0;transform:translateY(-5px)}30%,92%{opacity:1;transform:none}97%,100%{opacity:0;transform:none}}
+.hx-f2{display:inline-block;opacity:0;animation:hx-f2 12s ease-out infinite}
+@keyframes hx-e2{0%,26%{opacity:1}29%,93%{opacity:0}98%,100%{opacity:1}}
+.hx-e2{animation:hx-e2 12s linear infinite}
+@keyframes hx-c2{0%,26%{border-color:#333D52;color:#828CA6}28%,40%{border-color:#FF5F45;color:#FF7B64}44%,100%{border-color:#333D52;color:#828CA6}}
+.hx-c2{animation:hx-c2 12s linear infinite}
+@keyframes hx-f3{0%,44%{opacity:0;transform:translateY(-5px)}48%,92%{opacity:1;transform:none}97%,100%{opacity:0;transform:none}}
+.hx-f3{display:inline-block;opacity:0;animation:hx-f3 12s ease-out infinite}
+@keyframes hx-e3{0%,44%{opacity:1}47%,93%{opacity:0}98%,100%{opacity:1}}
+.hx-e3{animation:hx-e3 12s linear infinite}
+@keyframes hx-c3{0%,44%{border-color:#333D52;color:#828CA6}46%,58%{border-color:#FF5F45;color:#FF7B64}62%,100%{border-color:#333D52;color:#828CA6}}
+.hx-c3{animation:hx-c3 12s linear infinite}
+@keyframes hx-f4{0%,62%{opacity:0;transform:translateY(-5px)}66%,92%{opacity:1;transform:none}97%,100%{opacity:0;transform:none}}
+.hx-f4{display:inline-block;opacity:0;animation:hx-f4 12s ease-out infinite}
+@keyframes hx-e4{0%,62%{opacity:1}65%,93%{opacity:0}98%,100%{opacity:1}}
+.hx-e4{animation:hx-e4 12s linear infinite}
+@keyframes hx-c4{0%,62%{border-color:#333D52;color:#828CA6}64%,76%{border-color:#FF5F45;color:#FF7B64}80%,100%{border-color:#333D52;color:#828CA6}}
+.hx-c4{animation:hx-c4 12s linear infinite}
+@keyframes hx-w1{0%,8%{opacity:0}10%,24%{opacity:1}27%,100%{opacity:0}}
+.hx-w1{opacity:0;animation:hx-w1 12s ease-in-out infinite}
+.hx-q000{offset-path:path('M102 0 C 102 34, 319 15, 319 29');animation-delay:-0.00s}
+.hx-q001{offset-path:path('M102 0 C 102 34, 319 15, 319 29');animation-delay:-0.65s}
+.hx-q010{offset-path:path('M319 0 C 319 34, 319 15, 319 29');animation-delay:-0.30s}
+.hx-q011{offset-path:path('M319 0 C 319 34, 319 15, 319 29');animation-delay:-0.95s}
+.hx-q020{offset-path:path('M536 0 C 536 34, 319 15, 319 29');animation-delay:-0.60s}
+.hx-q021{offset-path:path('M536 0 C 536 34, 319 15, 319 29');animation-delay:-1.25s}
+.hx-q100{offset-path:path('M319 121 C 319 135, 102 116, 102 150');animation-delay:-0.00s}
+.hx-q101{offset-path:path('M319 121 C 319 135, 102 116, 102 150');animation-delay:-0.65s}
+.hx-q110{offset-path:path('M319 121 C 319 135, 319 116, 319 150');animation-delay:-0.30s}
+.hx-q111{offset-path:path('M319 121 C 319 135, 319 116, 319 150');animation-delay:-0.95s}
+.hx-q120{offset-path:path('M319 121 C 319 135, 536 116, 536 150');animation-delay:-0.60s}
+.hx-q121{offset-path:path('M319 121 C 319 135, 536 116, 536 150');animation-delay:-1.25s}
+.hx-r0{transform:rotate(0.0deg) translateX(34px);background:#8D96AD;animation-delay:0.000s}
+.hx-r1{transform:rotate(12.857142857142858deg) translateX(34px);background:#8D96AD;animation-delay:-0.071s}
+.hx-r2{transform:rotate(25.714285714285715deg) translateX(34px);background:#8D96AD;animation-delay:-0.143s}
+.hx-r3{transform:rotate(38.57142857142857deg) translateX(34px);background:#FF7B64;animation-delay:-0.214s}
+.hx-r4{transform:rotate(51.42857142857143deg) translateX(34px);background:#FF7B64;animation-delay:-0.286s}
+.hx-r5{transform:rotate(64.28571428571429deg) translateX(34px);background:#FF7B64;animation-delay:-0.357s}
+.hx-r6{transform:rotate(77.14285714285714deg) translateX(34px);background:#FF7B64;animation-delay:-0.429s}
+.hx-r7{transform:rotate(90.0deg) translateX(34px);background:#FF7B64;animation-delay:-0.500s}
+.hx-r8{transform:rotate(102.85714285714286deg) translateX(34px);background:#FF7B64;animation-delay:-0.571s}
+.hx-r9{transform:rotate(115.71428571428571deg) translateX(34px);background:#FF7B64;animation-delay:-0.643s}
+.hx-r10{transform:rotate(128.57142857142858deg) translateX(34px);background:#FF7B64;animation-delay:-0.714s}
+.hx-r11{transform:rotate(141.42857142857142deg) translateX(34px);background:#FF7B64;animation-delay:-0.786s}
+.hx-r12{transform:rotate(154.28571428571428deg) translateX(34px);background:#8D96AD;animation-delay:-0.857s}
+.hx-r13{transform:rotate(167.14285714285714deg) translateX(34px);background:#8D96AD;animation-delay:-0.929s}
+.hx-r14{transform:rotate(180.0deg) translateX(34px);background:#8D96AD;animation-delay:-1.000s}
+.hx-r15{transform:rotate(192.85714285714286deg) translateX(34px);background:#8D96AD;animation-delay:-1.071s}
+.hx-r16{transform:rotate(205.71428571428572deg) translateX(34px);background:#8D96AD;animation-delay:-1.143s}
+.hx-r17{transform:rotate(218.57142857142858deg) translateX(34px);background:#E6EAF3;animation-delay:-1.214s}
+.hx-r18{transform:rotate(231.42857142857142deg) translateX(34px);background:#E6EAF3;animation-delay:-1.286s}
+.hx-r19{transform:rotate(244.28571428571428deg) translateX(34px);background:#E6EAF3;animation-delay:-1.357s}
+.hx-r20{transform:rotate(257.14285714285717deg) translateX(34px);background:#E6EAF3;animation-delay:-1.429s}
+.hx-r21{transform:rotate(270.0deg) translateX(34px);background:#E6EAF3;animation-delay:-1.500s}
+.hx-r22{transform:rotate(282.85714285714283deg) translateX(34px);background:#E6EAF3;animation-delay:-1.571s}
+.hx-r23{transform:rotate(295.7142857142857deg) translateX(34px);background:#E6EAF3;animation-delay:-1.643s}
+.hx-r24{transform:rotate(308.57142857142856deg) translateX(34px);background:#E6EAF3;animation-delay:-1.714s}
+.hx-r25{transform:rotate(321.42857142857144deg) translateX(34px);background:#E6EAF3;animation-delay:-1.786s}
+.hx-r26{transform:rotate(334.2857142857143deg) translateX(34px);background:#8D96AD;animation-delay:-1.857s}
+.hx-r27{transform:rotate(347.14285714285717deg) translateX(34px);background:#8D96AD;animation-delay:-1.929s}
+@media (prefers-reduced-motion:reduce){
+  .hx-rig *{animation:none!important}
+  .hx-p,.hx-ph,.hx-ring{display:none}
+  .hx-f1,.hx-f2,.hx-f3,.hx-f4{opacity:1;transform:none}
+}
+
+/* =========================================================
+   V2 — alternative homepage skin (layout language after the
+   "AI product" reference): big rounded panels, a coral glow,
+   pill buttons, centred section heads, floating dark cards.
+   Content and animations are untouched; this layer only restyles.
+   ========================================================= */
+:root{
+  --v2-void:#06080D;
+  --v2-card:#0E1320;
+  --v2-card2:#121829;
+  --v2-line:rgba(230,234,243,.08);
+  --v2-line2:rgba(230,234,243,.14);
+  --v2-r-xl:28px;
+  --v2-r-lg:22px;
+  --v2-r-md:16px;
+  --v2-glow:radial-gradient(closest-side, rgba(255,95,69,.20), rgba(255,95,69,0));
+}
+body{background:var(--v2-void)}
+body::before{
+  background:
+    radial-gradient(420px 520px at -120px 38%, rgba(255,95,69,.16), transparent 70%),
+    radial-gradient(420px 520px at calc(100% + 120px) 62%, rgba(255,123,100,.12), transparent 70%);
+}
+
+/* ---------- type ---------- */
+h1,h2,h3,.row .t,.tier-name,.band .zero{font-family:var(--f-display)}
+h1{font-weight:600;font-size:clamp(40px,5.6vw,78px);line-height:1.02;letter-spacing:-.035em}
+h2{font-weight:600;font-size:clamp(32px,4.2vw,56px);line-height:1.06;letter-spacing:-.03em;max-width:20ch}
+h3{font-weight:600;letter-spacing:-.015em}
+.eyebrow{font-size:11.5px;font-weight:600;letter-spacing:.18em;color:var(--fog);gap:10px;margin-bottom:22px}
+.eyebrow::before{content:"\2726";width:auto;height:auto;background:none;color:var(--coral);font-size:14px;letter-spacing:0;line-height:1}
+.lede{color:var(--muted)}
+
+/* centred section heads, as in the reference */
+.fl-head,
+.steps > .shell:first-child .rise,
+.who-sec .shell > .rise:first-child,
+.pricing .shell > .rise:first-child,
+#faq .shell > .rise:first-child{text-align:center}
+.fl-head{display:block!important;max-width:900px}
+.fl-head .eyebrow,
+.steps > .shell:first-child .eyebrow,
+.who-sec .eyebrow,
+.pricing .shell > .rise:first-child .eyebrow,
+#faq .shell > .rise:first-child .eyebrow{justify-content:center}
+.fl-head h2,
+.steps > .shell:first-child h2,
+.who-sec h2,
+.pricing .shell > .rise:first-child h2,
+#faq .shell > .rise:first-child h2{margin-left:auto;margin-right:auto}
+.fl-head .lede,
+.pricing .shell > .rise:first-child .lede{margin-left:auto;margin-right:auto}
+
+/* ---------- buttons: pills ---------- */
+.btn{border-radius:999px;padding:16px 30px;font-weight:600}
+.btn-sm{padding:11px 20px}
+.btn:hover{transform:translateY(-2px)}
+.btn-line{border-color:var(--v2-line2);background:rgba(230,234,243,.03)}
+.btn-line:hover{border-color:var(--fog);background:rgba(230,234,243,.07)}
+
+/* ---------- nav ---------- */
+nav{background:rgba(6,8,13,.94);backdrop-filter:none;-webkit-backdrop-filter:none;border-bottom:1px solid var(--v2-line)}
+nav .bar{padding:14px 0}
+nav .menu a:not(.btn){font-family:var(--f-sans);font-size:14.5px;font-weight:500;letter-spacing:0;text-transform:none;color:#C9CFDC}
+nav .menu a:not(.btn):hover{color:#fff}
+.menu-toggle{border-radius:999px}
+
+/* =========================================================
+   HERO — one big rounded coral panel, cards floating right
+   ========================================================= */
+.hero{padding:18px 0 clamp(60px,7vw,100px);overflow:visible}
+.v2-panel{position:relative;max-width:1400px;margin:0 auto;padding:clamp(40px,5vw,72px) 0 clamp(40px,5vw,64px);
+  border-radius:var(--v2-r-xl);overflow:hidden;
+  background:
+    radial-gradient(900px 620px at 8% 0%, #FF9A84 0%, rgba(255,154,132,0) 60%),
+    linear-gradient(118deg,#FF8069 0%,#FF5F45 34%,#D8452A 50%,#6E2217 66%,#1A1219 82%,#0E1320 100%);
+}
+.v2-panel::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(600px 400px at 100% 100%, rgba(6,8,13,.55), transparent 70%),
+    repeating-radial-gradient(circle at 20% 30%, rgba(255,255,255,.018) 0 1px, transparent 1px 3px);
+}
+.v2-panel > .shell{position:relative;z-index:1}
+.hero .eyebrow{color:var(--ink)}
+.hero .eyebrow::before{color:var(--ink)}
+.hero h1{color:var(--ink);max-width:13ch}
+.hero h1 .stroke{-webkit-text-stroke:1.6px var(--ink);color:transparent}
+.hero .lede{color:var(--ink)}
+.hero .cta-note{color:var(--ink)}
+.hero .btn-solid{background:var(--ink);color:#fff}
+.hero .btn-solid:hover{background:#1C2436}
+.hero .btn-line{color:var(--ink);border-color:rgba(14,19,32,.35);background:rgba(255,255,255,.14)}
+.hero .btn-line:hover{border-color:var(--ink);background:rgba(255,255,255,.22)}
+.hero-grid{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr)}
+.rig::after{display:none}
+.slab{border-radius:var(--v2-r-lg);overflow:hidden;background:rgba(10,13,22,.92);border:1px solid rgba(230,234,243,.10);
+  box-shadow:0 30px 60px -30px rgba(0,0,0,.8)}
+.slab-top{border-bottom-color:var(--v2-line)}
+.tbl td{border-bottom-color:rgba(230,234,243,.06)}
+.hx-gate .hx-lab,.hx-gate .hx-chip,.hx-chips span{border-radius:999px}
+.hx-chips span{background:rgba(10,13,22,.88)}
+
+/* =========================================================
+   BAND — the "0" as a giant gradient word
+   ========================================================= */
+.band{background:transparent;color:var(--fog);padding:clamp(70px,9vw,120px) 0 clamp(50px,6vw,80px)}
+.band::after{display:none}
+.band-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center}
+.band .zero{font-weight:600;font-size:clamp(200px,34vw,480px);line-height:.78;letter-spacing:-.06em;
+  background:linear-gradient(100deg,#FF9A84 0%,#FF5F45 45%,#C63A1F 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;text-align:center}
+.band .kicker{color:var(--coral)}
+.band h2{color:var(--fog)}
+.band .say{color:var(--muted)}
+
+/* =========================================================
+   FLOW
+   ========================================================= */
+.fl-sec{padding-top:clamp(60px,8vw,110px)}
+.fl-fig{border-radius:var(--v2-r-xl);overflow:hidden;background:#090C14;border:1px solid var(--v2-line)}
+.fl-steps{background:var(--v2-card);border:1px solid var(--v2-line);border-radius:var(--v2-r-xl);padding:clamp(22px,3vw,36px)!important;margin-top:28px}
+.fl-legend span i{border-radius:999px}
+
+/* =========================================================
+   SURVIVES — rows as cards
+   ========================================================= */
+.survives{position:relative}
+.survives::before{content:"";position:absolute;left:-10%;top:10%;width:60%;height:80%;background:var(--v2-glow);pointer-events:none}
+.rows{border-top:none;display:flex;flex-direction:column;gap:12px}
+.row{background:var(--v2-card);border:1px solid var(--v2-line);border-radius:var(--v2-r-lg);padding:26px 28px}
+.row .t{font-weight:600;font-size:clamp(21px,2.3vw,28px)}
+.verdict{border-radius:999px;padding:6px 12px}
+
+/* =========================================================
+   METHOD — alternating text / screenshot rows
+   ========================================================= */
+.mk-fig{border-radius:var(--v2-r-xl);overflow:hidden;background:#090C14;border:1px solid var(--v2-line)}
+.ladder{margin-top:clamp(50px,7vw,90px);gap:clamp(50px,7vw,110px)}
+.rung,.rung:last-child{border:none;padding:0!important;display:block}
+.rung .n{display:inline-flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;letter-spacing:.18em;color:var(--fog);padding:0;margin-bottom:18px}
+.rung .n::before{content:"\2726";color:var(--coral);font-size:14px;letter-spacing:0}
+.rung .body{max-width:none;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  grid-template-areas:"h shot" "p shot";column-gap:clamp(30px,5vw,80px);align-items:start}
+.rung .body h3{grid-area:h;align-self:end;font-size:clamp(28px,3.4vw,46px);line-height:1.08;letter-spacing:-.03em;margin:0 0 18px}
+.rung .body p{grid-area:p;color:var(--muted);font-size:17px;max-width:46ch}
+.rung .rung-shot{grid-area:shot;margin:0;max-width:none;border:none;border-radius:var(--v2-r-xl);overflow:hidden;
+  padding:clamp(22px,3.4vw,46px);box-shadow:none;
+  background:
+    radial-gradient(520px 360px at 12% 10%, #FF9A84 0%, rgba(255,154,132,0) 62%),
+    linear-gradient(135deg,#FF6A50 0%,#D8452A 34%,#5E1F16 64%,#10141F 100%)}
+.rung .rung-shot::before{content:"";display:block}
+.rung .rung-shot-bar,.rung .rung-shot img{position:relative}
+.rung .rung-shot-bar{background:#0E1320;border:1px solid rgba(230,234,243,.10);border-bottom:none;border-radius:14px 14px 0 0;padding:12px 16px}
+.rung .rung-shot-bar span{width:9px;height:9px}
+.rung .rung-shot-bar span:nth-child(1){background:#FF5F45}
+.rung .rung-shot-bar span:nth-child(2){background:#F3B94A}
+.rung .rung-shot-bar span:nth-child(3){background:#3FCB98}
+.rung .rung-shot img{border:1px solid rgba(230,234,243,.10);border-top:none;border-radius:0 0 14px 14px;box-shadow:0 40px 70px -30px rgba(0,0,0,.75)}
+.rung:nth-child(even) .body{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);grid-template-areas:"shot h" "shot p"}
+.rung:nth-child(even) .n{margin-left:calc(55% + 20px)}
+
+/* =========================================================
+   AUDIENCE
+   ========================================================= */
+.two{gap:18px;background:none;border:none}
+.two > div{background:var(--v2-card);border:1px solid var(--v2-line);border-radius:var(--v2-r-xl);padding:clamp(28px,4vw,44px);position:relative;overflow:hidden}
+.two > div::after{content:"";position:absolute;right:-80px;top:-80px;width:240px;height:240px;background:var(--v2-glow);pointer-events:none}
+.two .who-lab{display:inline-block;background:rgba(255,95,69,.12);color:var(--coral);padding:6px 12px;border-radius:999px}
+
+/* =========================================================
+   PRICING
+   ========================================================= */
+.tier{border-radius:var(--v2-r-xl);background:var(--v2-card);border:1px solid var(--v2-line2)}
+.tier-live{border-color:transparent;
+  background:linear-gradient(var(--v2-card),var(--v2-card)) padding-box,
+             linear-gradient(150deg,#FF9A84,#FF5F45 40%,rgba(255,95,69,.15)) border-box;
+  border:1.5px solid transparent;box-shadow:0 30px 80px -40px rgba(255,95,69,.45)}
+.tier-soon{border-style:solid;border-color:var(--v2-line)}
+.tier-price{font-weight:600}
+.tier-notes .incl-note{background:var(--v2-card);border:1px solid var(--v2-line);border-radius:var(--v2-r-lg);padding:20px 22px}
+
+/* =========================================================
+   DOWNLOAD + FAQ
+   ========================================================= */
+#download .shell > .rise:first-child{background:
+    radial-gradient(640px 420px at 100% 0%, rgba(255,95,69,.22), transparent 70%),
+    var(--v2-card);
+  border:1px solid var(--v2-line);border-radius:var(--v2-r-xl);padding:clamp(28px,4.5vw,60px)}
+.ss-guide{border-radius:var(--v2-r-lg)}
+.qa{border-top:none;display:flex;flex-direction:column;gap:12px}
+.qa .item{background:var(--v2-card);border:1px solid var(--v2-line);border-radius:var(--v2-r-lg);padding:26px 30px}
+#faq .qa{max-width:960px;margin-left:auto;margin-right:auto}
+
+/* =========================================================
+   CLOSER — dark banner with a coral glow
+   ========================================================= */
+.closer > .shell{position:relative;overflow:hidden;border-radius:var(--v2-r-xl);border:1px solid var(--v2-line);
+  padding:clamp(40px,6vw,90px) clamp(26px,5vw,72px);
+  background:
+    radial-gradient(700px 520px at 100% 50%, rgba(255,95,69,.55), rgba(198,58,31,.18) 45%, transparent 72%),
+    linear-gradient(90deg,#0B0F19 0%,#0E1320 60%,#1A1219 100%)}
+.closer h2{font-weight:600;font-size:clamp(36px,5.6vw,80px)}
+
+footer{border-top:1px solid var(--v2-line)}
+footer .flinks a{font-family:var(--f-sans);font-size:13.5px;letter-spacing:0;text-transform:none}
+
+/* consent: pills */
+.consent-btn,.consent-widget{border-radius:999px}
+
+/* ---------- responsive ---------- */
+@media (max-width:1000px){
+  .hero-grid{grid-template-columns:1fr}
+  .v2-panel{margin:0 12px;background:
+    radial-gradient(700px 520px at 0% 0%, #FF9A84 0%, rgba(255,154,132,0) 60%),
+    linear-gradient(180deg,#FF8069 0%,#FF5F45 38%,#EC5638 50%,#8A2A1C 60%,#1A1219 74%,#0E1320 100%)}
+  .band-grid{grid-template-columns:1fr}
+  .band .zero{text-align:left;font-size:clamp(170px,52vw,300px)}
+}
+@media (max-width:860px){
+  .rung .body,.rung:nth-child(even) .body{grid-template-columns:1fr;grid-template-areas:"h" "p" "shot"}
+  .rung:nth-child(even) .n{margin-left:0}
+  .rung .body p{margin-bottom:22px}
+}
+@media (max-width:560px){
+  .row,.qa .item{padding:22px 20px}
+  .closer > .shell{margin:0 12px}
+}
+
+/* v2 fixes */
+.hero-grid{align-items:start;margin-top:clamp(28px,3.4vw,44px)}
+.fl-head .lede{margin-top:18px}
+#download .cta-note:not(:has(.pulse)){display:block}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect x="5" y="27" width="32" height="32" rx="8" fill="#E6EAF3"/>
+    <rect x="11" y="37.5" width="20" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="11" y="45" width="13" height="3.5" rx="1.75" fill="#0E1320"/>
+    <rect x="27" y="5" width="32" height="32" rx="8" fill="#FF7B64"/>
+    <rect x="33" y="15.5" width="20" height="3.5" rx="1.75" fill="#07090F"/>
+    <rect x="33" y="23" width="13" height="3.5" rx="1.75" fill="#07090F"/>
+  </symbol>
+</svg>
+
+<nav>
+  <div class="shell bar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="30" height="30" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="menu">
+      <a href="#how" class="nav-hide">Method</a>
+      <a href="#survives" class="nav-hide">What survives</a>
+      <a href="#pricing" class="nav-hide">Pricing</a>
+      <a href="/blog/" class="nav-hide">Blog</a>
+      <!-- TODO: podmień na prawdziwy link do pobrania -->
+      <a class="btn btn-solid btn-sm" href="#pricing" data-goatcounter-click="cta-nav">Get ShiftMask</a>
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span class="menu-toggle-bars" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobile-menu">
+    <div class="shell mobile-menu-inner">
+      <p class="mobile-menu-eyebrow">Menu</p>
+      <a href="#how">Method</a>
+      <a href="#survives">What survives</a>
+      <a href="#pricing">Pricing</a>
+      <a href="/blog/">Blog</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+   <div class="v2-panel">
+    <div class="shell">
+      <p class="eyebrow">Local-first data masking</p>
+      <h1>Give AI your data.<br><span class="stroke">Keep your data.</span></h1>
+    </div>
+    <div class="shell hero-grid">
+      <div>
+        <p class="lede">ShiftMask builds a safe local copy of your Excel and CSV files — table relations intact, every date shifted by one offset, every name masked. The real records never leave your machine.</p>
+        <div class="cta-row">
+          <!-- TODO: podmień na prawdziwy link do pobrania -->
+          <a class="btn btn-solid" href="#download" data-goatcounter-click="cta-download-hero">Download for Windows</a>
+          <a class="btn btn-line" href="#how">See the method</a>
+        </div>
+        <p class="cta-note"><span class="pulse"></span> Windows &middot; works with Wi-Fi off</p>
+      </div>
+
+      <div class="rig hx-rig" id="hx-rig">
+        <div class="slab">
+          <div class="slab-top">
+            <span class="who"><span class="dot a"></span> invoices.xlsx &middot; on your disk</span>
+            <span>3 rows</span>
+          </div>
+          <div class="tscroll">
+            <table class="tbl">
+              <thead><tr><th>customer_id</th><th>name</th><th>invoice_date</th><th>amount</th></tr></thead>
+              <tbody><tr><td class="key"><span class="hx-kv">C-10482<span class="hx-ring hx-w1"></span></span></td><td>Nowak Logistics</td><td>2026-08-14</td><td>18,420.00</td></tr><tr><td class="key">C-10483</td><td>Baltic Foods</td><td>2026-08-15</td><td>4,990.50</td></tr><tr><td class="key"><span class="hx-kv">C-10482<span class="hx-ring hx-w1"></span></span></td><td>Nowak Logistics</td><td>2026-08-28</td><td>7,110.00</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="hx-gate" id="hx-gate" aria-hidden="true">
+          <div class="hx-stage">
+            <svg class="hx-layer" width="638" height="150" viewBox="0 0 638 150"><path d="M102 0 C 102 34, 319 15, 319 29" class="hx-base" style="stroke:#E6EAF3"/><path d="M102 0 C 102 34, 319 15, 319 29" class="hx-march" style="stroke:#E6EAF3"/><path d="M319 0 C 319 34, 319 15, 319 29" class="hx-base" style="stroke:#E6EAF3"/><path d="M319 0 C 319 34, 319 15, 319 29" class="hx-march" style="stroke:#E6EAF3"/><path d="M536 0 C 536 34, 319 15, 319 29" class="hx-base" style="stroke:#E6EAF3"/><path d="M536 0 C 536 34, 319 15, 319 29" class="hx-march" style="stroke:#E6EAF3"/><path d="M319 121 C 319 135, 102 116, 102 150" class="hx-base" style="stroke:#FF7B64"/><path d="M319 121 C 319 135, 102 116, 102 150" class="hx-march" style="stroke:#FF7B64"/><path d="M319 121 C 319 135, 319 116, 319 150" class="hx-base" style="stroke:#FF7B64"/><path d="M319 121 C 319 135, 319 116, 319 150" class="hx-march" style="stroke:#FF7B64"/><path d="M319 121 C 319 135, 536 116, 536 150" class="hx-base" style="stroke:#FF7B64"/><path d="M319 121 C 319 135, 536 116, 536 150" class="hx-march" style="stroke:#FF7B64"/></svg>
+            <span class="hx-lab hx-side hx-c2" style="left:0;top:14px">Names &rarr; stand-ins</span>
+            <span class="hx-lab hx-side hx-c1" style="right:0;top:14px">Keys &rarr; same ID everywhere</span>
+            <span class="hx-chip hx-side hx-c3" style="left:0;top:60px">Dates <b>&minus;289 days</b></span>
+            <span class="hx-chip hx-side hx-c4" style="right:0;top:60px">Amounts <b>&times; hidden factor</b></span>
+            <div class="hx-core"><span class="hx-glow"></span><span class="hx-disc"></span><span class="hx-comet"></span><span class="hx-ring-dots"><span class="hx-dot hx-r0"></span><span class="hx-dot hx-r1"></span><span class="hx-dot hx-r2"></span><span class="hx-dot hx-r3"></span><span class="hx-dot hx-r4"></span><span class="hx-dot hx-r5"></span><span class="hx-dot hx-r6"></span><span class="hx-dot hx-r7"></span><span class="hx-dot hx-r8"></span><span class="hx-dot hx-r9"></span><span class="hx-dot hx-r10"></span><span class="hx-dot hx-r11"></span><span class="hx-dot hx-r12"></span><span class="hx-dot hx-r13"></span><span class="hx-dot hx-r14"></span><span class="hx-dot hx-r15"></span><span class="hx-dot hx-r16"></span><span class="hx-dot hx-r17"></span><span class="hx-dot hx-r18"></span><span class="hx-dot hx-r19"></span><span class="hx-dot hx-r20"></span><span class="hx-dot hx-r21"></span><span class="hx-dot hx-r22"></span><span class="hx-dot hx-r23"></span><span class="hx-dot hx-r24"></span><span class="hx-dot hx-r25"></span><span class="hx-dot hx-r26"></span><span class="hx-dot hx-r27"></span></span><span class="hx-center">SHIFT</span></div>
+            <div class="hx-layer"><span class="hx-p hx-real hx-q000"></span><span class="hx-p hx-real hx-q001"></span><span class="hx-p hx-real hx-q010"></span><span class="hx-p hx-real hx-q011"></span><span class="hx-p hx-real hx-q020"></span><span class="hx-p hx-real hx-q021"></span><span class="hx-p hx-mask hx-q100"></span><span class="hx-p hx-mask hx-q101"></span><span class="hx-p hx-key hx-q110"></span><span class="hx-p hx-key hx-q111"></span><span class="hx-p hx-mask hx-q120"></span><span class="hx-p hx-mask hx-q121"></span></div>
+          </div>
+        </div>
+        <div class="hx-chips" aria-hidden="true"><span class="hx-c1">Keys &rarr; same ID</span><span class="hx-c2">Names &rarr; stand-ins</span><span class="hx-c3">Dates <b>&minus;289 days</b></span><span class="hx-c4">Amounts <b>&times; hidden factor</b></span></div>
+
+        <div class="slab">
+          <div class="slab-top">
+            <span class="who"><span class="dot b"></span> what the model receives</span>
+            <span class="tagm">shifted</span>
+          </div>
+          <div class="tscroll">
+            <table class="tbl">
+              <thead><tr><th>customer_id</th><th>name</th><th>invoice_date</th><th>amount</th></tr></thead>
+              <tbody><tr><td><span class="hx-c"><span class="hx-ph hx-e1"></span><span class="hx-f1 hx-id">ID_7f3a2c9e</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e2"></span><span class="hx-f2 hx-m">Lis sp. j.</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e3"></span><span class="hx-f3 hx-m">2025-10-29</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e4"></span><span class="hx-f4 hx-m">25,235.40</span></span></td></tr><tr><td><span class="hx-c"><span class="hx-ph hx-e1"></span><span class="hx-f1 hx-id">ID_b41d06a2</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e2"></span><span class="hx-f2 hx-m">Wr&oacute;bel S.A.</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e3"></span><span class="hx-f3 hx-m">2025-10-30</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e4"></span><span class="hx-f4 hx-m">6,836.99</span></span></td></tr><tr><td><span class="hx-c"><span class="hx-ph hx-e1"></span><span class="hx-f1 hx-id">ID_7f3a2c9e</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e2"></span><span class="hx-f2 hx-m">Lis sp. j.</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e3"></span><span class="hx-f3 hx-m">2025-11-12</span></span></td><td><span class="hx-c"><span class="hx-ph hx-e4"></span><span class="hx-f4 hx-m">9,740.70</span></span></td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+   </div>
+  </header>
+
+  <!-- ============ CORAL BAND ============ -->
+  <section class="band">
+    <div class="shell band-grid">
+      <p class="zero">0</p>
+      <div>
+        <p class="kicker">Bytes sent to any server</p>
+        <h2>Nothing to leak, because nothing leaves.</h2>
+        <p class="say">No account, no upload, no telemetry. ShiftMask reads your files, builds the masked copy in a local DuckDB database, and writes it back to your disk. Pull the network cable and it still works.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FLOW (animated) ============ -->
+  <section class="fl-sec" id="flow">
+    <div class="shell fl-head rise">
+      <div>
+        <p class="eyebrow">Where it sits</p>
+        <h2>Real data stays home. The work travels.</h2>
+      </div>
+      <p class="lede">ShiftMask sits between your files and everyone who helps you build on them. Only the masked copy goes out. Only the finished work comes back &mdash; and it runs on your real data.</p>
+    </div>
+    <div class="fl-wide">
+      <figure class="fl-fig" id="fl-fig" role="img" aria-label="Animated diagram: Excel, CSV and SQL data is masked by ShiftMask on your machine. Only the masked copy goes to AI assistants and BI developers. Their finished report or code crosses the access boundary into Power BI, Tableau, Qlik or an HTML app, where it runs on real data that flows there directly.">
+<div class="fl-sizer" id="fl-sizer">
+<div class="fl-stage" aria-hidden="true">
+<div class="fl-abs fl-zone fl-on1" style="left:52px;top:252px;width:178px;height:276px;border-radius:8px;background:rgba(230,234,243,.04);border:1px solid rgba(230,234,243,.28)"></div>
+<div class="fl-abs fl-zone fl-on2" style="left:400px;top:230px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,123,100,.20),rgba(255,123,100,0) 70%)"></div>
+<div class="fl-abs fl-zone fl-on3" style="left:822px;top:218px;width:256px;height:344px;border-radius:8px;background:rgba(255,123,100,.05);border:1px solid rgba(255,123,100,.38)"></div>
+<div class="fl-abs fl-zone fl-on4" style="left:1151px;top:224px;width:263px;height:332px;border-radius:8px;background:rgba(63,203,152,.05);border:1px solid rgba(63,203,152,.45)"></div>
+<div class="fl-abs" style="left:40px;top:186px;width:686px;height:436px;box-sizing:border-box;border:1px dashed rgba(63,203,152,.5);border-radius:6px"></div>
+<div class="fl-abs fl-mono" style="left:56px;top:177px;padding:0 8px;background:#07090F;display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;letter-spacing:.2em;color:#3FCB98"><span style="position:relative;width:6px;height:6px"><span class="fl-abs" style="inset:0;border-radius:50%;background:#3FCB98"></span><span class="fl-abs fl-ping" style="inset:0;border-radius:50%;background:#3FCB98"></span></span>YOUR MACHINE · OFFLINE</div>
+<span class="fl-abs fl-lab" style="left:64px;top:222px">Real data</span>
+<span class="fl-abs fl-lab" style="left:836px;top:200px">Works on masked data</span>
+<span class="fl-abs fl-lab" style="left:1165px;top:200px">Production</span>
+<svg class="fl-layer" style="overflow:visible" width="1440" height="810" viewBox="0 0 1440 810"><path d="M210 300 C 330 300, 340 390, 460 390" class="fl-rib fl-w"/><path d="M210 300 C 330 300, 340 390, 460 390" class="fl-line fl-w"/><path d="M210 300 C 330 300, 340 390, 460 390" class="fl-march fl-w"/><path d="M210 390 C 330 390, 340 390, 460 390" class="fl-rib fl-w"/><path d="M210 390 C 330 390, 340 390, 460 390" class="fl-line fl-w"/><path d="M210 390 C 330 390, 340 390, 460 390" class="fl-march fl-w"/><path d="M210 480 C 330 480, 340 390, 460 390" class="fl-rib fl-w"/><path d="M210 480 C 330 480, 340 390, 460 390" class="fl-line fl-w"/><path d="M210 480 C 330 480, 340 390, 460 390" class="fl-march fl-w"/><path d="M660 390 C 750 390, 740 280, 836 280" class="fl-rib fl-c"/><path d="M660 390 C 750 390, 740 280, 836 280" class="fl-line fl-c"/><path d="M660 390 C 750 390, 740 280, 836 280" class="fl-march fl-c"/><path d="M660 390 C 750 390, 740 390, 836 390" class="fl-rib fl-c"/><path d="M660 390 C 750 390, 740 390, 836 390" class="fl-line fl-c"/><path d="M660 390 C 750 390, 740 390, 836 390" class="fl-march fl-c"/><path d="M660 390 C 750 390, 740 500, 836 500" class="fl-rib fl-c"/><path d="M660 390 C 750 390, 740 500, 836 500" class="fl-line fl-c"/><path d="M660 390 C 750 390, 740 500, 836 500" class="fl-march fl-c"/><path d="M1064 280 C 1110 280, 1120 330, 1165 330" class="fl-rib fl-w"/><path d="M1064 280 C 1110 280, 1120 330, 1165 330" class="fl-line fl-w"/><path d="M1064 280 C 1110 280, 1120 330, 1165 330" class="fl-march fl-w"/><path d="M1064 390 C 1110 390, 1120 390, 1165 390" class="fl-rib fl-w"/><path d="M1064 390 C 1110 390, 1120 390, 1165 390" class="fl-line fl-w"/><path d="M1064 390 C 1110 390, 1120 390, 1165 390" class="fl-march fl-w"/><path d="M1064 500 C 1110 500, 1120 450, 1165 450" class="fl-rib fl-w"/><path d="M1064 500 C 1110 500, 1120 450, 1165 450" class="fl-line fl-w"/><path d="M1064 500 C 1110 500, 1120 450, 1165 450" class="fl-march fl-w"/><path d="M137 508 C 137 630, 200 660, 320 660 L 1150 660 C 1250 660, 1282 630, 1282 548" class="fl-line fl-w" style="stroke-dasharray:4 6;opacity:.3"/><line x1="1112" y1="222" x2="1112" y2="622" class="fl-barrier"/></svg>
+<div class="fl-card" style="left:64px;top:270px;width:146px;height:60px;padding:0 14px;display:flex;align-items:center;gap:12px"><svg width="18" height="22" viewBox="0 0 18 22" style="flex:none"><path d="M1.5 1.5 H11 L16.5 7 V20.5 H1.5 Z" fill="none" stroke="#8D96AD" stroke-width="1.3" stroke-linejoin="round"/><path d="M11 1.5 V7 H16.5" fill="none" stroke="#8D96AD" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 12 H13 M5 15.5 H11" stroke="#E6EAF3" stroke-width="1.3" stroke-linecap="round"/></svg><div style="display:flex;flex-direction:column;gap:2px"><span class="fl-disp" style="font-size:16px;font-weight:800;letter-spacing:.02em">XLSX</span><span style="font-size:11.5px;color:#8D96AD;white-space:nowrap">Excel workbooks</span></div></div>
+<span class="fl-abs" style="left:206px;top:296px;width:8px;height:8px;border-radius:50%;background:#E6EAF3;box-shadow:0 0 10px rgba(230,234,243,.6)"></span>
+<div class="fl-card" style="left:64px;top:360px;width:146px;height:60px;padding:0 14px;display:flex;align-items:center;gap:12px"><svg width="18" height="22" viewBox="0 0 18 22" style="flex:none"><path d="M1.5 1.5 H11 L16.5 7 V20.5 H1.5 Z" fill="none" stroke="#8D96AD" stroke-width="1.3" stroke-linejoin="round"/><path d="M11 1.5 V7 H16.5" fill="none" stroke="#8D96AD" stroke-width="1.3" stroke-linejoin="round"/><path d="M5 12 H13 M5 15.5 H11" stroke="#E6EAF3" stroke-width="1.3" stroke-linecap="round"/></svg><div style="display:flex;flex-direction:column;gap:2px"><span class="fl-disp" style="font-size:16px;font-weight:800;letter-spacing:.02em">CSV</span><span style="font-size:11.5px;color:#8D96AD;white-space:nowrap">Delimited files</span></div></div>
+<span class="fl-abs" style="left:206px;top:386px;width:8px;height:8px;border-radius:50%;background:#E6EAF3;box-shadow:0 0 10px rgba(230,234,243,.6)"></span>
+<div class="fl-card" style="left:64px;top:450px;width:146px;height:60px;padding:0 14px;display:flex;align-items:center;gap:12px"><svg width="18" height="22" viewBox="0 0 18 22" style="flex:none"><ellipse cx="9" cy="4.5" rx="7" ry="3" fill="none" stroke="#8D96AD" stroke-width="1.3"/><path d="M2 4.5 V17.5 C2 19.2 5.1 20.5 9 20.5 C12.9 20.5 16 19.2 16 17.5 V4.5 M2 11 C2 12.7 5.1 14 9 14 C12.9 14 16 12.7 16 11" fill="none" stroke="#8D96AD" stroke-width="1.3"/></svg><div style="display:flex;flex-direction:column;gap:2px"><span class="fl-disp" style="font-size:16px;font-weight:800;letter-spacing:.02em">SQL</span><span style="font-size:11.5px;color:#8D96AD;white-space:nowrap">Databases · Pro</span></div></div>
+<span class="fl-abs" style="left:206px;top:476px;width:8px;height:8px;border-radius:50%;background:#E6EAF3;box-shadow:0 0 10px rgba(230,234,243,.6)"></span>
+
+<div class="fl-abs" style="left:460px;top:290px;width:200px;height:200px">
+<div class="fl-abs" style="inset:0;border-radius:50%;border:1px solid #222A3B;background:rgba(14,19,32,.6)"></div>
+<div class="fl-abs fl-spin" style="inset:-10px;border-radius:50%;border:1px dashed rgba(141,150,173,.30)"></div>
+<div class="fl-abs fl-comet" style="inset:0;border-radius:50%"></div>
+<div class="fl-abs fl-spinr" style="inset:0"><span class="fl-dot fl-r0"></span><span class="fl-dot fl-r1"></span><span class="fl-dot fl-r2"></span><span class="fl-dot fl-r3"></span><span class="fl-dot fl-r4"></span><span class="fl-dot fl-r5"></span><span class="fl-dot fl-r6"></span><span class="fl-dot fl-r7"></span><span class="fl-dot fl-r8"></span><span class="fl-dot fl-r9"></span><span class="fl-dot fl-r10"></span><span class="fl-dot fl-r11"></span><span class="fl-dot fl-r12"></span><span class="fl-dot fl-r13"></span><span class="fl-dot fl-r14"></span><span class="fl-dot fl-r15"></span><span class="fl-dot fl-r16"></span><span class="fl-dot fl-r17"></span><span class="fl-dot fl-r18"></span><span class="fl-dot fl-r19"></span><span class="fl-dot fl-r20"></span><span class="fl-dot fl-r21"></span><span class="fl-dot fl-r22"></span><span class="fl-dot fl-r23"></span><span class="fl-dot fl-r24"></span><span class="fl-dot fl-r25"></span><span class="fl-dot fl-r26"></span><span class="fl-dot fl-r27"></span><span class="fl-dot fl-r28"></span><span class="fl-dot fl-r29"></span><span class="fl-dot fl-r30"></span><span class="fl-dot fl-r31"></span><span class="fl-dot fl-r32"></span><span class="fl-dot fl-r33"></span><span class="fl-dot fl-r34"></span><span class="fl-dot fl-r35"></span></div>
+<div class="fl-abs fl-core" style="left:44px;top:44px;width:112px;height:112px;box-sizing:border-box;border-radius:50%;background:#0E1320;border:1px solid rgba(255,123,100,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;white-space:nowrap"><span class="fl-disp" style="font-size:18px;font-weight:800;letter-spacing:-.01em">ShiftMask</span><span class="fl-mono" style="font-size:8px;font-weight:600;letter-spacing:.18em;color:#FF7B64">MASK · SHIFT · KEEP</span></div>
+</div>
+<div class="fl-card" style="left:420px;top:510px;width:280px;padding:10px 12px;display:flex;flex-direction:column;gap:7px;overflow:hidden">
+<div class="fl-mono" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;font-size:10px;font-weight:600;letter-spacing:.18em;color:#828CA6"><span>BEFORE</span><span>AFTER</span></div>
+<div class="fl-abs fl-scan" style="left:0;top:31px;width:100%;height:1px;background:#FF7B64;box-shadow:0 0 10px #FF7B64"></div>
+<div class="fl-mono" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:14px;row-gap:7px;font-size:12.5px;font-weight:500">
+<span>Nowak Logistics</span><span class="fl-after" style="color:#FF7B64">Lis sp. j.</span>
+<span>2026-08-14</span><span class="fl-after" style="color:#FF7B64;animation-delay:calc(.5s*var(--fl-k,1))">2025-10-29</span>
+<span>C-10482</span><span class="fl-after" style="color:#8FA3FF;animation-delay:calc(1s*var(--fl-k,1))">ID_7f3a2c9e</span>
+</div></div>
+
+<div class="fl-card" style="left:836px;top:232px;width:228px;height:96px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start"><svg width="22" height="22" viewBox="0 0 22 22" style="flex:none"><path d="M11 2.5 L12.9 8.6 L19 10.5 L12.9 12.4 L11 18.5 L9.1 12.4 L3 10.5 L9.1 8.6 Z" fill="none" stroke="#FF7B64" stroke-width="1.4" stroke-linejoin="round"/><path d="M18 2.5 V6 M16.25 4.25 H19.75" stroke="#FF7B64" stroke-width="1.3" stroke-linecap="round"/></svg><div style="display:flex;flex-direction:column;gap:4px"><span class="fl-disp" style="font-size:15px;font-weight:800">AI assistants</span><span style="font-size:12px;line-height:1.4;color:#8D96AD">ChatGPT, Claude, Copilot or a coding agent writes the report, query or app.</span></div></div>
+<span class="fl-abs" style="left:832px;top:276px;width:8px;height:8px;border-radius:50%;background:#FF7B64;box-shadow:0 0 10px rgba(255,123,100,.7)"></span>
+<span class="fl-abs" style="left:1060px;top:276px;width:8px;height:8px;box-sizing:border-box;border-radius:2px;border:1.5px solid #E6EAF3;background:#0E1320"></span>
+<div class="fl-card" style="left:836px;top:342px;width:228px;height:96px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start"><svg width="22" height="22" viewBox="0 0 22 22" style="flex:none"><rect x="2.5" y="6.5" width="17" height="12" rx="2" fill="none" stroke="#FF7B64" stroke-width="1.4"/><path d="M8 6.5 V4.5 A1.5 1.5 0 0 1 9.5 3 H12.5 A1.5 1.5 0 0 1 14 4.5 V6.5 M2.5 11.5 H19.5" fill="none" stroke="#FF7B64" stroke-width="1.4"/></svg><div style="display:flex;flex-direction:column;gap:4px"><span class="fl-disp" style="font-size:15px;font-weight:800">External BI developer</span><span style="font-size:12px;line-height:1.4;color:#8D96AD">Gets realistic sample data to quote and build a prototype.</span></div></div>
+<span class="fl-abs" style="left:832px;top:386px;width:8px;height:8px;border-radius:50%;background:#FF7B64;box-shadow:0 0 10px rgba(255,123,100,.7)"></span>
+<span class="fl-abs" style="left:1060px;top:386px;width:8px;height:8px;box-sizing:border-box;border-radius:2px;border:1.5px solid #E6EAF3;background:#0E1320"></span>
+<div class="fl-card" style="left:836px;top:452px;width:228px;height:96px;padding:12px 14px;display:flex;gap:12px;align-items:flex-start"><svg width="22" height="22" viewBox="0 0 22 22" style="flex:none"><circle cx="8" cy="8" r="3.2" fill="none" stroke="#FF7B64" stroke-width="1.4"/><circle cx="15.5" cy="9" r="2.6" fill="none" stroke="#FF7B64" stroke-width="1.4"/><path d="M2.5 18.5 C2.5 14.8 5 13 8 13 C11 13 13.5 14.8 13.5 18.5 M14 13.3 C16.8 13.1 19.5 14.6 19.5 18" fill="none" stroke="#FF7B64" stroke-width="1.4" stroke-linecap="round"/></svg><div style="display:flex;flex-direction:column;gap:4px"><span class="fl-disp" style="font-size:15px;font-weight:800">Internal BI team</span><span style="font-size:12px;line-height:1.4;color:#8D96AD">Estimates effort and builds the model without seeing real records.</span></div></div>
+<span class="fl-abs" style="left:832px;top:496px;width:8px;height:8px;border-radius:50%;background:#FF7B64;box-shadow:0 0 10px rgba(255,123,100,.7)"></span>
+<span class="fl-abs" style="left:1060px;top:496px;width:8px;height:8px;box-sizing:border-box;border-radius:2px;border:1.5px solid #E6EAF3;background:#0E1320"></span>
+
+<div class="fl-abs fl-mono" style="left:962px;top:160px;width:300px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center"><span style="font-size:11.5px;font-weight:600;letter-spacing:.2em;color:#E6EAF3">ACCESS BOUNDARY</span><span style="font-size:11px;color:#8D96AD">finished work crosses · real data never</span></div>
+<div class="fl-card" style="left:1165px;top:238px;width:235px;height:304px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;flex-direction:column;gap:4px"><span class="fl-disp" style="font-size:16px;font-weight:800">Your BI &amp; apps</span><span style="font-size:12px;line-height:1.4;color:#8D96AD">The finished report, model or app runs on your real data.</span></div>
+<div class="fl-disp" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;font-size:13px;font-weight:700">
+<span style="height:32px;display:flex;align-items:center;justify-content:center;background:#1C2333;border-radius:4px">Power BI</span><span style="height:32px;display:flex;align-items:center;justify-content:center;background:#1C2333;border-radius:4px">Tableau</span><span style="height:32px;display:flex;align-items:center;justify-content:center;background:#1C2333;border-radius:4px">Qlik</span><span style="height:32px;display:flex;align-items:center;justify-content:center;background:#1C2333;border-radius:4px">HTML app</span></div>
+<div style="flex-grow:1;display:flex;align-items:flex-end;gap:6px;padding:0 2px;border-bottom:1px solid #222A3B"><span class="fl-g0" style="flex-grow:1;border-radius:2px 2px 0 0;background:rgba(63,203,152,.55)"></span><span class="fl-g1" style="flex-grow:1;border-radius:2px 2px 0 0;background:rgba(63,203,152,.55)"></span><span class="fl-g2" style="flex-grow:1;border-radius:2px 2px 0 0;background:rgba(63,203,152,.55)"></span><span class="fl-g3" style="flex-grow:1;border-radius:2px 2px 0 0;background:rgba(63,203,152,.55)"></span><span class="fl-g4" style="flex-grow:1;border-radius:2px 2px 0 0;background:rgba(63,203,152,.55)"></span><span class="fl-g5" style="flex-grow:1;border-radius:2px 2px 0 0;background:rgba(63,203,152,.55)"></span><span class="fl-g6" style="flex-grow:1;border-radius:2px 2px 0 0;background:rgba(63,203,152,.55)"></span></div>
+<div class="fl-mono" style="display:flex;align-items:center;gap:8px;font-size:10px;font-weight:600;letter-spacing:.04em;white-space:nowrap;color:#3FCB98"><span class="fl-live" style="width:7px;height:7px;border-radius:50%;background:#3FCB98;box-shadow:0 0 8px #3FCB98"></span>RUNS ON REAL DATA · NO CHANGES</div>
+</div>
+<div class="fl-abs fl-mono" style="left:370px;top:670px;width:700px;text-align:center;font-size:11px;font-weight:600;letter-spacing:.16em;color:#8D96AD">REAL DATA → PRODUCTION, DIRECTLY · NEVER THROUGH AI OR THIRD PARTIES</div>
+<div class="fl-layer"><span class="fl-p fl-real fl-s0q0"></span><span class="fl-p fl-real fl-s0q1"></span><span class="fl-p fl-real fl-s0q2"></span><span class="fl-p fl-real fl-s1q0"></span><span class="fl-p fl-real fl-s1q1"></span><span class="fl-p fl-real fl-s1q2"></span><span class="fl-p fl-real fl-s2q0"></span><span class="fl-p fl-real fl-s2q1"></span><span class="fl-p fl-real fl-s2q2"></span><span class="fl-p fl-mask fl-o0q0"></span><span class="fl-p fl-mask fl-o0q1"></span><span class="fl-p fl-key fl-o0q2"></span><span class="fl-p fl-mask fl-o0q3"></span><span class="fl-p fl-mask fl-o1q0"></span><span class="fl-p fl-mask fl-o1q1"></span><span class="fl-p fl-key fl-o1q2"></span><span class="fl-p fl-mask fl-o1q3"></span><span class="fl-p fl-mask fl-o2q0"></span><span class="fl-p fl-mask fl-o2q1"></span><span class="fl-p fl-key fl-o2q2"></span><span class="fl-p fl-mask fl-o2q3"></span><span class="fl-p fl-pkt fl-d0q0"></span><span class="fl-p fl-pkt fl-d0q1"></span><span class="fl-p fl-pkt fl-d1q0"></span><span class="fl-p fl-pkt fl-d1q1"></span><span class="fl-p fl-pkt fl-d2q0"></span><span class="fl-p fl-pkt fl-d2q1"></span><span class="fl-p fl-real fl-far fl-a0q0"></span><span class="fl-p fl-real fl-far fl-a0q1"></span><span class="fl-p fl-real fl-far fl-a0q2"></span><span class="fl-p fl-real fl-far fl-a0q3"></span><span class="fl-p fl-real fl-far fl-a0q4"></span><span class="fl-p fl-real fl-far fl-a0q5"></span><span class="fl-p fl-real fl-far fl-a0q6"></span></div>
+<div class="fl-abs fl-mono" style="left:668px;top:376px;height:28px;box-sizing:border-box;padding:0 9px;display:flex;align-items:center;gap:6px;background:#07090F;border:1px solid rgba(255,123,100,.6);border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.16em;color:#FF7B64"><svg width="12" height="13" viewBox="0 0 12 13" style="flex:none"><rect x="1.5" y="5.5" width="9" height="6.5" rx="1" fill="none" stroke="#FF7B64" stroke-width="1.2"/><path d="M3.5 5.5 V3.8 A2.5 2.5 0 0 1 8.5 3.8 V5.5" fill="none" stroke="#FF7B64" stroke-width="1.2"/></svg>MASKED ONLY</div>
+</div>
+</div>
+      </figure>
+      <p class="fl-hint shell" aria-hidden="true">Swipe to follow the flow &rarr;</p>
+    </div>
+    <div class="shell">
+      <div class="fl-legend" aria-hidden="true"><span><i style="background:#E6EAF3"></i>Real data</span><span><i style="background:#FF7B64"></i>Masked data</span><span><i style="background:#8FA3FF"></i>Keys &amp; relations kept</span><span><i style="border-radius:0;height:0;width:16px;border-top:1px dashed #3FCB98"></i>Stays on your machine</span></div>
+      <ol class="fl-steps">
+        <li><div class="fl-track"><b class="fl-bar1"></b></div><span class="fl-n fl-nc1">01</span><h3 class="fl-tc1">Load real data locally</h3><p>Excel or CSV files, read on your machine. It works with Wi-Fi off.</p></li>
+        <li><div class="fl-track"><b class="fl-bar2"></b></div><span class="fl-n fl-nc2">02</span><h3 class="fl-tc2">Mask it, keep the structure</h3><p>Names and IDs get consistent stand-ins, every date moves by one offset, keys still join.</p></li>
+        <li><div class="fl-track"><b class="fl-bar3"></b></div><span class="fl-n fl-nc3">03</span><h3 class="fl-tc3">Share only the masked copy</h3><p>AI assistants and BI developers build, prototype and quote on realistic data.</p></li>
+        <li><div class="fl-track"><b class="fl-bar4"></b></div><span class="fl-n fl-nc4">04</span><h3 class="fl-tc4">Deploy on real data</h3><p>Point the finished report or code at your real data. It runs unchanged.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ WHAT SURVIVES ============ -->
+  <section class="survives" id="survives">
+    <div class="shell split">
+      <div class="hold rise">
+        <p class="eyebrow">What survives</p>
+        <h2>Masked data is worthless if the analysis breaks.</h2>
+        <p class="lede">Most tools scramble values row by row. That destroys exactly the properties a model needs in order to write code that runs against your real database later.</p>
+      </div>
+      <div class="rows rise">
+        <div class="row">
+          <div>
+            <p class="t">Referential integrity</p>
+            <p class="d2">Keys are masked identically in every table, so joins, lookups and relationships still resolve.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Time intelligence</p>
+            <p class="d2">One shared offset moves the whole calendar. Intervals and period boundaries hold, so YTD, YoY and rolling averages return the same shape.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Cardinality and shape</p>
+            <p class="d2">Row counts, distinct counts and value distribution stay realistic, so the code is sized for your data, not a toy sample.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Proportions between amounts</p>
+            <p class="d2">Every amount in a group is multiplied by the same hidden factor, so totals, shares, ratios and trends keep their shape.</p>
+          </div>
+          <span class="verdict keep">Kept</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">Clients, products and people</p>
+            <p class="d2">Company names, product labels, people, emails, phone numbers, account numbers and identifiers become consistent stand-ins &mdash; the same original always gets the same stand-in, in every file and every run. The map back to the originals stays encrypted in a vault on your machine.</p>
+          </div>
+          <span class="verdict gone">Replaced</span>
+        </div>
+        <div class="row">
+          <div>
+            <p class="t">The real figures</p>
+            <p class="d2">Nobody reading the copy sees what anyone actually paid. Rescaling hides the figures from a reader, not from someone who already knows one real amount in that column &mdash; <a href="/for-it/">we say so plainly</a>.</p>
+          </div>
+          <span class="verdict gone">Rescaled</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METHOD ============ -->
+  <section class="steps" id="how">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">The method</p>
+        <h2>Three moves. None in the cloud.</h2>
+      </div>
+    </div>
+    <div class="mk-wide mk-wrap" id="mk-wrap">
+      <figure class="mk-fig" id="mk-fig" role="img" aria-label="Animated diagram: a customers table and an invoices table go into ShiftMask. It finds the keys, replaces names and emails with consistent stand-ins, shifts every date by the same offset and rescales amounts by one hidden factor. The masked copy keeps joins, the gaps between dates and the ratios between amounts; the map back to the originals stays in an encrypted vault on the machine.">
+        <div class="mk-sizer" id="mk-sizer">
+          <div class="mk-stage" aria-hidden="true">
+
+
+
+
+<span class="mk-eyebrow" style="position: absolute; left: 40px; top: 164px">In · your files</span>
+<span class="mk-eyebrow" style="position: absolute; left: 1000px; top: 164px; color: #FF7B64">Out · masked copy</span>
+<div class="mk-mono" style="position: absolute; left: 500px; top: 160px; width: 440px; display: flex; align-items: center; justify-content: space-between; font-size: 10.5px; font-weight: 600; letter-spacing: .2em; color: #E6EAF3">
+<span style="display: flex; align-items: center; gap: 8px"><span class="mk-live" style="width: 6px; height: 6px; border-radius: 50%; background: #3FCB98"></span>SHIFTMASK</span>
+<span style="color: #3FCB98">OFFLINE · THIS MACHINE</span>
+</div>
+<div style="position: absolute; left: 500px; top: 190px; width: 440px; height: 2px; background: #23293A; overflow: hidden"><div class="mk-prog" style="width: 100%; height: 2px; background: #FF7B64"></div></div>
+
+<svg class="mk-layer" width="1440" height="810"><path d="M440 261 C 470 261, 470 300, 500 300" class="mk-rib mk-w"></path><path d="M440 261 C 470 261, 470 300, 500 300" class="mk-line mk-w"></path><path d="M440 261 C 470 261, 470 300, 500 300" class="mk-march mk-w"></path><path d="M440 461 C 470 461, 470 420, 500 420" class="mk-rib mk-w"></path><path d="M440 461 C 470 461, 470 420, 500 420" class="mk-line mk-w"></path><path d="M440 461 C 470 461, 470 420, 500 420" class="mk-march mk-w"></path><path d="M940 300 C 970 300, 970 261, 1000 261" class="mk-rib mk-c"></path><path d="M940 300 C 970 300, 970 261, 1000 261" class="mk-line mk-c"></path><path d="M940 300 C 970 300, 970 261, 1000 261" class="mk-march mk-c"></path><path d="M940 420 C 970 420, 970 461, 1000 461" class="mk-rib mk-c"></path><path d="M940 420 C 970 420, 970 461, 1000 461" class="mk-line mk-c"></path><path d="M940 420 C 970 420, 970 461, 1000 461" class="mk-march mk-c"></path></svg>
+<div class="mk-card" style="left: 40px; top: 190px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">customers.xlsx</span><span style="color: #8E97AE">REAL</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span>customer_id</span><span>name</span><span>email</span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3"><span class="mk-ring mk-w1"></span>C-10482</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">Nowak Logistics</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">biuro@nowak-log.pl</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">C-10483</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">Baltic Foods</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">orders@baltic.pl</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">C-10484</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">Kowalski &amp; Syn</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">k.kowalski@ks.pl</span></span></div></div><div class="mk-card" style="left: 40px; top: 390px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">invoices.csv</span><span style="color: #8E97AE">REAL</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span>invoice_date</span><span>customer_id</span><span style="text-align: right">amount</span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">2026-08-14</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3"><span class="mk-ring mk-w1"></span>C-10482</span></span><span class="mk-cell mk-r"><span class="mk-val" style="color: #E6EAF3">18,420.00</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">2026-08-15</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">C-10483</span></span><span class="mk-cell mk-r"><span class="mk-val" style="color: #E6EAF3">4,990.50</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3">2026-08-28</span></span><span class="mk-cell"><span class="mk-val" style="color: #E6EAF3"><span class="mk-ring mk-w1"></span>C-10482</span></span><span class="mk-cell mk-r"><span class="mk-val" style="color: #E6EAF3">7,110.00</span></span></div></div><div class="mk-card" style="left: 1000px; top: 190px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">customers · masked copy</span><span style="color: #FF7B64">SHIFTED</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span>customer_id</span><span>name</span><span>email</span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 60%"></span><span class="mk-val mk-f1" style="color: #8FA3FF"><span class="mk-ring mk-w1"></span>ID_7f3a2c9e</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 72%"></span><span class="mk-val mk-f2" style="color: #FF7B64">Lis sp. j.</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 54%"></span><span class="mk-val mk-f2" style="color: #FF7B64">kontakt@lis.example</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 60%"></span><span class="mk-val mk-f1" style="color: #8FA3FF">ID_b41d06a2</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 72%"></span><span class="mk-val mk-f2" style="color: #FF7B64">Wróbel S.A.</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 54%"></span><span class="mk-val mk-f2" style="color: #FF7B64">biuro@wrobel.example</span></span></div><div class="mk-trow" style="grid-template-columns: 110px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 60%"></span><span class="mk-val mk-f1" style="color: #8FA3FF">ID_e90c14d7</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 72%"></span><span class="mk-val mk-f2" style="color: #FF7B64">Zając i Wsp.</span></span><span class="mk-cell"><span class="mk-ph mk-e2" style="width: 54%"></span><span class="mk-val mk-f2" style="color: #FF7B64">info@zajac.example</span></span></div></div><div class="mk-card" style="left: 1000px; top: 390px; width: 400px; height: 142px"><div class="mk-fbar"><span style="color: #E6EAF3">invoices · masked copy</span><span style="color: #FF7B64">SHIFTED</span></div><div class="mk-trow mk-thead" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span>invoice_date</span><span>customer_id</span><span style="text-align: right">amount</span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e3" style="width: 62%"></span><span class="mk-val mk-f3" style="color: #FF7B64">2025-10-29</span></span><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 66%"></span><span class="mk-val mk-f1" style="color: #8FA3FF"><span class="mk-ring mk-w1"></span>ID_7f3a2c9e</span></span><span class="mk-cell mk-r"><span class="mk-ph mk-e4" style="width: 48%"></span><span class="mk-val mk-f4" style="color: #FF7B64">25,235.40</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e3" style="width: 62%"></span><span class="mk-val mk-f3" style="color: #FF7B64">2025-10-30</span></span><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 66%"></span><span class="mk-val mk-f1" style="color: #8FA3FF">ID_b41d06a2</span></span><span class="mk-cell mk-r"><span class="mk-ph mk-e4" style="width: 48%"></span><span class="mk-val mk-f4" style="color: #FF7B64">6,836.99</span></span></div><div class="mk-trow" style="grid-template-columns: 120px 120px minmax(0, 1fr)"><span class="mk-cell"><span class="mk-ph mk-e3" style="width: 62%"></span><span class="mk-val mk-f3" style="color: #FF7B64">2025-11-12</span></span><span class="mk-cell"><span class="mk-ph mk-e1" style="width: 66%"></span><span class="mk-val mk-f1" style="color: #8FA3FF"><span class="mk-ring mk-w1"></span>ID_7f3a2c9e</span></span><span class="mk-cell mk-r"><span class="mk-ph mk-e4" style="width: 48%"></span><span class="mk-val mk-f4" style="color: #FF7B64">9,740.70</span></span></div></div>
+<svg class="mk-layer" width="1440" height="810"><path d="M109 332 C 109 372, 234 360, 234 390" class="mk-f1" style="fill: none; stroke: #8FA3FF; stroke-width: 1.4; stroke-dasharray: 3 4"></path><path d="M1069 332 C 1069 372, 1194 360, 1194 390" class="mk-f1" style="fill: none; stroke: #8FA3FF; stroke-width: 1.4; stroke-dasharray: 3 4"></path></svg>
+<div class="mk-step" style="top: 224px">
+<span class="mk-halo mk-w1 mk-kb"></span>
+<span class="mk-num mk-n1" style="position: relative">01</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Find the keys</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">customer_id links both tables, so it gets one stand-in everywhere.</span>
+</div>
+</div>
+<div class="mk-step" style="top: 302px">
+<span class="mk-halo mk-w2"></span>
+<span class="mk-num mk-n2" style="position: relative">02</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Replace identities</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Names and emails become consistent stand-ins. Same input, same output.</span>
+</div>
+</div>
+<div class="mk-step" style="top: 380px">
+<span class="mk-halo mk-w3"></span>
+<span class="mk-num mk-n3" style="position: relative">03</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Shift every date</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">One offset for the whole project. Gaps between dates stay exact.</span>
+</div>
+</div>
+<div class="mk-step" style="top: 458px">
+<span class="mk-halo mk-w4"></span>
+<span class="mk-num mk-n4" style="position: relative">04</span>
+<div style="position: relative; display: flex; flex-direction: column; gap: 3px">
+<span class="mk-disp" style="font-size: 15px; font-weight: 800; color: #E6EAF3">Rescale amounts</span>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">One hidden factor per group. Totals, shares and trends keep their shape.</span>
+</div>
+</div>
+
+<div class="mk-layer"><span class="mk-p mk-real mk-i0q0"></span><span class="mk-p mk-real mk-i0q1"></span><span class="mk-p mk-real mk-i0q2"></span><span class="mk-p mk-real mk-i1q0"></span><span class="mk-p mk-real mk-i1q1"></span><span class="mk-p mk-real mk-i1q2"></span><span class="mk-p mk-mask mk-o0q0"></span><span class="mk-p mk-mask mk-o0q1"></span><span class="mk-p mk-mask mk-o0q2"></span><span class="mk-p mk-mask mk-o1q0"></span><span class="mk-p mk-mask mk-o1q1"></span><span class="mk-p mk-mask mk-o1q2"></span></div>
+
+<div style="position: absolute; left: 200px; top: 660px; width: 1180px; height: 1px; background: #23293A"></div><div style="position: absolute; left: 200.0px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 205.0px; top: 666px; font-size: 10px; color: #858DA3">Oct 2025</span><div style="position: absolute; left: 300.2px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 305.2px; top: 666px; font-size: 10px; color: #858DA3">Nov</span><div style="position: absolute; left: 397.2px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 402.2px; top: 666px; font-size: 10px; color: #858DA3">Dec</span><div style="position: absolute; left: 497.4px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 502.4px; top: 666px; font-size: 10px; color: #858DA3">Jan 2026</span><div style="position: absolute; left: 597.6px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 602.6px; top: 666px; font-size: 10px; color: #858DA3">Feb</span><div style="position: absolute; left: 688.2px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 693.2px; top: 666px; font-size: 10px; color: #858DA3">Mar</span><div style="position: absolute; left: 788.4px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 793.4px; top: 666px; font-size: 10px; color: #858DA3">Apr</span><div style="position: absolute; left: 885.4px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 890.4px; top: 666px; font-size: 10px; color: #858DA3">May</span><div style="position: absolute; left: 985.6px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 990.6px; top: 666px; font-size: 10px; color: #858DA3">Jun</span><div style="position: absolute; left: 1082.6px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 1087.6px; top: 666px; font-size: 10px; color: #858DA3">Jul</span><div style="position: absolute; left: 1182.8px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 1187.8px; top: 666px; font-size: 10px; color: #858DA3">Aug</span><div style="position: absolute; left: 1283.0px; top: 655px; width: 1px; height: 10px; background: #23293A"></div><span class="mk-mono" style="position: absolute; left: 1288.0px; top: 666px; font-size: 10px; color: #858DA3">Sep</span><span style="position: absolute; left: 1219.8px; top: 655px; width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; border: 1px dashed rgba(230,234,243,.35)"></span><span style="position: absolute; left: 1223.1px; top: 655px; width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; border: 1px dashed rgba(230,234,243,.35)"></span><span style="position: absolute; left: 1265.1px; top: 655px; width: 10px; height: 10px; box-sizing: border-box; border-radius: 50%; border: 1px dashed rgba(230,234,243,.35)"></span><div class="mk-tl" style="position: absolute; left: 1224.8px; top: 660px; width: 45.3px; height: 0"><span class="mk-tdot" style="left: 0.0px"></span><span class="mk-tdot" style="left: 3.2px"></span><span class="mk-tdot" style="left: 45.3px"></span><div style="position: absolute; left: 0; top: -26px; width: 45.3px; height: 8px; box-sizing: border-box; border: 1px solid #8E97AE; border-bottom: none"></div><span class="mk-mono" style="position: absolute; left: -17.4px; top: -44px; width: 80px; text-align: center; font-size: 10px; font-weight: 600; color: #E6EAF3">14 days</span></div><div class="mk-f3" style="position: absolute; left: 302.5px; top: 606px; width: 910.3px; height: 0; border-top: 1px dashed rgba(255,123,100,.7)"></div><svg class="mk-f3" width="10" height="10" style="position: absolute; left: 300.5px; top: 601px"><path d="M8 1 L2 5 L8 9" fill="none" stroke="#FF7B64" stroke-width="1.4"></path></svg><span class="mk-mono mk-f3" style="position: absolute; left: 647.7px; top: 596px; width: 220px; text-align: center; font-size: 10.5px; font-weight: 600; letter-spacing: .12em; color: #FF7B64"><span style="background: #07090F; padding: 0 10px">−289 DAYS · EVERY DATE</span></span><span class="mk-eyebrow" style="position: absolute; left: 40px; top: 598px">Dates on a timeline</span><span class="mk-mono" style="position: absolute; left: 40px; top: 652px; font-size: 10px; color: #858DA3">invoice_date</span>
+
+<div style="position: absolute; left: 40px; top: 704px; width: 1360px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 24px">
+<div class="mk-v1" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Joins</span>
+<span class="mk-chip" style="background: #3FCB98">KEPT</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">customer_id resolves across both tables.</span>
+</div>
+<div class="mk-v2" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Identities</span>
+<span class="mk-chip" style="background: #FF7B64">REPLACED</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Names and emails replaced, the same way every time.</span>
+</div>
+<div class="mk-v3" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Date gaps</span>
+<span class="mk-chip" style="background: #3FCB98">KEPT</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">14 days apart before. 14 days apart after.</span>
+</div>
+<div class="mk-v4" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Ratios</span>
+<span class="mk-chip" style="background: #3FCB98">KEPT</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Every amount × the same hidden factor.</span>
+</div>
+<div class="mk-v5" style="display: flex; flex-direction: column; gap: 6px; padding-top: 12px; border-top: 1px solid #23293A">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 8px">
+<span class="mk-disp" style="font-size: 14px; font-weight: 800; color: #E6EAF3">Map to originals</span>
+<span class="mk-chip" style="background: #3FCB98">LOCAL</span>
+</div>
+<span style="font-size: 11.5px; line-height: 1.4; color: #8E97AE">Encrypted vault on this machine. Never shared.</span>
+</div>
+
+</div>
+
+
+          </div>
+        </div>
+      </figure>
+      <p class="mk-hint shell" aria-hidden="true">Swipe to follow the data &rarr;</p>
+    </div>
+    <div class="shell">
+      <div class="ladder">
+        <div class="rung rise">
+          <span class="n">01 / READ</span>
+          <div class="body">
+            <h3>Point it at your files</h3>
+            <p>Excel workbooks or CSV files. ShiftMask reads their structure and detects primary and foreign keys to map how your tables actually connect. You confirm or correct the map. SQL databases come with Pro.</p>
+            <div class="rung-shot"><div class="rung-shot-bar"><span></span><span></span><span></span></div><img src="/screens/step-read.png" alt="ShiftMask Read step: drop zone for Excel or CSV files, with files already added and read on this machine" width="1280" height="655" loading="lazy"></div>
+          </div>
+        </div>
+        <div class="rung rise">
+          <span class="n">02 / SHIFT</span>
+          <div class="body">
+            <h3>Move the calendar, mask the rest</h3>
+            <p>Every date moves by one project-wide offset. Names, emails and identifiers become generated stand-ins — the same input always yields the same output, so one customer stays one customer across every file.</p>
+            <div class="rung-shot"><div class="rung-shot-bar"><span></span><span></span><span></span></div><img src="/screens/step-shift.png" alt="ShiftMask Shift step: a table of columns showing which are masked, shifted or left unchanged" width="1280" height="655" loading="lazy"></div>
+          </div>
+        </div>
+        <div class="rung rise">
+          <span class="n">03 / BUILD</span>
+          <div class="body">
+            <h3>Hand the copy to a model</h3>
+            <p>Send the safe package to ChatGPT, Claude, Gemini or a coding agent. You get back a dashboard, report or app. Point that code at your real data offline and it runs unchanged.</p>
+            <div class="rung-shot"><div class="rung-shot-bar"><span></span><span></span><span></span></div><img src="/screens/step-build.png" alt="ShiftMask Build step: original data and the masked copy shown side by side before anything is sent to a model" width="1280" height="655" loading="lazy"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AUDIENCE ============ -->
+  <section class="who-sec">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Built for</p>
+        <h2>Two people, one bad afternoon.</h2>
+      </div>
+      <div class="two rise">
+        <div>
+          <p class="who-lab">The analyst</p>
+          <p>You already use AI to write DAX, SQL and Python. You also know that pasting a client extract into a chat window is the kind of thing that ends a contract. ShiftMask gives you something you can paste.</p>
+        </div>
+        <div>
+          <p class="who-lab">The owner</p>
+          <p>You want a report or a small internal tool without hiring anyone for three months. You are also the person who signs the data processing agreement. ShiftMask keeps the real records where they belong.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="pricing" id="pricing">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Pricing</p>
+        <h2>Buy it once. It&rsquo;s yours.</h2>
+        <p class="lede" style="margin-top:20px">One licence for what ships today. Two more tiers are on the way, priced so that starting with Core never costs you anything later.</p>
+      </div>
+
+      <div class="tiers rise">
+
+        <!-- CORE -->
+        <article class="tier tier-live">
+          <p class="tier-flag">Available now</p>
+          <p class="tier-name">Core</p>
+          <p class="tier-for">One person, one machine, Excel and CSV.</p>
+          <p class="tier-price"><sup>$</sup>39</p>
+          <p class="tier-terms">One payment, per device<br>Free updates for 1 year<br><span class="tier-founding">Founding price &mdash; first 150 licences</span></p>
+          <a class="btn btn-solid" href="#download" data-goatcounter-click="cta-demo-pricing">Start the free 7-day trial</a>
+          <p class="tier-try">Download, install, then activate seven days of the full product. No email, no card. Buy when it has earned it.</p>
+          <ul class="incl">
+            <li>Unlimited files, tables and projects &mdash; no time limit</li>
+            <li>Excel and CSV sources</li>
+            <li>Automatic relationship detection with manual override</li>
+            <li>Date shifting and deterministic masking</li>
+            <li>Export to masked Excel files</li>
+            <li>Runs entirely on your machine, offline</li>
+          </ul>
+        </article>
+
+        <!-- PRO -->
+        <article class="tier tier-soon">
+          <p class="tier-flag">Coming soon</p>
+          <p class="tier-name">Pro <span class="tier-sub">BI Bundle</span></p>
+          <p class="tier-for">The analyst whose AI assistant needs a whole database, not a folder.</p>
+          <p class="tier-price"><sup>$</sup>89</p>
+          <p class="tier-terms">Planned price<br>One payment, per device<br>Upgrade from Core &mdash; 50 USD</p>
+          <a class="btn btn-line" href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20waitlist%5D%20pro&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20waitlist%0Asource%3A%20site%0Apage%3A%20pricing%0Aplan%3A%20pro%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A" data-goatcounter-click="cta-notify-pro">Tell me when Pro ships</a>
+          <p class="tier-try">&nbsp;</p>
+          <ul class="incl">
+            <li class="incl-all">Everything in Core, plus</li>
+            <li><strong>DuckDB warehouse and .db export</strong> &mdash; hand your AI assistant a masked database</li>
+            <li><strong>SQL dialect translation</strong> &mdash; the query it writes runs against your real warehouse</li>
+          </ul>
+        </article>
+
+        <!-- TEAM -->
+        <article class="tier tier-soon">
+          <p class="tier-flag">Coming soon</p>
+          <p class="tier-name">Team <span class="tier-sub">Enterprise</span></p>
+          <p class="tier-for">Several people, one person keeping track of the licences.</p>
+          <p class="tier-price"><sup>$</sup>35</p>
+          <p class="tier-terms">Planned price<br>Per seat, per month<br>or 350 USD per seat, per year</p>
+          <a class="btn btn-line" href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20waitlist%5D%20team&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20waitlist%0Asource%3A%20site%0Apage%3A%20pricing%0Aplan%3A%20team%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A" data-goatcounter-click="cta-notify-team">Tell me when Team ships</a>
+          <p class="tier-try">Over 20 seats? <a href="mailto:shiftmask@4optima.pl">Talk to us.</a></p>
+          <ul class="incl">
+            <li class="incl-all">Everything in Pro, plus</li>
+            <li><strong>Local PII scanner</strong> &mdash; a language model on your machine finds the identifying columns nobody labelled</li>
+            <li><strong>Multi-seat licensing</strong> and a licence console</li>
+            <li><strong>Compliance reports</strong> &mdash; what was masked, when, by whom</li>
+          </ul>
+        </article>
+
+      </div>
+
+      <div class="tier-notes rise">
+        <p class="incl-note">Buying Core today does not make you a second-class customer later. What you pay for stays yours for good, and upgrades are priced as the difference, not as a fresh purchase.</p>
+        <p class="incl-note">Team is the only tier sold as a subscription, and deliberately so: it is the only one where you keep receiving something &mdash; model updates and seat management &mdash; rather than a set of features that is yours once you buy it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DOWNLOAD ============ -->
+  <section class="faq" id="download">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Download</p>
+        <h2>Windows 10 and 11.<br>No account, no admin rights.</h2>
+        <p class="lede" style="margin-top:20px">ShiftMask installs for your user only, so you do not need administrator permissions. If your work laptop blocks installers outright, take the portable build instead &mdash; unzip it and run it.</p>
+        <div class="cta-row" style="margin-top:30px">
+          <a class="btn btn-solid" href="https://github.com/CjxPL/shiftmask-releases/releases/latest/download/ShiftMask-win-Setup.exe" data-goatcounter-click="download-setup">Download the installer</a>
+          <a class="btn btn-line" href="https://github.com/CjxPL/shiftmask-releases/releases/latest/download/ShiftMask-win-Portable.zip" data-goatcounter-click="download-portable">Portable version</a>
+        </div>
+        <p class="cta-note" style="margin-top:14px">The installed version updates itself. The portable one does not &mdash; you come back here for the next release.</p>
+        <p class="cta-note" style="margin-top:8px">On a managed work laptop? Send your IT department <a href="/for-it/">this page</a> &mdash; what it installs, what leaves the machine, and how to check the signature.</p>
+        <p class="lede" style="margin-top:18px">Installed it? You will need a licence to do anything with it &mdash; <a href="/try/">start a free 7-day trial</a>, no email address required.</p>
+        <!-- SMARTSCREEN GUIDE: schemat okna, ktore uzytkownik ma przed oczami -->
+        <div class="ss-guide" style="margin-top:30px">
+          <p class="eyebrow" style="margin:0 0 6px">Before it runs</p>
+          <h3 class="ss-title">Windows will show you a warning. It looks like a dead end &mdash; it isn't.</h3>
+          <p class="ss-lede">There are two steps, and the first one hides the second. This is what you will see and where to click.</p>
+
+          <div class="ss-steps">
+            <!-- STEP 1 -->
+            <div class="ss-step">
+              <div class="ss-step-head"><span class="ss-num">1</span><span>You see one button. Don't press it.</span></div>
+              <div class="ss-panel">
+                <p class="ss-p-title">Windows protected your PC</p>
+                <span class="ss-p-x" aria-hidden="true"></span>
+                <p class="ss-p-body">Microsoft Defender SmartScreen prevented an unrecognised app from starting. Running this app might put your PC at risk.<br><span class="ss-target">More info<span class="ss-ring"></span></span></p>
+                <div class="ss-p-actions"><span class="ss-p-btn">Don't run</span></div>
+                <div class="ss-note ss-note-1">Click this small link &mdash; it's text, not a button</div>
+              </div>
+            </div>
+
+            <div class="ss-arrow" aria-hidden="true"><svg viewBox="0 0 40 24" width="40" height="24"><path d="M2 12h30M24 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+
+            <!-- STEP 2 -->
+            <div class="ss-step">
+              <div class="ss-step-head"><span class="ss-num">2</span><span>The panel opens up. Check the publisher, then run.</span></div>
+              <div class="ss-panel">
+                <p class="ss-p-title">Windows protected your PC</p>
+                <span class="ss-p-x" aria-hidden="true"></span>
+                <p class="ss-p-body">Microsoft Defender SmartScreen prevented an unrecognised app from starting. Running this app might put your PC at risk.</p>
+                <dl class="ss-p-meta">
+                  <dt>App:</dt><dd>ShiftMask-win-Setup.exe</dd>
+                  <dt>Publisher:</dt><dd>PL, Mazowieckie, &#321;omianki, <mark>4optima Sp. z o.o.</mark>, 4optima Sp. z o.o.<span class="ss-tick" aria-hidden="true"></span></dd>
+                </dl>
+                <div class="ss-p-actions"><span class="ss-p-btn ss-p-btn-go">Run anyway<span class="ss-ring"></span></span><span class="ss-p-btn">Don't run</span></div>
+                <div class="ss-note ss-note-2">Look for 4optima Sp. z o.o. &mdash; anything else, stop</div>
+              </div>
+            </div>
+          </div>
+
+          <p class="ss-why">Why does Windows do this? The file <strong>is</strong> signed by 4optima. The warning is about reputation &mdash; a new release simply hasn't been installed by many people yet. <a href="#ss-details">How to verify the file yourself &darr;</a></p>
+        </div>
+        <p class="cta-note"><span class="pulse"></span> Uses Microsoft Edge WebView2 Runtime &middot; if it is missing, ShiftMask asks and installs it for you</p>
+      </div>
+
+      <div class="qa rise" id="ss-details" style="margin-top:52px">
+        <div class="item">
+          <h3>First, your browser may block the download</h3>
+          <p>Edge or Chrome may report that the file could not be scanned. Open the downloads list, click the three dots next to <em>ShiftMask-win-Setup.exe</em>, and choose <strong>Keep</strong>.</p>
+        </div>
+        <div class="item">
+          <h3>Do not take our word for it &mdash; check the file yourself</h3>
+          <p>Right-click the installer, choose <strong>Properties</strong> and open the <strong>Digital Signatures</strong> tab: it should name <em>4optima Sp. z o.o.</em> From PowerShell, <em>Get-AuthenticodeSignature .\ShiftMask-win-Setup.exe</em> should return <em>Valid</em>. That tells you more about a file than any warning dialog does &mdash; and it is the same check your IT department will run.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="faq" id="faq">
+    <div class="shell">
+      <div class="rise">
+        <p class="eyebrow">Before you trust it</p>
+        <h2>The questions that actually matter.</h2>
+      </div>
+      <div class="qa rise" style="margin-top:46px">
+        <div class="item">
+          <h3>Can I try it before buying?</h3>
+          <p>Yes &mdash; <a href="/try/">seven days with the full product</a>. Every feature, no row limits, no watermark on the output. It is the same build you would buy, with a licence that expires. No purchase, no email address, no account: install it, copy the device ID it shows you, and paste it into the page.</p>
+          <p>We dropped the idea of a permanently free edition with file and row limits. A limited version answers the wrong question &mdash; it tells you whether ShiftMask runs, not whether it survives your actual data. Seven days on your own files answers the question you have.</p>
+        </div>
+        <div class="item">
+          <h3>Is it safe to put company data into ChatGPT?</h3>
+          <p>Not the real data. Anything you paste leaves your control, and most public AI tools give you no contractual guarantee about where it goes. ShiftMask exists so you never have to — you send a structurally identical copy in which no value is a real name, account or identifier, and you get working code back all the same.</p>
+        </div>
+        <div class="item">
+          <h3>We use Microsoft Copilot. Is our data not already protected?</h3>
+          <p>Two different things get called Copilot, and they need different answers.</p>
+          <p><strong>If it means pasting a real spreadsheet into Copilot and asking it to anonymise the contents</strong> &mdash; by the time it can do that, the data has already left your machine. The masking happens after the exposure instead of preventing it. ShiftMask runs before anything is sent, and that is the whole difference.</p>
+          <p><strong>If it means Microsoft 365 Copilot with enterprise data protection</strong>, the guarantee is real and worth having: your prompts stay inside your tenant and are not used to train foundation models. But it answers a different question from the one a client contract asks. An NDA is usually about where a client&rsquo;s data may be processed and who may see it, not about whether a model trains on it. If you hold data for several clients, or for one whose contract names the systems their data may enter, &ldquo;it stayed in our tenant&rdquo; is an argument you have to make and win. With a masked copy there is no argument to make, because what you pasted was not their data.</p>
+          <p>For the practical side of Copilot inside Excel, see <a href="/blog/copilot-excel-sensitive-data.html">How to use Copilot in Excel safely with sensitive data</a>.</p>
+        </div>
+        <div class="item">
+          <h3>Can't I just ask Copilot or ChatGPT to anonymise the file?</h3>
+          <p>You can ask, and people do. What comes back is a best effort, not a guarantee. A language model works through a workbook the way it reads text: it can stop part-way, skip rows, or treat the same customer differently in two places &mdash; and it says it is done when it believes it is.</p>
+          <p>One analyst told us exactly that. He asked Copilot to anonymise the personal data in a workbook, then asked whether it had done everything. It checked, found it had not, and did more. It took more than four rounds, and he still had no way to know whether the last round was the last.</p>
+          <p>ShiftMask works the other way round. Before anything runs, you see every column and what will happen to it. Every value in every column you chose is then processed in every row, the same way every time, and the report at the end says what was done &mdash; including any cell that could not be converted. The question you are left with is not &ldquo;did it finish?&rdquo; but &ldquo;did I pick the right columns?&rdquo;, and that one you can check with your own eyes.</p>
+          <p>And there is the earlier point: to have a model anonymise a file, you first have to give it the file.</p>
+        </div>
+        <div class="item">
+          <h3>My company does not let me install software. Can I still use it?</h3>
+          <p>Possibly, and the honest answer has three parts.</p>
+          <p><strong>The installer needs no administrator rights.</strong> It installs for your user only and writes nothing to <em>Program Files</em>. That settles the technical question, but not the policy one.</p>
+          <p><strong>If the policy is about installers specifically</strong>, take the portable build instead: unpack the ZIP, run the file inside. No installer, no registry entry, nothing written outside the folder you unpacked it into.</p>
+          <p><strong>If the policy is about running any unapproved program</strong> &mdash; and in the kind of organisation that needs this tool most, it usually is &mdash; then someone has to approve it, and the way through is to ask rather than to go around. We wrote the page for that person: <a href="/for-it/">what your IT department will ask</a>. It covers what gets installed and where, exactly what leaves the machine and what does not, how to verify the code signature yourself, and which third-party components ship inside.</p>
+        </div>
+        <div class="item">
+          <h3>Does my data leave my computer?</h3>
+          <p>No. ShiftMask is a desktop application. It reads your files locally, builds the masked copy in a local DuckDB database, and writes the output to your disk. You decide what, if anything, gets sent anywhere.</p>
+        </div>
+        <div class="item">
+          <h3>Does masking break my Power BI time intelligence?</h3>
+          <p>That is the specific failure ShiftMask was built to avoid. Random date replacement destroys intervals, which breaks YTD, YoY and every rolling calculation. ShiftMask moves every date by one shared offset instead, so the distance between any two events is unchanged and time-based measures return the same shape.</p>
+        </div>
+        <div class="item">
+          <h3>How do I anonymize an Excel file for AI?</h3>
+          <p>Open the workbook in ShiftMask, confirm which columns hold personal data — it proposes a classification automatically — and export. You get a new workbook with the same sheets, columns and relationships, and with names, identifiers and dates replaced by consistent stand-ins. The map back to the real values stays in an encrypted vault on your machine &mdash; that is what lets you swap the real data back in later, and it is why the export is pseudonymised rather than irreversibly anonymised.</p>
+        </div>
+        <div class="item">
+          <h3>Does this make me GDPR compliant?</h3>
+          <p>No tool can make that promise for you, and be careful with any that does. What ShiftMask does is replace the personal data in the copy you share with stand-ins, which is usually the hard part of using public AI tools lawfully. Because the map back is kept &mdash; encrypted, on your machine &mdash; that copy is pseudonymised under GDPR rather than anonymised, so it remains personal data. Your obligations under GDPR, and under HIPAA if you work with health data, still depend on your own processes.</p>
+        </div>
+        <div class="item">
+          <h3>Can I get a refund?</h3>
+          <p>Yes &mdash; within 14 days, no questions asked. Write to <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20refund">shiftmask@4optima.pl</a> and we will arrange it. Your purchase is handled by Lemon Squeezy as merchant of record, so the money comes back through them.</p>
+          <p>One thing worth saying plainly: a licence token, once issued, cannot be revoked. It is verified entirely offline, which is exactly what lets ShiftMask run on machines with no internet &mdash; and the price of that is no kill switch. After a refund we are relying on you to stop using it. We would rather ask than break offline activation to prevent it.</p>
+        </div>
+        <div class="item">
+          <h3>I am replacing my computer. What happens to my licence?</h3>
+          <p>You get a new token, at no charge, and there is no limit on how many times. Hardware fails and laptops get stolen; a limit would punish the people that happens to without stopping anyone acting in bad faith.</p>
+          <p>ShiftMask prepares the whole request for you &mdash; there is a transfer button on the activation screen, which is where you will be if the old machine is already gone. Send it from the address you bought with, since that is what links the request to your order, and you get a new token within one working day. A person handles this rather than an automatic system: self-service would mean keeping a record of every activation on our server, which is precisely what this product promises not to do.</p>
+        </div>
+        <div class="item">
+          <h3>How is this different from an enterprise masking platform?</h3>
+          <p>Those are built for test environments, priced for enterprise budgets, and usually run as a service. ShiftMask is a desktop app for one person with one project and a deadline, sold for one payment, and it never sends your data to a server.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSER ============ -->
+  <section class="closer">
+    <div class="shell rise">
+      <h2>Ship the report.<br><span style="color:var(--coral)">Keep the records.</span></h2>
+      <div class="cta-row">
+        <!-- TODO: podmień na prawdziwy link do pobrania -->
+        <a class="btn btn-solid" href="#download" data-goatcounter-click="cta-download-footer">Download for Windows</a>
+        <a class="btn btn-line" href="#faq">Read the questions</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="shell fbar">
+    <a class="lockup" href="/" aria-label="ShiftMask — home">
+      <svg width="26" height="26" aria-hidden="true"><use href="#mark"/></svg>
+      <span class="wordmark">shift<span class="m">mask</span></span>
+    </a>
+    <div class="flinks">
+      <a href="#how">Method</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+      <a href="/blog/">Blog</a>
+      <a href="/support/">Support</a>
+      <a href="/for-it/">For IT</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/eula/">Terms</a>
+      <a href="/imprint.html">Legal</a>
+      <a href="mailto:shiftmask@4optima.pl?subject=%5BShiftMask%20contact%5D%20footer&body=Fill%20in%20the%20lines%20below%20and%20send%20this%20message%20as%20it%20is.%20The%20lines%20are%20read%20automatically%2C%20so%20please%20keep%20them.%0A%0A---%20SHIFTMASK-DATA%20v1%20---%0Akind%3A%20contact%0Asource%3A%20site%0Apage%3A%20home%0Aname%3A%20%0Acompany%3A%20%0Aemail%3A%20%0A---%20END%20---%0A">Contact</a>
+    </div>
+    <p class="rights">ShiftMask is a product of <a href="/imprint.html" style="color:inherit">4optima Sp. z o.o.</a> &middot; &copy; 2026</p>
+  </div>
+</footer>
+
+<!-- Privacy-first analytics: no cookies, no cross-site profile. -->
+<!-- TODO: podmień na własny kod po założeniu darmowego konta na goatcounter.com -->
+<script data-goatcounter="https://shiftmask.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
+<!-- Cookie consent banner (RODO/GDPR) — gates Google Analytics (GA4) behind explicit opt-in. GoatCounter above sets no cookies and is unaffected. -->
+<div id="consent-banner" class="consent-banner" hidden>
+  <div class="consent-inner">
+    <p class="consent-text">We'd like to use <strong>Google Analytics</strong> (sets cookies) to see which pages and links lead to downloads or purchases. It only runs if you accept — <a href="/privacy.html">Privacy Policy</a></p>
+    <div class="consent-actions">
+      <button type="button" class="consent-btn secondary" id="consent-reject">Reject</button>
+      <button type="button" class="consent-btn" id="consent-accept">Accept</button>
+    </div>
+  </div>
+</div>
+<button type="button" id="consent-widget" class="consent-widget" hidden aria-label="Cookie preferences">Cookies</button>
+
+<script>
+(function(){
+  var KEY = 'shiftmask_consent';
+  var GA_ID = 'G-5KEZY0VNNV';
+
+  function stored(){ try { return localStorage.getItem(KEY); } catch(e){ return null; } }
+  function store(v){ try { localStorage.setItem(KEY, v); } catch(e){} }
+
+  function loadGA(){
+    if (window.__smGaLoaded) return;
+    window.__smGaLoaded = true;
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      analytics_storage: 'granted'
+    });
+    gtag('js', new Date());
+    gtag('config', GA_ID);
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+    document.head.appendChild(s);
+  }
+
+  var consent = stored();
+  if (consent === 'granted') loadGA();
+
+  document.addEventListener('DOMContentLoaded', function(){
+    var banner = document.getElementById('consent-banner');
+    var widget = document.getElementById('consent-widget');
+    var acceptBtn = document.getElementById('consent-accept');
+    var rejectBtn = document.getElementById('consent-reject');
+
+    function showBanner(){
+      if (banner) banner.hidden = false;
+      if (widget) widget.hidden = true;
+    }
+    function showWidget(){
+      if (banner) banner.hidden = true;
+      if (widget) widget.hidden = false;
+    }
+
+    if (consent) { showWidget(); } else { showBanner(); }
+
+    if (acceptBtn) acceptBtn.addEventListener('click', function(){
+      store('granted'); consent = 'granted'; loadGA(); showWidget();
+    });
+    if (rejectBtn) rejectBtn.addEventListener('click', function(){
+      store('denied'); consent = 'denied'; showWidget();
+    });
+    if (widget) widget.addEventListener('click', function(){ showBanner(); });
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.rise');
+  if (rm || !('IntersectionObserver' in window)) {
+    els.forEach(function(e){ e.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+    els.forEach(function(e){ io.observe(e); });
+  }
+
+  // Loop the "before/after" reveal in the hero data panel: names sweep
+  // into a redaction bar, dates settle on their shifted value, in sync
+  // with a pulse on the offset strip between the two tables. Runs on
+  // its own, independent of the .rise block above, and independent of
+  // prefers-reduced-motion (the CSS above already swaps the sweep/slide
+  // for a plain opacity fade when reduced motion is requested, rather
+  // than skipping the demo entirely).
+  var strip = document.querySelector('.offset-strip');
+  var revealEls = document.querySelectorAll('.rig .rd, .rig .flip');
+  var rig = document.querySelector('.rig');
+  if (strip && revealEls.length && rig) {
+    var play = function(){
+      strip.classList.remove('beat'); void strip.offsetWidth; strip.classList.add('beat');
+      revealEls.forEach(function(el){ el.classList.remove('on'); });
+      revealEls.forEach(function(el, i){
+        setTimeout(function(){ el.classList.add('on'); }, 220 + i * 110);
+      });
+    };
+    setTimeout(play, 350);
+    var timer = null;
+    var start = function(){ if (!timer) { timer = setInterval(play, 6000); } };
+    var stop = function(){ if (timer) { clearInterval(timer); timer = null; } };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(en){ en.isIntersecting ? start() : stop(); });
+      }, { threshold: 0.3 }).observe(rig);
+    } else {
+      start();
+    }
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) { stop(); }
+      else if (rig.getBoundingClientRect().top < innerHeight) { start(); }
+    });
+  }
+})();
+</script>
+
+<script>
+(function(){
+  var toggle = document.getElementById('menu-toggle');
+  var panel = document.getElementById('mobile-menu');
+  if (!toggle || !panel) return;
+
+  function closeMenu(){
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-label', 'Open menu');
+    panel.classList.remove('open');
+  }
+  function openMenu(){
+    toggle.setAttribute('aria-expanded', 'true');
+    toggle.setAttribute('aria-label', 'Close menu');
+    panel.classList.add('open');
+  }
+
+  toggle.addEventListener('click', function(){
+    var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  panel.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 760) closeMenu();
+  });
+})();
+</script>
+
+<script>
+(function(){
+  // Flow diagram: scale the fixed 1440px stage to the figure width,
+  // and pause every animation in the section while it is off-screen.
+  var sec = document.getElementById('flow');
+  var fig = document.getElementById('fl-fig');
+  if (!sec || !fig || !document.getElementById('fl-sizer')) { return; }
+  var sizer = document.getElementById('fl-sizer');
+  var fit = function(){
+    var w = fig.clientWidth;
+    var narrow = window.matchMedia && window.matchMedia('(max-width:699px)').matches;
+    var s = narrow ? Math.max(w / 1440, 0.62) : w / 1440;
+    sizer.style.width = Math.round(1440 * s) + 'px';
+    sizer.style.height = Math.round(560 * s) + 'px';
+    sizer.style.aspectRatio = 'auto';
+    sizer.style.setProperty('--fl-s', s.toFixed(4));
+  };
+  fit();
+  if ('ResizeObserver' in window) { new ResizeObserver(fit).observe(fig); }
+  else { window.addEventListener('resize', fit); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ sec.classList.toggle('fl-off', !en.isIntersecting); });
+    }, { threshold: 0 }).observe(sec);
+  }
+})();
+</script>
+
+<script>
+(function(){
+  // Masking diagram in the method section: scale the fixed 1440px stage
+  // to the figure width and pause its animations while off-screen.
+  var wrap = document.getElementById('mk-wrap');
+  var fig = document.getElementById('mk-fig');
+  var sizer = document.getElementById('mk-sizer');
+  if (!wrap || !fig || !sizer) { return; }
+  var fit = function(){
+    var w = fig.clientWidth;
+    var narrow = window.matchMedia && window.matchMedia('(max-width:699px)').matches;
+    var s = narrow ? Math.max(w / 1440, 0.62) : w / 1440;
+    sizer.style.width = Math.round(1440 * s) + 'px';
+    sizer.style.height = Math.round(650 * s) + 'px';
+    sizer.style.aspectRatio = 'auto';
+    sizer.style.setProperty('--mk-s', s.toFixed(4));
+  };
+  fit();
+  if ('ResizeObserver' in window) { new ResizeObserver(fit).observe(fig); }
+  else { window.addEventListener('resize', fit); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ wrap.classList.toggle('mk-off', !en.isIntersecting); });
+    }, { threshold: 0 }).observe(wrap);
+  }
+})();
+</script>
+
+<script>
+(function(){
+  // Hero graphic: scale the fixed 638px gate to the column width and pause
+  // the loop while the hero is off-screen.
+  var rig = document.getElementById('hx-rig');
+  var gate = document.getElementById('hx-gate');
+  if (!rig || !gate) { return; }
+  var fit = function(){ gate.style.setProperty('--hx-s', (gate.clientWidth / 638).toFixed(4)); };
+  fit();
+  if ('ResizeObserver' in window) { new ResizeObserver(fit).observe(gate); }
+  else { window.addEventListener('resize', fit); }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ rig.classList.toggle('hx-off', !en.isIntersecting); });
+    }, { threshold: 0 }).observe(rig);
+  }
+})();
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "ShiftMask",
+      "url": "https://shiftmask.com/",
+      "applicationCategory": "BusinessApplication",
+      "publisher": {
+        "@type": "Organization",
+        "name": "4optima Sp. z o.o.",
+        "url": "https://4optima.pl",
+        "email": "shiftmask@4optima.pl",
+        "taxID": "1182105589",
+        "vatID": "PL1182105589",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "ul. Wydmowa 4",
+          "postalCode": "05-092",
+          "addressLocality": "\u0141omianki",
+          "addressCountry": "PL"
+        }
+      },
+      "operatingSystem": "Windows",
+      "description": "Desktop app that builds a safe local copy of Excel and CSV data — relations intact, dates shifted, values masked — so data can be used with AI tools without exposing real records.",
+      "offers": {
+        "@type": "Offer",
+        "price": "39",
+        "priceCurrency": "USD",
+        "name": "Core License",
+        "description": "One-time payment per device, perpetual license, includes one year of free updates. Founding price for the first 150 licenses."
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {"@type":"Question","name":"Can I try ShiftMask before buying?","acceptedAnswer":{"@type":"Answer","text":"Yes. There is a seven-day trial of the full product: every feature, no row limits and no watermark, with no purchase, email address or account required. Install ShiftMask, copy the device ID it shows, and request a trial token at shiftmask.com/try."}},
+        {"@type":"Question","name":"Is it safe to put company data into ChatGPT?","acceptedAnswer":{"@type":"Answer","text":"Not the real data. Anything you paste leaves your control, and most public AI tools give no contractual guarantee about where it goes. ShiftMask lets you send a structurally identical copy in which no value is a real name, account or identifier, and you still get working code back."}},
+        {"@type":"Question","name":"We use Microsoft Copilot. Is our data not already protected?","acceptedAnswer":{"@type":"Answer","text":"It depends which Copilot is meant. Pasting a real spreadsheet into Copilot and asking it to anonymise the contents means the data has already left your machine before anything is masked. Microsoft 365 Copilot with enterprise data protection keeps prompts inside your tenant and does not use them to train foundation models, which is a real guarantee, but a client contract usually asks where the data may be processed and who may see it. A masked copy avoids that question, because what you paste is not the client's data."}},
+        {"@type":"Question","name":"Can't I just ask Copilot or ChatGPT to anonymise the file?","acceptedAnswer":{"@type":"Answer","text":"A language model gives a best effort, not a guarantee: it can stop part-way, skip rows or treat the same customer differently in two places, and it reports completion when it believes the work is done. ShiftMask shows every column and its treatment before anything runs, then processes every value in every chosen column, in every row, the same way every time, with a report of what was done. And to have a model anonymise a file, you first have to give it the file."}},
+        {"@type":"Question","name":"My company does not let me install software. Can I still use it?","acceptedAnswer":{"@type":"Answer","text":"The installer needs no administrator rights and installs for one user only. If the policy is about installers, a portable build runs from an unpacked folder with no installer and no registry entry. If the policy is about running any unapproved program, someone has to approve it; the page shiftmask.com/for-it/ lists what gets installed, what leaves the machine, and how to verify the code signature."}},
+        {"@type":"Question","name":"Does my data leave my computer?","acceptedAnswer":{"@type":"Answer","text":"No. ShiftMask is a desktop application. It reads files locally, builds the masked copy in a local DuckDB database, and writes the output to your disk."}},
+        {"@type":"Question","name":"Does masking break my Power BI time intelligence?","acceptedAnswer":{"@type":"Answer","text":"No. Random date replacement destroys intervals, which breaks YTD, YoY and rolling calculations. ShiftMask moves every date by one shared offset, so the distance between any two events is unchanged and time-based measures return the same shape."}},
+        {"@type":"Question","name":"How do I anonymize an Excel file for AI?","acceptedAnswer":{"@type":"Answer","text":"Open the workbook in ShiftMask, confirm which columns hold personal data, and export. You get a new workbook with the same sheets, columns and relationships, and with names, identifiers and dates replaced by consistent stand-ins. The map back to the real values stays in an encrypted vault on your machine, so the export is pseudonymised rather than irreversibly anonymised."}},
+        {"@type":"Question","name":"Does ShiftMask make me GDPR compliant?","acceptedAnswer":{"@type":"Answer","text":"No tool can make that promise. ShiftMask replaces the personal data in the copy you share with stand-ins, which is usually the hard part of using public AI tools lawfully. Because the map back is kept, encrypted, on your machine, that copy is pseudonymised under GDPR rather than anonymised, and your obligations still depend on your own processes."}},
+        {"@type":"Question","name":"Can I get a refund?","acceptedAnswer":{"@type":"Answer","text":"Yes, within 14 days, no questions asked. Purchases are handled by Lemon Squeezy as merchant of record, so the refund is processed by them. A licence token, once issued, cannot be revoked: it is verified entirely offline, which is what lets ShiftMask run on machines with no internet."}},
+        {"@type":"Question","name":"I am replacing my computer. What happens to my licence?","acceptedAnswer":{"@type":"Answer","text":"You get a new token at no charge, with no limit on how many times. Use the transfer button on the activation screen and send the request from the address you bought with. A new token arrives within one working day. This is handled by a person rather than automatically, because self-service would require keeping a record of every activation on a server."}},
+        {"@type":"Question","name":"How is ShiftMask different from an enterprise data masking platform?","acceptedAnswer":{"@type":"Answer","text":"Enterprise masking platforms are built for test environments, priced for enterprise budgets, and usually run as a service. ShiftMask is a desktop app for one person with one project, sold for one payment, and it never sends data to a server."}}
+      ]
+    }
+  ]
+}
+</script>
+
+</body>
+</html>

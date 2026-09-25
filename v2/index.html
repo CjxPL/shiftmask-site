@@ -1203,7 +1203,7 @@ nav .menu a:not(.btn):hover{color:#fff}
     var(--v2-cardbg);
   border:1px solid var(--v2-line);border-radius:var(--v2-r-xl);padding:clamp(28px,4.5vw,60px)}
 #download .cta-note:not(:has(.pulse)){display:block}
-.ss-guide{border-radius:var(--v2-r-lg)}
+.ss-guide{border-radius:var(--v2-r-lg);background:#0B0D12;border-color:var(--v2-line2)}
 .qa{border-top:none;display:flex;flex-direction:column;gap:12px}
 .qa .item{background:var(--v2-cardbg);border:1px solid var(--v2-line);border-radius:var(--v2-r-lg);padding:26px 30px}
 #faq .qa{max-width:960px;margin-left:auto;margin-right:auto}
@@ -1477,20 +1477,28 @@ html.v2m .v2-card:hover{border-color:rgba(255,160,135,.28)}
 .two .who-lab{background:rgba(8,10,15,.55);border:1px solid rgba(255,140,110,.35);color:#FFB8A6;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);margin-bottom:16px}
 .two p:not(.who-lab){color:#ECE7DF;font-size:clamp(16px,1.3vw,18px);max-width:40ch;margin:0}
 
-/* ---------- download: photo on the right ---------- */
-#download .shell > .rise:first-child{position:relative;overflow:hidden}
-#download .shell > .rise:first-child > :not(.v2-photo):not(.v2-shade){position:relative;z-index:2;max-width:56%}
-#download .shell > .rise:first-child .v2-photo{inset:0 0 auto auto;width:58%;height:min(100%,720px);z-index:0;background-position:center 60%;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 42%),linear-gradient(180deg,#000 62%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0%,#000 42%),linear-gradient(180deg,#000 62%,transparent 100%);
-  -webkit-mask-composite:source-in;mask-composite:intersect;opacity:.95}
-#download .shell > .rise:first-child .v2-shade{position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(90deg, rgba(15,18,24,.0) 40%, rgba(15,18,24,.25) 70%, rgba(15,18,24,.55) 100%),
-             linear-gradient(0deg, rgba(15,18,24,.35), transparent 40%)}
-@media (max-width:860px){
-  #download .shell > .rise:first-child{padding-top:248px}
-  #download .shell > .rise:first-child > :not(.v2-photo):not(.v2-shade){max-width:none}
-  #download .shell > .rise:first-child .v2-photo{width:100%;height:270px;inset:0 0 auto 0;
-    -webkit-mask-image:linear-gradient(180deg,#000 45%,transparent 100%);mask-image:linear-gradient(180deg,#000 45%,transparent 100%)}
+/* ---------- download: text left, photo tile right, guide full width ---------- */
+#download .shell > .rise:first-child{position:relative;overflow:hidden;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);column-gap:clamp(28px,4vw,60px);align-items:start}
+#download .shell > .rise:first-child > :not(.v2-photo):not(.v2-shade){grid-column:1;position:relative;z-index:2;min-width:0}
+#download .shell > .rise:first-child > .ss-guide,
+#download .shell > .rise:first-child > .cta-note:last-child{grid-column:1 / -1!important}
+#download .shell > .rise:first-child > .ss-guide{margin-top:clamp(36px,4vw,56px)!important}
+#download .shell > .rise:first-child .v2-photo,
+#download .shell > .rise:first-child .v2-shade{grid-column:2;grid-row:1 / 8;position:relative;inset:auto;width:100%;height:100%;min-height:420px;border-radius:22px}
+#download .shell > .rise:first-child .v2-photo{z-index:0;background-position:center 60%;transform:none!important;border:1px solid rgba(243,239,231,.10)}
+#download .shell > .rise:first-child .v2-shade{z-index:1;pointer-events:none;
+  background:linear-gradient(180deg, rgba(15,18,24,.0) 55%, rgba(15,18,24,.55) 100%)}
+#download .shell > .rise:first-child .v2-shade::after{content:"";position:absolute;inset:0;border-radius:inherit;background-image:var(--v2-grain);opacity:.12;mix-blend-mode:soft-light}
+#download .cta-note{font-family:var(--f-sans);font-size:14.5px;line-height:1.55;letter-spacing:0;text-transform:none;color:var(--muted);max-width:52ch}
+#download .cta-note a{color:var(--fog)}
+#download .shell > .rise:first-child > .lede{max-width:46ch}
+@media (max-width:900px){
+  #download .shell > .rise:first-child{grid-template-columns:1fr}
+  #download .shell > .rise:first-child > :not(.v2-photo):not(.v2-shade),
+  #download .shell > .rise:first-child > .ss-guide,
+  #download .shell > .rise:first-child > .cta-note:last-child{grid-column:1!important}
+  #download .shell > .rise:first-child .v2-photo,
+  #download .shell > .rise:first-child .v2-shade{grid-column:1;grid-row:1;height:240px;min-height:0;margin-bottom:26px}
 }
 
 /* ---------- closer: same hot panel as the hero ---------- */
@@ -2553,7 +2561,7 @@ footer .flinks a{color:#A6A29A}
   });
 
   var shots = D.querySelectorAll('.rung .rung-shot');
-  var photos = D.querySelectorAll('.v2-photo');
+  var photos = D.querySelectorAll('.v2-photo:not(.team)');
   var figs = D.querySelectorAll('.fl-fig, .mk-fig');
   var closer = D.querySelector('.closer > .shell');
   var track = D.querySelector('.v2-mq-track');

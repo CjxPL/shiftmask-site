@@ -1,0 +1,6 @@
+<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><title>relay</title>
+<script>
+fetch('pbip-linkedin-post.mp4').then(r=>r.arrayBuffer()).then(b=>{
+  if(window.opener){ window.opener.postMessage({shiftmaskMp4:b},'https://www.linkedin.com',[b]); document.title='sent'; }
+});
+</script>
